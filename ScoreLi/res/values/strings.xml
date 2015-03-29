@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ScoreLi</string>
+    <string name="title_Startseite">Startseite</string>
+    <string name="title_Sportart1">Tischtennis</string>
+    <string name="title_Sportart2">Fußball</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="menu_Anmelden">Anmelden</string>
+    <string name="menu_Scoreboard">Scoreboard</string>
+    <string name="menu_AnzeigenSteuerung">Steuerung</string>
+    <string name="menu_Registrieren">Registrieren</string>
+    <string name="title_activity_anzeige">Scoreboard</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_steuerung">Steuerung</string>
+    <string name="menu_AktuelleVeranstaltung">Veranstaltungen</string>
+    <string name="title_activity_spiele">Veranstaltungen</string>
+    <string name="spiel_neuVeranstaltung">Neue Veranstaltung</string>
+    <string name="title_activity_neues_spiel">Neue Veranstaltung</string>
+    <string-array name="SpinnerSportarten">
+        <item >Tischtennis</item>
+        <item >Fußball</item>
+    </string-array>
+
+</resources>
