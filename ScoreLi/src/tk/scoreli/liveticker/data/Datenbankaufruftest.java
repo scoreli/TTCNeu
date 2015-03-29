@@ -44,18 +44,18 @@ public class Datenbankaufruftest {
 		Cursor cursor = database.query("mitglieder", allCollums, null, null,
 				null, null, null);
 		cursor.moveToFirst();
-		if(cursor.getCount()==0)return mitgliedereintraege;
-		
-		while(cursor.isAfterLast()== false){
+		if (cursor.getCount() == 0)
+			return mitgliedereintraege;
+
+		while (cursor.isAfterLast() == false) {
 			Mitgliedtest mitgliedeintrag = cursorToMitglieder(cursor);
 			mitgliedereintraege.add(mitgliedeintrag);
 			cursor.moveToNext();
 		}
 		cursor.close();
-		
+
 		return mitgliedereintraege;
-		}
-	
+	}
 
 	private Mitgliedtest cursorToMitglieder(Cursor cursor) {
 		Mitgliedtest mitglied = new Mitgliedtest();

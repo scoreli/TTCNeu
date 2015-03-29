@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-
 public class Datenbanktest extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "mitglieder.db";
