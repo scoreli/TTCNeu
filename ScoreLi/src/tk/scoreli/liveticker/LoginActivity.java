@@ -82,8 +82,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			}
 		});
 
-		mLoginFormView = findViewById(R.id.login_form);
-		mProgressView = findViewById(R.id.login_progress);
+		mLoginFormView = findViewById(R.id.register_form);
+		mProgressView = findViewById(R.id.register_progress);
 	}
 
 	private void populateAutoComplete() {

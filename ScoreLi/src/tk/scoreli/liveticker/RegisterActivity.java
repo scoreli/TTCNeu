@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -24,9 +25,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import tk.scoreli.liveticker.data.Datenbankaufruftest;
 
 /**
  * A login screen that offers login via email/password.
@@ -50,7 +54,7 @@ public class RegisterActivity extends Activity implements
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
-
+	
 	// UI references.
 	private AutoCompleteTextView mEmailViewR;
 	private EditText mPasswordViewR,mPasswordViewConfirmR;
@@ -73,7 +77,7 @@ public class RegisterActivity extends Activity implements
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
 						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
+							attemptRegister();
 							return true;
 						}
 						return false;
@@ -87,7 +91,7 @@ public class RegisterActivity extends Activity implements
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
 						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
+							attemptRegister();
 							return true;
 						}
 						return false;
@@ -97,12 +101,12 @@ public class RegisterActivity extends Activity implements
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				attemptLogin();
+				attemptRegister();
 			}
 		});
 
-		mLoginFormViewR = findViewById(R.id.login_form);
-		mProgressViewR = findViewById(R.id.login_progress);
+		mLoginFormViewR = findViewById(R.id.register_form);
+		mProgressViewR = findViewById(R.id.register_progress);
 	}
 
 	private void populateAutoComplete() {
@@ -114,7 +118,7 @@ public class RegisterActivity extends Activity implements
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin() {
+	public void attemptRegister() {
 		if (mAuthTask != null) {
 			return;
 		}
@@ -172,8 +176,13 @@ public class RegisterActivity extends Activity implements
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(email, password);
+			/*mAuthTask = new UserLoginTask(email, password);
 			mAuthTask.execute((Void) null);
+			*/
+			/*
+			 * In die Datenbank schreiben
+			 */
+			
 		}
 	}
 

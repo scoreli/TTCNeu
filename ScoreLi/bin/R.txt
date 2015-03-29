@@ -401,8 +401,6 @@ int id image 0x7f090023
 int id listMode 0x7f09000a
 int id list_item 0x7f090025
 int id login 0x7f09004a
-int id login_form 0x7f090046
-int id login_progress 0x7f090045
 int id menu_Registrieren 0x7f090058
 int id menu_Scoreboard 0x7f090056
 int id menu_Spiele 0x7f090057
@@ -417,6 +415,8 @@ int id passwordregisterueberpruefen 0x7f090050
 int id progress_circular 0x7f090007
 int id progress_horizontal 0x7f090008
 int id radio 0x7f09002b
+int id register_form 0x7f090046
+int id register_progress 0x7f090045
 int id search_badge 0x7f090035
 int id search_bar 0x7f090034
 int id search_button 0x7f090036
