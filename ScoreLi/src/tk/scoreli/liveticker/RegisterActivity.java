@@ -1,15 +1,18 @@
 package tk.scoreli.liveticker;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import tk.scoreli.liveticker.data.DatabaseHandler;
+import tk.scoreli.liveticker.data.Mitgliedtest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,12 +28,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import tk.scoreli.liveticker.data.Datenbankaufruftest;
 
 /**
  * A login screen that offers login via email/password.
@@ -39,10 +36,11 @@ import tk.scoreli.liveticker.data.Datenbankaufruftest;
 /**
  * 
  * @author philipp
- *Es fehlt noch die änderung das erst nach dem Passwort bestätigen Feld auch dieses im Bildschirm angezeigt wird.
+ *
  */
 public class RegisterActivity extends Activity implements
 		LoaderCallbacks<Cursor> {
+private DatabaseHandler dbHandler;
 
 	/**
 	 * A dummy authentication store containing known user names and passwords.
@@ -65,6 +63,7 @@ public class RegisterActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+		dbHandler=new DatabaseHandler(getApplication());
 
 		// Set up the login form.
 		mEmailViewR = (AutoCompleteTextView) findViewById(R.id.emailregister);
@@ -182,6 +181,7 @@ public class RegisterActivity extends Activity implements
 			/*
 			 * In die Datenbank schreiben
 			 */
+			
 			
 		}
 	}

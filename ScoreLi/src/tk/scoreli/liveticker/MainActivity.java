@@ -1,13 +1,12 @@
 package tk.scoreli.liveticker;
 
-import tk.scoreli.liveticker.data.Datenbankaufruftest;
+import tk.scoreli.liveticker.data.DatabaseHandler;
+import tk.scoreli.liveticker.data.Mitgliedtest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.database.SQLException;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -15,11 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
-	private Datenbankaufruftest datasource;
+
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -62,19 +60,11 @@ public class MainActivity extends Activity implements
 		switch (number) {
 		case 1:
 			mTitle = getString(R.string.title_Startseite);
-			
+
 			break;
 		case 2:
 			mTitle = getString(R.string.title_Sportart1);
-			try {
-				datasource.open();
-				datasource.createMitgliedertest("Hallo", "1234");
-				datasource.close();
-			} catch (SQLException e) {
-				Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
-				
-			}
-			break;
+						break;
 		case 3:
 			mTitle = getString(R.string.title_Sportart2);
 			break;

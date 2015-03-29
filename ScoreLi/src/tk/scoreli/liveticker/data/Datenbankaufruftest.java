@@ -1,3 +1,4 @@
+/*
 package tk.scoreli.liveticker.data;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class Datenbankaufruftest {
 	private SQLiteDatabase database;
 	private Datenbanktest dbhelper;
+	private static int mitgliedid =0;
 	private String[] allCollums = { "_id", "email", "passwort" };
 
 	public Datenbankaufruftest(Context context) {
@@ -27,16 +29,23 @@ public class Datenbankaufruftest {
 	}
 
 	public Mitgliedtest createMitgliedertest(String email, String passwort) {
-		ContentValues values = new ContentValues();
-		values.put("email", email);
-		values.put("passwort", passwort);
-		long insertId = database.insert("mitglieder", null, values);
+				
+			Cursor cursor;
+			String mitgliedIDString= ""+mitgliedid+"";
+			ContentValues values = new ContentValues();
+			values.put(mitgliedIDString,true);
+			values.put("email", email);
+			values.put("passwort", passwort);
+			long insertId = database.insert("mitglieder", null, values);
 
-		Cursor cursor = database.query("mitglieder", allCollums, "_id = "
-				+ insertId, null, null, null, null);
-		cursor.moveToFirst();
+			cursor = database.query("mitglieder", allCollums, "_id = "
+					+ insertId, null, null, null, null);
+			cursor.moveToFirst();
+			mitgliedid++;
+		
 		return cursorToMitglieder(cursor);
-	}
+		}		
+
 
 	protected List<Mitgliedtest> getAllmitglieder() {
 		List<Mitgliedtest> mitgliedereintraege = new ArrayList<Mitgliedtest>();
@@ -56,7 +65,7 @@ public class Datenbankaufruftest {
 
 		return mitgliedereintraege;
 	}
-
+	
 	private Mitgliedtest cursorToMitglieder(Cursor cursor) {
 		Mitgliedtest mitglied = new Mitgliedtest();
 		mitglied.setId(cursor.getLong(0));
@@ -66,3 +75,4 @@ public class Datenbankaufruftest {
 	}
 
 }
+*/
