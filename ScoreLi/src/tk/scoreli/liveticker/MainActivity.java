@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-	private final static int REQUEST_ENABLE_BT = 1;
+	
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -43,20 +43,7 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     
-        /**
-         * Hat das Gerät Bluetooth ?
-         */
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            // Das Gerät verfügt über kein Bluetooth.
-        }
-        /**
-         * BluetoothAdapter Aktivieren wenn er nicht schon an ist.
-         */
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
+        
     
      
     
@@ -64,20 +51,7 @@ public class MainActivity extends Activity
     
     
     }
-    /**
-     * Wird geprüft ob Bluetooth auch aktiviert wurde. Sonst wird wieder gefragt usw.
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    	   if (resultCode == Activity.RESULT_OK) {
-    	      // Bluetooth ist aktiv.
-    	   } else {
-    		   if (!mBluetoothAdapter.isEnabled()) {
-    	            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-    	            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-    	        }
-    	   }
-    	}   
+     
     
     
     
