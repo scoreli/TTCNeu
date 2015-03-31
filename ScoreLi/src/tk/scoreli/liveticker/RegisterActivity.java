@@ -3,7 +3,7 @@ package tk.scoreli.liveticker;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.scoreli.liveticker.data.DatabasehandlerNeu;
+import tk.scoreli.liveticker.data.Databasehandler;
 import tk.scoreli.liveticker.data.Mitglied;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -28,6 +28,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A login screen that offers login via email/password.
@@ -51,7 +52,7 @@ public class RegisterActivity extends Activity implements
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
-	DatabasehandlerNeu db = new DatabasehandlerNeu(this);
+	Databasehandler db = new Databasehandler(this);
 	// UI references.
 	private AutoCompleteTextView mEmailViewR;
 	private EditText mPasswordViewR, mPasswordViewConfirmR;
@@ -173,16 +174,16 @@ public class RegisterActivity extends Activity implements
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			showProgress(true);
+			//showProgress(true);
 			/*
-			 * mAuthTask = new UserLoginTask(email, password);
-			 * mAuthTask.execute((Void) null);
+			  mAuthTask = new UserLoginTask(email, password);
+			  mAuthTask.execute((Void) null);
 			 */
 			/*
 			 * In die Datenbank schreiben
 			 */
 			db.addMitglied(new Mitglied(email, password));
-
+			Toast.makeText(getApplicationContext(), "Account Gespeichert ", Toast.LENGTH_LONG).show();
 		}
 	}
 

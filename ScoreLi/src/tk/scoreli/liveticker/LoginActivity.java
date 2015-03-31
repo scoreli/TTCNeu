@@ -1,17 +1,19 @@
 package tk.scoreli.liveticker;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import tk.scoreli.liveticker.data.Databasehandler;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -25,15 +27,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Einen Loginscreen der per Email und Passwort funktioniert
  * 
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-
+	Databasehandler db = new Databasehandler(this);
 	/**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
@@ -135,7 +135,21 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			focusView = mEmailView;
 			cancel = true;
 		}
-
+		
+		
+		/*
+		 * geht noch nicht
+		 * 
+		 */
+		try {
+			String ueberpruefePasswort=db.getMitglied(email);
+			System.out.println(ueberpruefePasswort);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
