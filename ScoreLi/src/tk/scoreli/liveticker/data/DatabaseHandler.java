@@ -1,6 +1,4 @@
-
- package tk.scoreli.liveticker.data;
-
+package tk.scoreli.liveticker.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +27,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String createDB = "CREATE TABLE" + MITGLIEDER_ID + "(" + MITGLIEDER_ID
-				+ " INTEGER PRIMARY KEY, " + MITLGIEDER_EMAIL + "TEXT,"
-				+ MITGLIEDER_PASSWORT + "TEXT)";
+		String createDB = "CREATE TABLE" + MITGLIEDER_TABLE + "("
+				+ MITGLIEDER_ID + " INTEGER PRIMARY KEY," + MITLGIEDER_EMAIL
+				+ "TEXT," + MITGLIEDER_PASSWORT + " TEXT" + ")";
 		db.execSQL(createDB);
 	}
 
@@ -47,11 +45,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(MITLGIEDER_EMAIL, mitglied.getEmail());
 		values.put(MITGLIEDER_PASSWORT, mitglied.getPasswort());
-
-		long id = db.insert(MITGLIEDER_TABLE, null, values);
-		mitglied.setId(id);
-		this.close();
-
+		/*
+		 * long id = db.insert(MITGLIEDER_TABLE, null, values);
+		 * mitglied.setId(id); this.close();
+		 */
+		db.insert(MITGLIEDER_TABLE, null, values);
+		db.close(); // Closing database connection
 		return mitglied;
 	}
 
@@ -66,82 +65,79 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		this.close();
 		return mitglied;
 	}
-public Mitgliedtest speicherMitglied(Mitgliedtest mitglied){
-	if(mitglied.getId()>0){
-		updateMitglied(mitglied);
-	}
-	else {
-		neuesMitglied(mitglied);
-	}
-return mitglied;
-}
 
+	public Mitgliedtest speicherMitglied(Mitgliedtest mitglied) {
+		if (mitglied.getId() > 0) {
+			updateMitglied(mitglied);
+		} else {
+			neuesMitglied(mitglied);
+		}
+		return mitglied;
+	}
 
-public List<Mitgliedtest> getAllMitglieder(){
-	SQLiteDatabase db = this.getReadableDatabase();
-	Cursor cursor = null;
-	cursor= db.query(MITGLIEDER_TABLE, null, null, null, null, null, null);
-	List<Mitgliedtest> mitgliederListe = new ArrayList<Mitgliedtest>();
-	cursor.moveToFirst();
-	int emailIndex = cursor.getColumnIndex(MITLGIEDER_EMAIL);
-	int passwortIndex = cursor.getColumnIndex(MITGLIEDER_PASSWORT);
-	int idIndex = cursor.getColumnIndex(MITGLIEDER_ID);
-	do {
+	public List<Mitgliedtest> getAllMitglieder() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = null;
+		cursor = db.query(MITGLIEDER_TABLE, null, null, null, null, null, null);
+		List<Mitgliedtest> mitgliederListe = new ArrayList<Mitgliedtest>();
+		cursor.moveToFirst();
+		int emailIndex = cursor.getColumnIndex(MITLGIEDER_EMAIL);
+		int passwortIndex = cursor.getColumnIndex(MITGLIEDER_PASSWORT);
+		int idIndex = cursor.getColumnIndex(MITGLIEDER_ID);
+		do {
+			String email = cursor.getString(emailIndex);
+			String passwort = cursor.getString(passwortIndex);
+			long id = cursor.getLong(idIndex);
+			Mitgliedtest mitglied = new Mitgliedtest();
+			mitglied.setEmail(email);
+			mitglied.setPasswort(passwort);
+			mitglied.setId(id);
+			mitgliederListe.add(mitglied);
+
+		} while (cursor.moveToNext());
+		cursor.close();
+		this.close();
+
+		return mitgliederListe;
+	}
+
+	public Mitgliedtest getNotizById(long id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = null;
+		cursor = db.query(MITGLIEDER_TABLE, null, MITGLIEDER_ID + "=?",
+				new String[] { String.valueOf(id) }, null, null, null);
+		cursor.moveToFirst();
+		int idIndex = cursor.getColumnIndex(MITGLIEDER_ID);
+		int emailIndex = cursor.getColumnIndex(MITLGIEDER_EMAIL);
+		int passwortIndex = cursor.getColumnIndex(MITGLIEDER_PASSWORT);
+		// int imageIndex = cursor.getColumnIndex(NOTIZ_IMAGE);
+
 		String email = cursor.getString(emailIndex);
-		String passwort= cursor.getString(passwortIndex);
-		long id = cursor.getLong(idIndex);
+		String passwort = cursor.getString(passwortIndex);
+		// String imagePath = cursor.getString(imageIndex);
+		long newId = cursor.getLong(idIndex);
+
 		Mitgliedtest mitglied = new Mitgliedtest();
 		mitglied.setEmail(email);
 		mitglied.setPasswort(passwort);
-		mitglied.setId(id);
-		mitgliederListe.add(mitglied);
-		
-	} while (cursor.moveToNext());
-	cursor.close();
-	this.close();
-	
-	return mitgliederListe;
-}
+		mitglied.setId(newId);
+		cursor.close();
+		this.close();
+		return mitglied;
+	}
 
-public Mitgliedtest getNotizById(long id) {
-	SQLiteDatabase db = this.getReadableDatabase();
-	Cursor cursor = null;
-	cursor = db.query(MITGLIEDER_TABLE, null, MITGLIEDER_ID + "=?",
-			new String[] { String.valueOf(id) }, null, null, null);
-	cursor.moveToFirst();
-	int idIndex = cursor.getColumnIndex(MITGLIEDER_ID);
-	int emailIndex = cursor.getColumnIndex(MITLGIEDER_EMAIL);
-	int passwortIndex = cursor.getColumnIndex(MITGLIEDER_PASSWORT);
-	//int imageIndex = cursor.getColumnIndex(NOTIZ_IMAGE);
+	public void deleteMitglied(Mitgliedtest notiz) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(MITGLIEDER_TABLE, MITGLIEDER_ID + "=?",
+				new String[] { String.valueOf(notiz.getId()) });
+		this.close();
+	}
 
-	String email = cursor.getString(emailIndex);
-	String passwort= cursor.getString(passwortIndex);
-//	String imagePath = cursor.getString(imageIndex);
-	long newId = cursor.getLong(idIndex);
-	
-	Mitgliedtest mitglied = new Mitgliedtest();
-	mitglied.setEmail(email);
-	mitglied.setPasswort(passwort);
-	mitglied.setId(newId);
-	cursor.close();
-	this.close();
-	return mitglied;
-}
+	public Cursor getAllNotizenCursor() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.query(MITGLIEDER_TABLE, null, null, null, null,
+				null, null);
+		return cursor;
+	}
 
-public void deleteMitglied(Mitgliedtest notiz) {
-	SQLiteDatabase db = this.getWritableDatabase();
-	db.delete(MITGLIEDER_TABLE, MITGLIEDER_ID + "=?",
-			new String[] { String.valueOf(notiz.getId()) });
-	this.close();
-}
-
-public Cursor getAllNotizenCursor(){
-	SQLiteDatabase db = this.getReadableDatabase();
-	Cursor cursor = db.query(MITGLIEDER_TABLE, null, null, null, null, null, null);
-	return cursor;
-}
-
-	
-	
-	
 }

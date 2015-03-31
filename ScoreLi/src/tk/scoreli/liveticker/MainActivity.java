@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
-
+	DatabaseHandler db = new DatabaseHandler(this);
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -64,7 +64,22 @@ public class MainActivity extends Activity implements
 			break;
 		case 2:
 			mTitle = getString(R.string.title_Sportart1);
-						break;
+			
+			
+			try {
+				db.neuesMitglied(new Mitgliedtest("philipp.messmer@gmail.com", "1234"));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+			
+			
+			
+			
+			break;
 		case 3:
 			mTitle = getString(R.string.title_Sportart2);
 			break;

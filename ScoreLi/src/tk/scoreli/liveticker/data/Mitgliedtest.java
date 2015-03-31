@@ -2,16 +2,22 @@ package tk.scoreli.liveticker.data;
 
 public class Mitgliedtest {
 	private String email, passwort;
-
-	public static long id = 1;
-
-	/*public Mitgliedtest(String email, String passwort) {
+	private long _id;
+	
+	public Mitgliedtest(String email, String passwort, int _id) {
 		super();
 		this.email = email;
 		this.passwort = passwort;
-		id++;
+		this._id = _id;
 	}
-*/
+public Mitgliedtest(){
+	super();
+}
+public Mitgliedtest(String email, String passwort) {
+	super();
+	this.email = email;
+	this.passwort = passwort;
+}
 	public String getEmail() {
 		return email;
 	}
@@ -29,11 +35,14 @@ public class Mitgliedtest {
 	}
 
 	public long getId() {
-		return id;
+		return _id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setId(long newId) {
+		this._id = newId;
 	}
+	
+
+
 
 }
