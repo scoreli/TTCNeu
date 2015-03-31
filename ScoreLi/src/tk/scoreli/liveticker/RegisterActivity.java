@@ -3,8 +3,8 @@ package tk.scoreli.liveticker;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.scoreli.liveticker.data.DatabaseHandler;
-import tk.scoreli.liveticker.data.Mitgliedtest;
+import tk.scoreli.liveticker.data.DatabasehandlerNeu;
+import tk.scoreli.liveticker.data.Mitglied;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -40,7 +40,6 @@ import android.widget.TextView;
  */
 public class RegisterActivity extends Activity implements
 		LoaderCallbacks<Cursor> {
-private DatabaseHandler dbHandler;
 
 	/**
 	 * A dummy authentication store containing known user names and passwords.
@@ -52,10 +51,10 @@ private DatabaseHandler dbHandler;
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
-	
+	DatabasehandlerNeu db = new DatabasehandlerNeu(this);
 	// UI references.
 	private AutoCompleteTextView mEmailViewR;
-	private EditText mPasswordViewR,mPasswordViewConfirmR;
+	private EditText mPasswordViewR, mPasswordViewConfirmR;
 	private View mProgressViewR;
 	private View mLoginFormViewR;
 
@@ -63,7 +62,6 @@ private DatabaseHandler dbHandler;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
-		dbHandler=new DatabaseHandler(getApplication());
 
 		// Set up the login form.
 		mEmailViewR = (AutoCompleteTextView) findViewById(R.id.emailregister);
@@ -130,7 +128,7 @@ private DatabaseHandler dbHandler;
 		String email = mEmailViewR.getText().toString();
 		String password = mPasswordViewR.getText().toString();
 		String passwordconfirm = mPasswordViewConfirmR.getText().toString();
-		
+
 		boolean cancel = false;
 		View focusView = null;
 
@@ -140,19 +138,20 @@ private DatabaseHandler dbHandler;
 			focusView = mPasswordViewR;
 			cancel = true;
 		}
-		/*Überprüfe ob das Passwortfeld ausgefüllt ist
-		 * 
+		/*
+		 * Überprüfe ob das Passwortfeld ausgefüllt ist
 		 */
 		if (TextUtils.isEmpty(password)) {
 			mPasswordViewR.setError(getString(R.string.error_field_required));
 			focusView = mPasswordViewR;
 			cancel = true;
 		}
-		/*Überprüfe ob die Eingegebenen Passwörter übereinstimmen
-		 * 
+		/*
+		 * Überprüfe ob die Eingegebenen Passwörter übereinstimmen
 		 */
 		if (!password.equals(passwordconfirm)) {
-			mPasswordViewConfirmR.setError(getString(R.string.error_invalid_password_confirm));
+			mPasswordViewConfirmR
+					.setError(getString(R.string.error_invalid_password_confirm));
 			focusView = mPasswordViewConfirmR;
 			cancel = true;
 		}
@@ -175,14 +174,15 @@ private DatabaseHandler dbHandler;
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			/*mAuthTask = new UserLoginTask(email, password);
-			mAuthTask.execute((Void) null);
-			*/
+			/*
+			 * mAuthTask = new UserLoginTask(email, password);
+			 * mAuthTask.execute((Void) null);
+			 */
 			/*
 			 * In die Datenbank schreiben
 			 */
-			
-			
+			db.addMitglied(new Mitglied(email, password));
+
 		}
 	}
 

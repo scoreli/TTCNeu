@@ -1,7 +1,5 @@
 package tk.scoreli.liveticker;
 
-import tk.scoreli.liveticker.data.DatabaseHandler;
-import tk.scoreli.liveticker.data.Mitgliedtest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -17,7 +15,7 @@ import android.view.ViewGroup;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
-	DatabaseHandler db = new DatabaseHandler(this);
+	
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -66,12 +64,8 @@ public class MainActivity extends Activity implements
 			mTitle = getString(R.string.title_Sportart1);
 			
 			
-			try {
-				db.neuesMitglied(new Mitgliedtest("philipp.messmer@gmail.com", "1234"));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				
+			
 			
 			
 			
