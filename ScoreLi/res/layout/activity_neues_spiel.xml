@@ -10,10 +10,73 @@
 
     <Spinner
         android:id="@+id/spinner_Sportart"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnNeuesSpiel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp" />
+        android:text="@string/txt_spielerstellen" />
+
+    <EditText
+        android:id="@+id/txfHeimmannschaft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner_Sportart"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/txt_Heimmannschaft" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/txfGastmannschaft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txfHeimmannschaft"
+        android:layout_below="@+id/txfHeimmannschaft"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/txt_Gastmannschaft" />
+
+    <EditText
+        android:id="@+id/txfSpielstandHeim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/btnNeuesSpiel"
+        android:ems="10"
+        android:hint="Heim"
+        android:inputType="number"
+        android:text="0" />
+
+    <EditText
+        android:id="@+id/txfSpielstandGast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/btnNeuesSpiel"
+        android:ems="10"
+        android:hint="Gast"
+        android:inputType="number"
+        android:text="0" />
+
+    <EditText
+        android:id="@+id/txfSpielbeginn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnNeuesSpiel"
+        android:layout_alignLeft="@+id/txfSpielstandHeim"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:hint="@string/txt_Spielbeginn"
+        android:inputType="time" />
 
 </RelativeLayout>

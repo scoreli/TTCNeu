@@ -3,7 +3,7 @@ package tk.scoreli.liveticker;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.scoreli.liveticker.data.Databasehandler;
+import tk.scoreli.liveticker.data.DatabasehandlerMitglieder;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -33,7 +33,7 @@ import android.widget.TextView;
  * 
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-	Databasehandler db = new Databasehandler(this);
+	DatabasehandlerMitglieder db = new DatabasehandlerMitglieder(this);
 	/**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.

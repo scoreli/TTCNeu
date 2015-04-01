@@ -3,7 +3,7 @@ package tk.scoreli.liveticker;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.scoreli.liveticker.data.Databasehandler;
+import tk.scoreli.liveticker.data.DatabasehandlerMitglieder;
 import tk.scoreli.liveticker.data.Mitglied;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -52,7 +52,7 @@ public class RegisterActivity extends Activity implements
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
-	Databasehandler db = new Databasehandler(this);
+	DatabasehandlerMitglieder db = new DatabasehandlerMitglieder(this);
 	// UI references.
 	private AutoCompleteTextView mEmailViewR;
 	private EditText mPasswordViewR, mPasswordViewConfirmR;

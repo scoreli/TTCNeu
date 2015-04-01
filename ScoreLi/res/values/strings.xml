@@ -25,5 +25,9 @@
         <item >Tischtennis</item>
         <item >Fußball</item>
     </string-array>
+        <string name="txt_spielerstellen">Spiel Erstellen</string>
+        <string name="txt_Heimmannschaft">Heimmannschaft</string>
+        <string name="txt_Gastmannschaft">Gastmannschaft</string>
+        <string name="txt_Spielbeginn">Spielbeginn</string>
 
 </resources>

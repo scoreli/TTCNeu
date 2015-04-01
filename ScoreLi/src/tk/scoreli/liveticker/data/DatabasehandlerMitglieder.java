@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class Databasehandler extends SQLiteOpenHelper {
+public class DatabasehandlerMitglieder extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
@@ -26,7 +26,7 @@ public class Databasehandler extends SQLiteOpenHelper {
 	private static final String MITGLIEDER_EMAIL = "name";
 	private static final String MITGLIEDER_PASSWORT = "passwort";
 
-	public Databasehandler(Context context) {
+	public DatabasehandlerMitglieder(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
