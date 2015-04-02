@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabasehandlerSpiele extends SQLiteOpenHelper {
@@ -38,15 +37,15 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_Veranstalungen
-				+ "(" + Veranstaltung_ID + " INTEGER PRIMARY KEY,"
-				+ Veranstaltung_Sportart + " TEXT,"
+		String CREATE_Veranstaltung_TABLE = "CREATE TABLE "
+				+ TABLE_Veranstalungen + "(" + Veranstaltung_ID
+				+ " INTEGER PRIMARY KEY," + Veranstaltung_Sportart + " TEXT,"
 				+ Veranstaltung_Heimmanschaft + " TEXT, "
 				+ Veranstaltung_Gastmanschaft + " TEXT, "
 				+ Veranstaltung_SpielstandHeim + " INTEGER, "
 				+ Veranstaltung_SpielstandGast + " INTEGER, "
 				+ Veranstaltung_Spielbeginn + " TEXT" + ")";
-		db.execSQL(CREATE_CONTACTS_TABLE);
+		db.execSQL(CREATE_Veranstaltung_TABLE);
 	}
 
 	// Upgrading database
@@ -84,7 +83,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		db.close(); // Closing database connection
 	}
 
-	// Getting single contact
+	// Getting single Veranstaltung
 	public Veranstaltung getVeranstaltung(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
@@ -105,31 +104,14 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return contact
 		return veranstaltung;
 	}
-/*
- * HIer weitermachen für Veranstaltung
- * 
- */
+
 	/*
-	 * get Mitglied ist noch nicht ganz gut ... schmeist eine exeption
+	 * HIer weitermachen für Veranstaltung
 	 */
-	public String getMitglied(String email) {
-		SQLiteDatabase db = this.getReadableDatabase();
-
-		Cursor cursor = db.query(TABLE_Veranstalungen, null,
-				Veranstaltung_Sportart + "=?", new String[] { email }, null,
-				null, null, null);
-		if (cursor.getCount() < 1) // UserName Not Exist
-			return "NOT EXIST";
-		cursor.moveToFirst();
-		String password = cursor.getString(cursor
-				.getColumnIndex(Veranstaltung_Heimmanschaft));
-		return password;
-
-	}
 
 	// Getting All Contacts
-	public List<Mitglied> getAllMitglieder() {
-		List<Mitglied> mitgliederListe = new ArrayList<Mitglied>();
+	public List<Veranstaltung> getAllVeranstaltungen() {
+		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Veranstalungen;
 
@@ -139,42 +121,54 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				Mitglied mitglied = new Mitglied();
-				mitglied.setID(Integer.parseInt(cursor.getString(0)));
-				mitglied.setEmail(cursor.getString(1));
-				mitglied.setPasswort(cursor.getString(2));
+				Veranstaltung veranstaltung = new Veranstaltung(
+						cursor.getString(0), cursor.getString(1),
+						cursor.getString(2), cursor.getString(3),
+						Integer.parseInt(cursor.getString(4)),
+						Integer.parseInt(cursor.getString(5)),
+						Integer.parseInt(cursor.getString(6)));
+
 				// Adding contact to list
-				mitgliederListe.add(mitglied);
+				veranstaltungliste.add(veranstaltung);
 			} while (cursor.moveToNext());
 		}
 
 		// return contact list
-		return mitgliederListe;
+		return veranstaltungliste;
 	}
 
 	// Updating single contact
-	public int updateMitglied(Mitglied mitglied) {
+	public int updateVeranstaltung(Veranstaltung veranstaltung) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(Veranstaltung_Sportart, mitglied.getEmail());
-		values.put(Veranstaltung_Heimmanschaft, mitglied.getPasswort());
+		values.put(Veranstaltung_Sportart, veranstaltung.getSportart()); // Sportart
+		values.put(Veranstaltung_Heimmanschaft,
+				veranstaltung.getHeimmanschaft()); // Heimmannschaft
+		values.put(Veranstaltung_Gastmanschaft,
+				veranstaltung.getGastmannschaft()); // Gastmannschaft
+		values.put(Veranstaltung_SpielstandHeim,
+				veranstaltung.getSpielstandHeim()); // SpielstandHeim
+		values.put(Veranstaltung_SpielstandGast,
+				veranstaltung.getSpielstandGast()); // SpielstandGast
+		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
 
 		// updating row
 		return db.update(TABLE_Veranstalungen, values, Veranstaltung_ID
-				+ " = ?", new String[] { String.valueOf(mitglied.getID()) });
+				+ " = ?",
+				new String[] { String.valueOf(veranstaltung.getId()) });
 	}
 
 	// Deleting single contact
-	public void deleteMitglied(Mitglied mitglied) {
+	public void deleteVeranstaltung(Veranstaltung veranstaltung) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_Veranstalungen, Veranstaltung_ID + " = ?",
-				new String[] { String.valueOf(mitglied.getID()) });
+				new String[] { String.valueOf(veranstaltung.getId()) });
 		db.close();
 	}
 
 	// Getting contacts Count
-	public int getMitgliederCount() {
+	public int getVeranstaltungCount() {
 		String countQuery = "SELECT  * FROM " + TABLE_Veranstalungen;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(countQuery, null);
