@@ -53,6 +53,10 @@
             android:label="@string/title_activity_neues_spiel"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".UpdateSpielActivity"
+            android:label="@string/title_activity_update_spiel" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

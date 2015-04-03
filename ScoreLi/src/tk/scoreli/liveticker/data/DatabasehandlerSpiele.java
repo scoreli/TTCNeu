@@ -29,6 +29,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	private static final String Veranstaltung_SpielstandHeim = "SpielstandHeim";
 	private static final String Veranstaltung_SpielstandGast = "SpielstandGast";
 	private static final String Veranstaltung_Spielbeginn = "Spielbeginn";
+	private static final String Veranstaltung_Status = "Status";
 
 	public DatabasehandlerSpiele(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,7 +45,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				+ Veranstaltung_Gastmanschaft + " TEXT, "
 				+ Veranstaltung_SpielstandHeim + " INTEGER, "
 				+ Veranstaltung_SpielstandGast + " INTEGER, "
-				+ Veranstaltung_Spielbeginn + " TEXT" + ")";
+				+ Veranstaltung_Spielbeginn + " TEXT, " + Veranstaltung_Status
+				+ " TEXT" + ")";
 		db.execSQL(CREATE_Veranstaltung_TABLE);
 	}
 
@@ -77,7 +79,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(Veranstaltung_SpielstandGast,
 				veranstaltung.getSpielstandGast()); // SpielstandGast
 		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
-
+		values.put(Veranstaltung_Status, veranstaltung.getStatus());// Status
 		// Inserting Row
 		db.insert(TABLE_Veranstalungen, null, values);
 		db.close(); // Closing database connection
@@ -88,18 +90,20 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_Veranstalungen, new String[] {
+				Veranstaltung_ID, Veranstaltung_Sportart,
 				Veranstaltung_Heimmanschaft, Veranstaltung_Gastmanschaft,
-				Veranstaltung_Spielbeginn, Veranstaltung_Sportart,
-				Veranstaltung_ID, Veranstaltung_SpielstandHeim,
-				Veranstaltung_SpielstandGast, }, Veranstaltung_ID + "=?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+				Veranstaltung_SpielstandHeim, Veranstaltung_SpielstandGast,
+				Veranstaltung_Spielbeginn, Veranstaltung_Status },
+				Veranstaltung_ID + "=?", new String[] { String.valueOf(id) },
+				null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
 		Veranstaltung veranstaltung = new Veranstaltung(Integer.parseInt(cursor
 				.getString(0)), cursor.getString(1), cursor.getString(2),
 				cursor.getString(3), Integer.parseInt(cursor.getString(4)),
-				Integer.parseInt(cursor.getString(5)), cursor.getString(6));
+				Integer.parseInt(cursor.getString(5)), cursor.getString(6),
+				cursor.getString(7));
 
 		// return contact
 		return veranstaltung;
@@ -126,7 +130,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 						cursor.getString(1), cursor.getString(2),
 						cursor.getString(3), Integer.parseInt(cursor
 								.getString(4)), Integer.parseInt(cursor
-								.getString(5)), cursor.getString(6));
+								.getString(5)), cursor.getString(6),
+						cursor.getString(7));
 
 				// Adding contact to list
 				veranstaltungliste.add(veranstaltung);
@@ -152,7 +157,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(Veranstaltung_SpielstandGast,
 				veranstaltung.getSpielstandGast()); // SpielstandGast
 		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
-
+		values.put(Veranstaltung_Status, veranstaltung.getStatus());// Status
 		// updating row
 		return db.update(TABLE_Veranstalungen, values, Veranstaltung_ID
 				+ " = ?",

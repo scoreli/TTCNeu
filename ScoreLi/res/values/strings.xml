@@ -21,15 +21,19 @@
     <string name="title_activity_spiele">Veranstaltungen</string>
     <string name="spiel_neuVeranstaltung">Neue Veranstaltung</string>
     <string name="title_activity_neues_spiel">Neue Veranstaltung</string>
+
     <string-array name="SpinnerSportarten">
-        <item >Tischtennis</item>
-        <item >Fußball</item>
+        <item>Tischtennis</item>
+        <item>Fußball</item>
     </string-array>
-        <string name="txt_spielerstellen">Spiel Erstellen</string>
-        <string name="txt_Heimmannschaft">Heimmannschaft</string>
-        <string name="txt_Gastmannschaft">Gastmannschaft</string>
-        <string name="txt_Spielbeginn">Spielbeginn</string>
-        <string name="txt_Spielstand">Spielstand:</string>
-        <string name="txt_Status">Status</string>
+
+    <string name="txt_spielerstellen">Spiel Erstellen</string>
+    <string name="txt_Heimmannschaft">Heimmannschaft</string>
+    <string name="txt_Gastmannschaft">Gastmannschaft</string>
+    <string name="txt_Spielbeginn">Spielbeginn</string>
+    <string name="txt_Spielstand">Spielstand:</string>
+    <string name="txt_Status">Status</string>
+    <string name="txt_Aktualisieren">Aktualisieren</string>
+    <string name="title_activity_update_spiel">Aktualisiere Spiel</string>
 
 </resources>

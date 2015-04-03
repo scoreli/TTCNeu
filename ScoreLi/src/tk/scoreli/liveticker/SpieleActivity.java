@@ -10,16 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class SpieleActivity extends Activity implements OnItemClickListener {
+public class SpieleActivity extends Activity implements OnItemClickListener, OnItemLongClickListener {
 
 	private ListView Veranstaltungsliste;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
-
+	 public static final String KEY = "ID_Veranstaltung";
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
@@ -27,6 +28,8 @@ public class SpieleActivity extends Activity implements OnItemClickListener {
 		/*
 		 * Komischerweise führt Android automatisch die toString methode aus und
 		 * gibt die Veranstaltung als String aus.
+		 * http://app-makers.blogspot.de/2010/05/eine-listview-mit-inhalt-fullen.html
+		 * http://www.appartig.net/?e=18
 		 */
 		try {
 			Veranstaltungsliste = (ListView) findViewById(R.id.listView1);
@@ -35,6 +38,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener {
 					db.getAllVeranstaltungen());
 			Veranstaltungsliste.setAdapter(listenAdapter);
 			Veranstaltungsliste.setOnItemClickListener(this);
+			Veranstaltungsliste.setOnItemLongClickListener(this);
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(),
 					Toast.LENGTH_LONG).show();
@@ -48,9 +52,20 @@ public class SpieleActivity extends Activity implements OnItemClickListener {
  */
 	@Override
     public void onItemClick(AdapterView<?> lV, View view, int pos, long id) { 
-        Toast.makeText(this, "Veranstaltung " + pos + " ausgewählt!",  
-                Toast.LENGTH_SHORT).show(); 
+		//Hier wird das Objekt geholt der Liste und unten die Id geholt
+		Veranstaltung veranstaltung= (Veranstaltung) Veranstaltungsliste.getItemAtPosition(pos);
+		Intent i=new Intent(SpieleActivity.this,
+			UpdateSpielActivity.class);
+		i.putExtra(KEY, veranstaltung.getId());
+		startActivity(i);
+		
     } 
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		
+		return false;
+	}
 	/*
 	 * 
 	 * 
@@ -91,9 +106,12 @@ public class SpieleActivity extends Activity implements OnItemClickListener {
 		if (id == R.id.spiel_neueVeranstaltung) {
 			startActivity(new Intent(SpieleActivity.this,
 					NeuesSpielActivity.class));
+			
 			return true;
 		}
+	
 		return super.onOptionsItemSelected(item);
 	}
+	
 
 }

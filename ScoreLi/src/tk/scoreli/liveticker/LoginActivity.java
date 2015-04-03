@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 /**
  * Einen Loginscreen der per Email und Passwort funktioniert
+ * http://www.androidhive.info/2012/01/android-login-and-registration-with-php-mysql-and-sqlite/
+ * tutorial
  * 
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {

@@ -1,16 +1,18 @@
 package tk.scoreli.liveticker.data;
 
 public class Veranstaltung {
-	private String Heimmanschaft, Gastmannschaft, Spielbeginn, Sportart;
+	private String Heimmanschaft, Gastmannschaft, Spielbeginn, Sportart,Status;
 	private long _id;
 	private int SpielstandHeim, SpielstandGast;
 
 	public Veranstaltung() {
 	}
-
+/*
+ * Status fehlt noch
+ */
 	public Veranstaltung(String heimmanschaft, String gastmannschaft,
 			String spielbeginn, String sportart, int spielstandHeim,
-			int spielstandGast) {
+			int spielstandGast, String status) {
 		super();
 		Heimmanschaft = heimmanschaft;
 		Gastmannschaft = gastmannschaft;
@@ -18,10 +20,11 @@ public class Veranstaltung {
 		Sportart = sportart;
 		SpielstandHeim = spielstandHeim;
 		SpielstandGast = spielstandGast;
+		Status=status;
 	}
 
 	public Veranstaltung(long id,String sportart,String heimmanschaft, String gastmannschaft,
-			  int spielstandHeim,int spielstandGast, String spielbeginn
+			  int spielstandHeim,int spielstandGast, String spielbeginn, String status
 			) {
 		super();
 		Heimmanschaft = heimmanschaft;
@@ -31,6 +34,7 @@ public class Veranstaltung {
 		this._id = id;
 		SpielstandHeim = spielstandHeim;
 		SpielstandGast = spielstandGast;
+		Status=status;
 	}
 
 	public String getHeimmanschaft() {
@@ -88,13 +92,20 @@ public class Veranstaltung {
 	public void setSpielstandGast(int spielstandGast) {
 		SpielstandGast = spielstandGast;
 	}
-
+	public String getStatus() {
+		return Status;
+	}
+	public void setStatus(String status) {
+		Status = status;
+	}
 	@Override
 	public String toString() {
-		return "Veranstaltung Nr:"+_id + Heimmanschaft+" gegen " + Gastmannschaft + ", Spielbeginn="
-				+ Spielbeginn + ", Sportart=" + Sportart 
-				+ ", SpielstandHeim=" + SpielstandHeim + ", SpielstandGast="
-				+ SpielstandGast ;
+		return "Veranstaltung [Heimmanschaft=" + Heimmanschaft
+				+ ", Gastmannschaft=" + Gastmannschaft + ", Spielbeginn="
+				+ Spielbeginn + ", Sportart=" + Sportart + ", Status=" + Status
+				+ ", _id=" + _id + ", SpielstandHeim=" + SpielstandHeim
+				+ ", SpielstandGast=" + SpielstandGast + "]";
 	}
 
+	
 }
