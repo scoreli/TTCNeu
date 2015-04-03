@@ -54,8 +54,7 @@
         android:layout_toLeftOf="@+id/btnNeuesSpiel"
         android:ems="10"
         android:hint="Heim"
-        android:inputType="number"
-        android:text="0" />
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/txfSpielstandGast"
@@ -65,18 +64,36 @@
         android:layout_toRightOf="@+id/btnNeuesSpiel"
         android:ems="10"
         android:hint="Gast"
-        android:inputType="number"
-        android:text="0" />
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/txvSpielstand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txfSpielstandGast"
+        android:layout_centerHorizontal="true"
+        android:text="@string/txt_Spielstand"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/txfSpielbeginn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnNeuesSpiel"
         android:layout_alignLeft="@+id/txfSpielstandHeim"
-        android:layout_marginBottom="30dp"
+        android:layout_below="@+id/txfSpielstandHeim"
+        android:layout_marginTop="27dp"
         android:ems="10"
         android:hint="@string/txt_Spielbeginn"
         android:inputType="time" />
+
+    <EditText
+        android:id="@+id/txfStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txfSpielbeginn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/txt_Status" />
 
 </RelativeLayout>

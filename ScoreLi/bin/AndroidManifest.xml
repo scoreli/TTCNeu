@@ -50,7 +50,8 @@
         </activity>
         <activity
             android:name=".NeuesSpielActivity"
-            android:label="@string/title_activity_neues_spiel" >
+            android:label="@string/title_activity_neues_spiel"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

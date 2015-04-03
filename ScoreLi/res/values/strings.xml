@@ -29,5 +29,7 @@
         <string name="txt_Heimmannschaft">Heimmannschaft</string>
         <string name="txt_Gastmannschaft">Gastmannschaft</string>
         <string name="txt_Spielbeginn">Spielbeginn</string>
+        <string name="txt_Spielstand">Spielstand:</string>
+        <string name="txt_Status">Status</string>
 
 </resources>

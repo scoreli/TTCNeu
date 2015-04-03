@@ -2,6 +2,7 @@ package tk.scoreli.liveticker;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Mitglied;
+import tk.scoreli.liveticker.data.Veranstaltung;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,10 +16,11 @@ import android.widget.Toast;
 
 public class NeuesSpielActivity extends Activity {
 	private Spinner SpinnerSportart;
-	private EditText txfHeimmannschaft,txfGastmannschaft,txfSpielbeginn,txfSpielstandHeim,txfSpielstandGast;
+	private EditText txfHeimmannschaft,txfGastmannschaft,txfSpielbeginn,txfSpielstandHeim,txfSpielstandGast,txfStatus;
 	private Button btnSpielerstellen;
 	public String [] test = {"Tischtennis","Fußball"};
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,11 +46,11 @@ public void Spielerstellen(){
 	txfSpielstandGast.setError(null);
 	
 	String heimmanschaft = txfHeimmannschaft.getText().toString();
-	String gastmanschaft = txfGastmannschaft.getText().toString();
+	String gastmannschaft = txfGastmannschaft.getText().toString();
 	String spielbeginn = txfSpielbeginn.getText().toString();
-	String spielstandheim = txfSpielstandHeim.getText().toString();
-	String spielstandgast = txfSpielstandGast.getText().toString();
-	
+	String spielstandHeim = txfSpielstandHeim.getText().toString();
+	String spielstandGast = txfSpielstandGast.getText().toString();
+	String sportart= SpinnerSportart.getSelectedItem().toString();
 	boolean cancel = false;
 	View focusView = null;
 	
@@ -58,6 +60,30 @@ public void Spielerstellen(){
 	cancel =true;
 	
 	}
+	if (TextUtils.isEmpty(gastmannschaft)) {
+		txfGastmannschaft.setError(getString(R.string.error_field_required));
+		focusView = txfGastmannschaft;
+		cancel =true;
+		
+		}
+	if (TextUtils.isEmpty(spielbeginn)) {
+		txfSpielbeginn.setError(getString(R.string.error_field_required));
+		focusView = txfSpielbeginn;
+		cancel =true;
+		
+		}
+	if (TextUtils.isEmpty(spielstandHeim)) {
+		txfSpielstandHeim.setError(getString(R.string.error_field_required));
+		focusView = txfSpielstandHeim;
+		cancel =true;
+		
+		}
+	if (TextUtils.isEmpty(spielstandGast)) {
+		txfSpielstandGast.setError(getString(R.string.error_field_required));
+		focusView = txfSpielstandGast;
+		cancel =true;
+		
+		}
 	/*
 	 * Für alle weiteren felder bitte ausfüllen
 	 * 
@@ -77,7 +103,7 @@ public void Spielerstellen(){
 		/*
 		 * In die Datenbank schreiben
 		 */
-		
+		db.addVeranstaltung(new Veranstaltung(heimmanschaft, gastmannschaft, spielbeginn, sportart, Integer.parseInt(spielstandHeim), Integer.parseInt(spielstandGast)));
 		Toast.makeText(getApplicationContext(), "Veranstaltung gespeichert ", Toast.LENGTH_LONG).show();
 	}
 }
@@ -91,6 +117,7 @@ public void init(){
 	txfSpielstandGast = (EditText)findViewById(R.id.txfSpielstandGast);
 	txfSpielbeginn = (EditText)findViewById(R.id.txfSpielbeginn);
 	btnSpielerstellen=(Button)findViewById(R.id.btnNeuesSpiel);
+	txfStatus=(EditText)findViewById(R.id.txfStatus);
 }	
 	
 	

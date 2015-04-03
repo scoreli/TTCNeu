@@ -1,17 +1,22 @@
 package tk.scoreli.liveticker;
 
+import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 public class SpieleActivity extends Activity {
-
+	private Spinner SpinneraktuelleSpiele;
+	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
+		
 	}
 
 	@Override
@@ -28,9 +33,11 @@ public class SpieleActivity extends Activity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.spiel_neueVeranstaltung) {
-			startActivity(new Intent(SpieleActivity.this, NeuesSpielActivity.class));
+			startActivity(new Intent(SpieleActivity.this,
+					NeuesSpielActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
 }
