@@ -2,7 +2,7 @@ package tk.scoreli.liveticker.data;
 
 public class Veranstaltung {
 	private String Heimmanschaft, Gastmannschaft, Spielbeginn, Sportart;
-	private long id;
+	private long _id;
 	private int SpielstandHeim, SpielstandGast;
 
 	public Veranstaltung() {
@@ -20,15 +20,15 @@ public class Veranstaltung {
 		SpielstandGast = spielstandGast;
 	}
 
-	public Veranstaltung(String heimmanschaft, String gastmannschaft,
-			String spielbeginn, String sportart, long id, int spielstandHeim,
-			int spielstandGast) {
+	public Veranstaltung(long id,String sportart,String heimmanschaft, String gastmannschaft,
+			  int spielstandHeim,int spielstandGast, String spielbeginn
+			) {
 		super();
 		Heimmanschaft = heimmanschaft;
 		Gastmannschaft = gastmannschaft;
 		Spielbeginn = spielbeginn;
 		Sportart = sportart;
-		this.id = id;
+		this._id = id;
 		SpielstandHeim = spielstandHeim;
 		SpielstandGast = spielstandGast;
 	}
@@ -66,11 +66,11 @@ public class Veranstaltung {
 	}
 
 	public long getId() {
-		return id;
+		return _id;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		this._id = id;
 	}
 
 	public int getSpielstandHeim() {
@@ -87,6 +87,14 @@ public class Veranstaltung {
 
 	public void setSpielstandGast(int spielstandGast) {
 		SpielstandGast = spielstandGast;
+	}
+
+	@Override
+	public String toString() {
+		return "Veranstaltung Nr:"+_id + Heimmanschaft+" gegen " + Gastmannschaft + ", Spielbeginn="
+				+ Spielbeginn + ", Sportart=" + Sportart 
+				+ ", SpielstandHeim=" + SpielstandHeim + ", SpielstandGast="
+				+ SpielstandGast ;
 	}
 
 }

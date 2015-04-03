@@ -96,10 +96,10 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		Veranstaltung veranstaltung = new Veranstaltung(cursor.getString(0),
-				cursor.getString(1), cursor.getString(2), cursor.getString(3),
-				Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor
-						.getString(5)), Integer.parseInt(cursor.getString(6)));
+		Veranstaltung veranstaltung = new Veranstaltung(Integer.parseInt(cursor
+				.getString(0)), cursor.getString(1), cursor.getString(2),
+				cursor.getString(3), Integer.parseInt(cursor.getString(4)),
+				Integer.parseInt(cursor.getString(5)), cursor.getString(6));
 
 		// return contact
 		return veranstaltung;
@@ -122,11 +122,11 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				Veranstaltung veranstaltung = new Veranstaltung(
-						cursor.getString(0), cursor.getString(1),
-						cursor.getString(2), cursor.getString(3),
-						Integer.parseInt(cursor.getString(4)),
-						Integer.parseInt(cursor.getString(5)),
-						Integer.parseInt(cursor.getString(6)));
+						Integer.parseInt(cursor.getString(0)),
+						cursor.getString(1), cursor.getString(2),
+						cursor.getString(3), Integer.parseInt(cursor
+								.getString(4)), Integer.parseInt(cursor
+								.getString(5)), cursor.getString(6));
 
 				// Adding contact to list
 				veranstaltungliste.add(veranstaltung);

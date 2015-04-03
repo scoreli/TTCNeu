@@ -1,23 +1,79 @@
 package tk.scoreli.liveticker;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
+import tk.scoreli.liveticker.data.Veranstaltung;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class SpieleActivity extends Activity {
-	private Spinner SpinneraktuelleSpiele;
+public class SpieleActivity extends Activity implements OnItemClickListener {
+
+	private ListView Veranstaltungsliste;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
-		
+
+		/*
+		 * Komischerweise führt Android automatisch die toString methode aus und
+		 * gibt die Veranstaltung als String aus.
+		 */
+		try {
+			Veranstaltungsliste = (ListView) findViewById(R.id.listView1);
+			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1,
+					db.getAllVeranstaltungen());
+			Veranstaltungsliste.setAdapter(listenAdapter);
+			Veranstaltungsliste.setOnItemClickListener(this);
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.toString(),
+					Toast.LENGTH_LONG).show();
+
+		}
+
+	
 	}
+/*
+ * Hier fehlt noch das die Id von der Veranstaltung angezeigt wird.
+ */
+	@Override
+    public void onItemClick(AdapterView<?> lV, View view, int pos, long id) { 
+        Toast.makeText(this, "Veranstaltung " + pos + " ausgewählt!",  
+                Toast.LENGTH_SHORT).show(); 
+    } 
+	/*
+	 * 
+	 * 
+	 * private static class VeranstaltungsListAdapter extends CursorAdapter {
+	 * 
+	 * @Override public View getView(int position, View convertView, ViewGroup
+	 * parent) { Veranstaltung veranstaltung = getItem(position); return
+	 * super.getView(position, convertView, parent); }
+	 * 
+	 * public VeranstaltungsListAdapter(Context context, int textViewResourceId,
+	 * List<Veranstaltung> objects) { super(context, textViewResourceId,
+	 * objects); // TODO Auto-generated constructor stub }
+	 * 
+	 * @Override public void bindView(View arg0, Context arg1, Cursor arg2) { //
+	 * TODO Auto-generated method stub
+	 * 
+	 * }
+	 * 
+	 * @Override public View newView(Context arg0, Cursor arg1, ViewGroup arg2)
+	 * { // TODO Auto-generated method stub return null; }
+	 * 
+	 * }
+	 */
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,5 +95,5 @@ public class SpieleActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 }

@@ -103,8 +103,13 @@ public void Spielerstellen(){
 		/*
 		 * In die Datenbank schreiben
 		 */
+		//Veranstaltung servus = new Veranstaltung(heimmanschaft, gastmannschaft, spielbeginn, sportart, Integer.parseInt(spielstandHeim), Integer.parseInt(spielstandGast));
+		
+		//Toast.makeText(getApplicationContext(), servus.toString(), Toast.LENGTH_LONG).show();
 		db.addVeranstaltung(new Veranstaltung(heimmanschaft, gastmannschaft, spielbeginn, sportart, Integer.parseInt(spielstandHeim), Integer.parseInt(spielstandGast)));
+		
 		Toast.makeText(getApplicationContext(), "Veranstaltung gespeichert ", Toast.LENGTH_LONG).show();
+		finish();
 	}
 }
 

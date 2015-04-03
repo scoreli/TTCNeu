@@ -1,5 +1,6 @@
 package tk.scoreli.liveticker;
 
+import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,7 +16,7 @@ import android.view.ViewGroup;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
-	
+	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
