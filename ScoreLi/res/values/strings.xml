@@ -35,5 +35,13 @@
     <string name="txt_Status">Status</string>
     <string name="txt_Aktualisieren">Aktualisieren</string>
     <string name="title_activity_update_spiel">Aktualisiere Spiel</string>
+    <string name="txt_Bluetoothan">Bluetooth an</string>
+    <string name="txt_Bluetooth">Bluetooth</string>
+    <string name="txt_gepaartegeräte">Gepaarte Geräte</string>
+    <string name="title_activity_gepaarte_bt">Gepaarte Geräte</string>
+    <string name="MY_UUID">fa87c0d0-afac-11de-8a39-0800200c9a66</string>
+    <string name="title_activity_bluetoothtest">Bluetoothtest</string>
+    <string name="title_activity_bluetoothclient">Bluetoothclient</string>
+    <string name="title_activity_bluetooth_server">BluetoothServer</string>
 
 </resources>

@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
 
     <application
         android:allowBackup="true"
@@ -56,6 +57,24 @@
         <activity
             android:name=".UpdateSpielActivity"
             android:label="@string/title_activity_update_spiel" >
+        </activity>
+        <activity
+            android:name=".GepaarteBtActivity"
+            android:label="@string/title_activity_gepaarte_bt" >
+        </activity>
+        <activity
+            android:name=".Bluetoothtest"
+            android:label="@string/title_activity_bluetoothtest" >
+        </activity>
+        <activity
+            android:name=".bluetoothneu.Bluetoothclient"
+            android:label="@string/title_activity_bluetoothclient"
+            android:screenOrientation="landscape"  >
+        </activity>
+        <activity
+            android:name="tk.scoreli.liveticker.bluetoothneu.BluetoothServer"
+            android:label="@string/title_activity_bluetooth_server"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

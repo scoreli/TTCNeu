@@ -65,6 +65,7 @@ public class MainActivity extends Activity implements
 			mTitle = getString(R.string.title_Sportart1);
 			
 			
+			
 				
 			
 			

@@ -1,8 +1,12 @@
 package tk.scoreli.liveticker;
 
+import java.util.Set;
+
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,11 +20,14 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class SpieleActivity extends Activity implements OnItemClickListener, OnItemLongClickListener {
+public class SpieleActivity extends Activity implements OnItemClickListener,
+		OnItemLongClickListener {
 
 	private ListView Veranstaltungsliste;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
-	 public static final String KEY = "ID_Veranstaltung";
+	public static final String KEY = "ID_Veranstaltung";
+	private final static int REQUEST_ENABLE_BT = 1;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
@@ -28,11 +35,12 @@ public class SpieleActivity extends Activity implements OnItemClickListener, OnI
 		/*
 		 * Komischerweise führt Android automatisch die toString methode aus und
 		 * gibt die Veranstaltung als String aus.
-		 * http://app-makers.blogspot.de/2010/05/eine-listview-mit-inhalt-fullen.html
+		 * http://app-makers.blogspot.de/2010
+		 * /05/eine-listview-mit-inhalt-fullen.html
 		 * http://www.appartig.net/?e=18
 		 */
 		try {
-			Veranstaltungsliste = (ListView) findViewById(R.id.listView1);
+			Veranstaltungsliste=(ListView)findViewById(R.id.listVeranstaltung);
 			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
 					android.R.layout.simple_list_item_1,
 					db.getAllVeranstaltungen());
@@ -45,27 +53,29 @@ public class SpieleActivity extends Activity implements OnItemClickListener, OnI
 
 		}
 
-	
 	}
-/*
- * Hier fehlt noch das die Id von der Veranstaltung angezeigt wird.
- */
+
+	/*
+	 * Hier fehlt noch das die Id von der Veranstaltung angezeigt wird.
+	 */
 	@Override
-    public void onItemClick(AdapterView<?> lV, View view, int pos, long id) { 
-		//Hier wird das Objekt geholt der Liste und unten die Id geholt
-		Veranstaltung veranstaltung= (Veranstaltung) Veranstaltungsliste.getItemAtPosition(pos);
-		Intent i=new Intent(SpieleActivity.this,
-			UpdateSpielActivity.class);
+	public void onItemClick(AdapterView<?> lV, View view, int pos, long id) {
+		// Hier wird das Objekt geholt der Liste und unten die Id geholt
+		Veranstaltung veranstaltung = (Veranstaltung) Veranstaltungsliste
+				.getItemAtPosition(pos);
+		Intent i = new Intent(SpieleActivity.this, UpdateSpielActivity.class);
 		i.putExtra(KEY, veranstaltung.getId());
 		startActivity(i);
-		
-    } 
+
+	}
+
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		
+
 		return false;
 	}
+
 	/*
 	 * 
 	 * 
@@ -106,12 +116,47 @@ public class SpieleActivity extends Activity implements OnItemClickListener, OnI
 		if (id == R.id.spiel_neueVeranstaltung) {
 			startActivity(new Intent(SpieleActivity.this,
 					NeuesSpielActivity.class));
-			
+
 			return true;
 		}
-	
+		if (id == R.id.menu_Bluetooth_an) {
+			Bluetoothaktivieren();
+
+		}
+		if (id == R.id.menu_Gepaartegeraete) {
+			
+			
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
+
+	private void Bluetoothaktivieren() {
+		boolean bluetoothadapter = true;
+		/**
+		 * Hat das Gerät Bluetooth ?
+		 */
+		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+				.getDefaultAdapter();
+		if (mBluetoothAdapter == null) {
+			Toast.makeText(getApplicationContext(),
+					"Bluetooth gerät nicht gefunden", Toast.LENGTH_SHORT)
+					.show();
+			bluetoothadapter = false;
+		}
+		/**
+		 * BluetoothAdapter Aktivieren wenn er nicht schon an ist.
+		 */
+		if (!mBluetoothAdapter.isEnabled() && bluetoothadapter == true) {
+			Intent enableBtIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+		}
+		Set<BluetoothDevice> pairedDevices;
+		
+		pairedDevices = mBluetoothAdapter.getBondedDevices();
+		
 	
+	}
 
 }
