@@ -3,6 +3,6 @@
     tools:context="tk.scoreli.liveticker.SpieleActivity" >
     <item android:id="@+id/spiel_neueVeranstaltung" android:title="@string/spiel_neuVeranstaltung"></item>
     <item android:id="@+id/menu_Bluetooth_an" android:title="@string/txt_Bluetoothan"></item>
-    <item android:id="@+id/menu_Gepaartegeraete" android:title="@string/txt_gepaartegeräte"></item>
+    <item android:id="@+id/menu_gerätverbinden" android:title="Gerät verbinden"></item>
 
 </menu>

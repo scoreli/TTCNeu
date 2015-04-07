@@ -43,5 +43,14 @@
     <string name="title_activity_bluetoothtest">Bluetoothtest</string>
     <string name="title_activity_bluetoothclient">Bluetoothclient</string>
     <string name="title_activity_bluetooth_server">BluetoothServer</string>
+    <string name="text_suchen">Suchen</string>
+    <string name="text_gepaartegeraete">Gepaarte Geräte</string>
+    <string name="text_neueGeraete">Neue Geräte</string>
+    <string name="text_keinegepaartenGeraete">Keine Gepaarten Geräte</string>
+    <string name="text_geraetAuswaehlen">Ein Gerät zum Verbinden auswählen</string>
+    <string name="text_keinegefunden">Keine Geräte gefunden</string>
+    <string name="text_suchebeendet">Suche beendet</string>
+    <string name="title_activity_main_activitydsf">MainActivitydsf</string>
+    <string name="title_activity_main_activityh">MainActivityh</string>
 
 </resources>

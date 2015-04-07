@@ -69,13 +69,19 @@
         <activity
             android:name=".bluetoothneu.Bluetoothclient"
             android:label="@string/title_activity_bluetoothclient"
-            android:screenOrientation="landscape"  >
+            android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="tk.scoreli.liveticker.bluetoothneu.BluetoothServer"
+            android:name=".bluetoothneu.BluetoothServer"
             android:label="@string/title_activity_bluetooth_server"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name="tk.scoreli.liveticker.bluetooth.DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_bluetoothtest" >
+        </activity>
+        
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

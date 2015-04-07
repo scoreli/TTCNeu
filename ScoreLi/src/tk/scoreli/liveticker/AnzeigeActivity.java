@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 
 import tk.scoreli.liveticker.bluetooth.BluetoothService;
 import tk.scoreli.liveticker.data.Veranstaltung;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
