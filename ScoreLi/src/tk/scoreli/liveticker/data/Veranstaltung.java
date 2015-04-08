@@ -1,6 +1,12 @@
 package tk.scoreli.liveticker.data;
 
-public class Veranstaltung {
+import java.io.Serializable;
+
+public class Veranstaltung implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String Heimmanschaft, Gastmannschaft, Spielbeginn, Sportart,Status;
 	private long _id;
 	private int SpielstandHeim, SpielstandGast;

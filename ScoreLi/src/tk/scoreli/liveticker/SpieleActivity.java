@@ -2,7 +2,9 @@ package tk.scoreli.liveticker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import tk.scoreli.liveticker.bluetooth.BluetoothService;
 import tk.scoreli.liveticker.bluetooth.DeviceListActivity;
@@ -28,7 +30,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class SpieleActivity extends Activity implements OnItemClickListener,
-		OnItemLongClickListener {
+		OnItemLongClickListener, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Message types sent from the BluetoothChatService Handler
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
@@ -47,17 +53,17 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	private final static int REQUEST_ENABLE_BT = 2;
 	// Name of the connected device
 	private String mConnectedDeviceName = null;
-	 // String buffer for outgoing messages
-    private StringBuffer mOutStringBuffer;
+	// String buffer for outgoing messages
+	private StringBuffer mOutStringBuffer;
 	// Local Bluetooth adapter
-	private BluetoothAdapter mBluetoothAdapter=null;
+	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
 	private BluetoothService mChatService = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
-		
+
 		/*
 		 * Komischerweise führt Android automatisch die toString methode aus und
 		 * gibt die Veranstaltung als String aus.
@@ -66,14 +72,16 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		 * http://www.appartig.net/?e=18
 		 */
 		// Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
+		// If the adapter is null, then Bluetooth is not supported
+		if (mBluetoothAdapter == null) {
+			Toast.makeText(this, "Bluetooth is not available",
+					Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
+
 		try {
 			Veranstaltungsliste = (ListView) findViewById(R.id.listVeranstaltung);
 			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
@@ -89,42 +97,63 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		}
 
 	}
+
 	@Override
-    public synchronized void onResume() {
-        super.onResume();
-       // if(D) Log.e(TAG, "+ ON RESUME +");
+	public synchronized void onResume() {
+		super.onResume();
+		// if(D) Log.e(TAG, "+ ON RESUME +");
 
-        // Performing this check in onResume() covers the case in which BT was
-        // not enabled during onStart(), so we were paused to enable it...
-        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
-        if (mChatService != null) {
-            // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothService.STATE_NONE) {
-              // Start the Bluetooth chat services
-              mChatService.start();
-            }
-        }
-    }
+		// Performing this check in onResume() covers the case in which BT was
+		// not enabled during onStart(), so we were paused to enable it...
+		// onResume() will be called when ACTION_REQUEST_ENABLE activity
+		// returns.
+		if (mChatService != null) {
+			// Only if the state is STATE_NONE, do we know that we haven't
+			// started already
+			if (mChatService.getState() == BluetoothService.STATE_NONE) {
+				// Start the Bluetooth chat services
+				mChatService.start();
+			}
+		}
+	}
+
 	@Override
-    public synchronized void onPause() {
-        super.onPause();
-      //  if(D) Log.e(TAG, "- ON PAUSE -");
-    }
+	public synchronized void onPause() {
+		super.onPause();
+		// if(D) Log.e(TAG, "- ON PAUSE -");
+	}
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    //    if(D) Log.e(TAG, "-- ON STOP --");
-    }
+	@Override
+	public void onStop() {
+		super.onStop();
+		// if(D) Log.e(TAG, "-- ON STOP --");
+	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Stop the Bluetooth chat services
-        if (mChatService != null) mChatService.stop();
-     //   if(D) Log.e(TAG, "--- ON DESTROY ---");
-    }
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// Stop the Bluetooth chat services
+		if (mChatService != null)
+			mChatService.stop();
+		// if(D) Log.e(TAG, "--- ON DESTROY ---");
+	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		// If BT is not on, request that it be enabled.
+		// setupChat() will then be called during onActivityResult
+		if (!mBluetoothAdapter.isEnabled()) {
+			Intent enableIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+			// Otherwise, setup the chat session
+		} else {
+			if (mChatService == null)
+				setupUebertragung();
+		}
+	}
 
 	/*
 	 * Hier fehlt noch das die Id von der Veranstaltung angezeigt wird.
@@ -143,8 +172,10 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		Veranstaltung veranstaltung = (Veranstaltung) Veranstaltungsliste
+		Veranstaltung veranstaltung= new Veranstaltung();
+		 veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(position);
+		 String hallo ="hall";
 		sendVeranstaltung(veranstaltung);
 		return false;
 	}
@@ -206,7 +237,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		try {
 			switch (requestCode) {
 			case REQUEST_CONNECT_DEVICE:
@@ -215,12 +246,13 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 					// Get the device MAC address
 					String address = data.getExtras().getString(
 							DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-					
+
 					// Get the BLuetoothDevice object
 					BluetoothDevice device = mBluetoothAdapter
 							.getRemoteDevice(address);
 					// Attempt to connect to the device
-				mChatService.connect(device);
+
+					mChatService.connect(device);
 				}
 				break;
 			case REQUEST_ENABLE_BT:
@@ -243,9 +275,9 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 
 	private void setupUebertragung() {
 		// Initialize the BluetoothChatService to perform bluetooth connections
-		mChatService = new BluetoothService(this, mHandler);
-	    // Initialize the buffer for outgoing messages
-        mOutStringBuffer = new StringBuffer("");
+		mChatService = new BluetoothService(this, mHandlerHier);
+		// Initialize the buffer for outgoing messages
+		mOutStringBuffer = new StringBuffer("");
 	}
 
 	private void Bluetoothaktivieren() {
@@ -279,24 +311,26 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 			// Toast.LENGTH_SHORT).show();
 			return;
 		}
-
+		
 		// Check that there's actually something to send
 		if (veranstaltung != null) {
 			// Get the message bytes and tell the BluetoothChatService to write
-			Object uebertrag = veranstaltung;
+			
 			byte[] send = null;
 			try {
-				send = serialize(uebertrag);
+				send = serialize(veranstaltung);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			//send=veranstaltung.getBytes();			
+			 
 			mChatService.write(send);
 
 		}
 	}
 
-	private final Handler mHandler = new Handler() {
+	private final Handler mHandlerHier = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -341,11 +375,12 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 			}
 		}
 	};
-
+	
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);
 		o.writeObject(obj);
 		return b.toByteArray();
 	}
+	
 }

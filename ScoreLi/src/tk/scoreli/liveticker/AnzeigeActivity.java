@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 
 import tk.scoreli.liveticker.bluetooth.BluetoothService;
 import tk.scoreli.liveticker.data.Veranstaltung;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -35,7 +34,7 @@ public class AnzeigeActivity extends Activity {
 	public static final String DEVICE_NAME = "device_name";
 	public static final String TOAST = "toast";
 
-	Veranstaltung zeigeVeranstaltung;
+	Veranstaltung veranstaltung;
 
 	// Layout Views
 	private TextView mTitle;
@@ -198,13 +197,21 @@ public class AnzeigeActivity extends Activity {
 				break;
 
 			case MESSAGE_READ:
+
 				byte[] readBuf = (byte[]) msg.obj;
+				System.out.println(readBuf);
 				// construct a string from the valid bytes in the buffer
-				// String readMessage = new String(readBuf, 0, msg.arg1);
-				Object uebergabe;
+				// #
+				// String readMessage = new S(readBuf, 0, msg.arg1);
+				// Toast.makeText(AnzeigeActivity.this, readMessage,
+				// Toast.LENGTH_SHORT).show();
+
+			//	Object uebergabe = new Object();
+				Veranstaltung zeigeVeranstaltung = new Veranstaltung();
 				try {
-					uebergabe = deserialize(readBuf);
-					Veranstaltung zeigeVeranstaltung = (Veranstaltung) uebergabe;
+				//	uebergabe = deserialize(readBuf);
+				//	zeigeVeranstaltung = (Veranstaltung) uebergabe;
+					zeigeVeranstaltung = deserialize(readBuf);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -212,17 +219,7 @@ public class AnzeigeActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-
-				AnzeigeHeima.setText(""
-						+ zeigeVeranstaltung.getSpielstandHeim());
-				AnzeigekleinHeima
-						.setText(zeigeVeranstaltung.getHeimmanschaft());
-				AnzeigeGasta.setText(""
-						+ zeigeVeranstaltung.getSpielstandGast());
-				AnzeigekleinGasta.setText(zeigeVeranstaltung
-						.getGastmannschaft());
-				AnzeigeStatusa.setText(zeigeVeranstaltung.getStatus());
+				 aktualisiereScoreboard(zeigeVeranstaltung);
 
 				break;
 			case MESSAGE_DEVICE_NAME:
@@ -258,11 +255,19 @@ public class AnzeigeActivity extends Activity {
 		}
 	};
 
-	public static Object deserialize(byte[] bytes) throws IOException,
+	public void aktualisiereScoreboard(Veranstaltung veranstaltung) {
+		AnzeigeHeima.setText("" + veranstaltung.getSpielstandHeim());
+		AnzeigekleinHeima.setText(veranstaltung.getHeimmanschaft());
+		AnzeigeGasta.setText("" + veranstaltung.getSpielstandGast());
+		AnzeigekleinGasta.setText(veranstaltung.getGastmannschaft());
+		AnzeigeStatusa.setText(veranstaltung.getStatus());
+	}
+
+	public static Veranstaltung deserialize(byte[] bytes) throws IOException,
 			ClassNotFoundException {
 		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
 		ObjectInputStream o = new ObjectInputStream(b);
-		return o.readObject();
+		return (Veranstaltung) o.readObject();
 	}
 
 }
