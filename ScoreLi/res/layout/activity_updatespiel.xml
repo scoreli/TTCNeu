@@ -50,4 +50,10 @@
         android:layout_height="wrap_content"
         android:text="@string/txt_Aktualisieren" />
 
+    <Button
+        android:id="@+id/btnloeschen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_loeschen" />
+
 </LinearLayout>

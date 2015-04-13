@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class UpdateSpielActivity extends Activity {
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
-	private Button btnaktualisieren;
+	private Button btnaktualisieren, btnloeschen;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 
 	@Override
@@ -32,6 +32,15 @@ public class UpdateSpielActivity extends Activity {
 			}
 
 		});
+		btnloeschen.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				loeschen();
+
+			}
+
+		});
 	}
 
 	private void init() {
@@ -39,6 +48,18 @@ public class UpdateSpielActivity extends Activity {
 		txfSpielstandGast = (EditText) findViewById(R.id.txfGastmannschaftAktualisiere);
 		txfStatus = (EditText) findViewById(R.id.txfAktualisiereStatus);
 		btnaktualisieren = (Button) findViewById(R.id.btnaktualisieren);
+		btnloeschen = (Button) findViewById(R.id.btnloeschen);
+	}
+
+	private void loeschen() {
+		/*
+		 * Hier wird die Zahl(id) der Veranstaltung geholt
+		 */
+		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
+		db.deleteVeranstaltung(updateveranstaltung);
+
+		finish();
 	}
 
 	private void aktualisieren() {
