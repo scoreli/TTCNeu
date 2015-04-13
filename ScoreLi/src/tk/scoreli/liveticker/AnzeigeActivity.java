@@ -1,8 +1,10 @@
 package tk.scoreli.liveticker;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import tk.scoreli.liveticker.bluetooth.BluetoothService;
 import tk.scoreli.liveticker.data.Veranstaltung;
@@ -49,13 +51,23 @@ public class AnzeigeActivity extends Activity {
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
 	private BluetoothService mChatService = null;
-
+	//Hier das sie überall zu verfügung steht.
+	Veranstaltung zeigeVeranstaltung = new Veranstaltung();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_anzeige);
 		init();
+		try {
+			aktualisiereScoreboard(deserialize(getIntent().getExtras().getByteArray(MainActivity.KEY)));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/**
 		 * Hat das Gerät Bluetooth ?
 		 */
@@ -104,7 +116,7 @@ public class AnzeigeActivity extends Activity {
 		super.onStart();
 		if (D)
 			Log.e(TAG, "++ ON START ++");
-
+		
 		// If BT is not on, request that it be enabled.
 		// setupChat() will then be called during onActivityResult
 		if (!mBluetoothAdapter.isEnabled()) {
@@ -206,8 +218,7 @@ public class AnzeigeActivity extends Activity {
 				// Toast.makeText(AnzeigeActivity.this, readMessage,
 				// Toast.LENGTH_SHORT).show();
 
-			//	Object uebergabe = new Object();
-				Veranstaltung zeigeVeranstaltung = new Veranstaltung();
+				
 				try {
 				//	uebergabe = deserialize(readBuf);
 				//	zeigeVeranstaltung = (Veranstaltung) uebergabe;
@@ -245,8 +256,17 @@ public class AnzeigeActivity extends Activity {
 																// in gleicher
 																// Richtung)deswegen
 																// neustart
-					startActivity(new Intent(AnzeigeActivity.this,
-							AnzeigeActivity.class));
+					Intent i = new Intent(AnzeigeActivity.this, AnzeigeActivity.class);
+		           
+					byte[] uebergabe;
+					try {//Daten empfangen
+						uebergabe = serialize(zeigeVeranstaltung);
+						i.putExtra(MainActivity.KEY,uebergabe);
+						startActivity(i);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					finish();
 
 				}
@@ -269,5 +289,11 @@ public class AnzeigeActivity extends Activity {
 		ObjectInputStream o = new ObjectInputStream(b);
 		return (Veranstaltung) o.readObject();
 	}
-
+	public static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o = new ObjectOutputStream(b);
+		o.writeObject(obj);
+		return b.toByteArray();
+	}
+	
 }

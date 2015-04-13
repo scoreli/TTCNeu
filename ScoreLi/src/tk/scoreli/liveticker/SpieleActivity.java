@@ -175,7 +175,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		Veranstaltung veranstaltung= new Veranstaltung();
 		 veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(position);
-		 String hallo ="hall";
+		
 		sendVeranstaltung(veranstaltung);
 		return false;
 	}

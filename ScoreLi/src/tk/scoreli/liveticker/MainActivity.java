@@ -1,6 +1,11 @@
 package tk.scoreli.liveticker;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
+import tk.scoreli.liveticker.data.Veranstaltung;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -17,6 +22,7 @@ import android.view.ViewGroup;
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	public static final String KEY = "UebergabeVeranstaltungObjekt";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -31,6 +37,7 @@ public class MainActivity extends Activity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		 
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
@@ -120,7 +127,24 @@ public class MainActivity extends Activity implements
 			return true;
 		}
 		if (id == R.id.menu_Scoreboard) {
-			startActivity(new Intent(MainActivity.this, AnzeigeActivity.class));
+			/*
+			 * Hier wird ein leeres Veranstaltungsobjekt übergeben. Dies braucht man damit die Anzeigen
+			 * Actitvity beim Beenden der Bluetoothverbindung der Stand von vorher bleibt.
+			 */
+			Intent i = new Intent(MainActivity.this, AnzeigeActivity.class);
+            Veranstaltung leereVeranstaltung = new Veranstaltung("", "", "", "", 0, 0, "");
+			byte[] uebergabe;
+			try {
+				uebergabe = serialize(leereVeranstaltung);
+				i.putExtra(KEY,uebergabe);
+				startActivity(i);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+           
 			return true;
 		}
 		if (id == R.id.menu_Spiele) {
@@ -170,5 +194,10 @@ public class MainActivity extends Activity implements
 					ARG_SECTION_NUMBER));
 		}
 	}
-
+	public static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o = new ObjectOutputStream(b);
+		o.writeObject(obj);
+		return b.toByteArray();
+	}
 }

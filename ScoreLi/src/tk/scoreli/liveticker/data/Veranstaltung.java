@@ -106,11 +106,10 @@ public class Veranstaltung implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Veranstaltung [Heimmanschaft=" + Heimmanschaft
-				+ ", Gastmannschaft=" + Gastmannschaft + ", Spielbeginn="
-				+ Spielbeginn + ", Sportart=" + Sportart + ", Status=" + Status
-				+ ", _id=" + _id + ", SpielstandHeim=" + SpielstandHeim
-				+ ", SpielstandGast=" + SpielstandGast + "]";
+		return ""+Heimmanschaft+" gegen "+Gastmannschaft+" "+SpielstandHeim+" : "+SpielstandGast+
+				  " Spielbeginn: "
+				+ Spielbeginn +" Uhr "+ " Sportart: " + Sportart + " Status: " + Status
+				;
 	}
 
 	
