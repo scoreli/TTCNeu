@@ -94,11 +94,12 @@ public class AnzeigeActivity extends Activity {
 		if (resultCode == Activity.RESULT_OK) {
 			// Bluetooth ist aktiv.
 		} else {
-			if (!mBluetoothAdapter.isEnabled()) {
+			/*if (!mBluetoothAdapter.isEnabled()) {
 				Intent enableBtIntent = new Intent(
 						BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-			}
+			}*/
+			finish();
 		}
 	}
 
