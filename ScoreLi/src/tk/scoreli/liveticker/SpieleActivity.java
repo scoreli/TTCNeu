@@ -107,6 +107,19 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		// not enabled during onStart(), so we were paused to enable it...
 		// onResume() will be called when ACTION_REQUEST_ENABLE activity
 		// returns.
+		try {
+			Veranstaltungsliste = (ListView) findViewById(R.id.listVeranstaltung);
+			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1,
+					db.getAllVeranstaltungen());
+			Veranstaltungsliste.setAdapter(listenAdapter);
+			Veranstaltungsliste.setOnItemClickListener(this);
+			Veranstaltungsliste.setOnItemLongClickListener(this);
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.toString(),
+					Toast.LENGTH_LONG).show();
+
+		}
 		if (mChatService != null) {
 			// Only if the state is STATE_NONE, do we know that we haven't
 			// started already
