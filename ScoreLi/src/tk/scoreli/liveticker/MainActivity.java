@@ -3,6 +3,7 @@ package tk.scoreli.liveticker;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
@@ -18,10 +19,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+
 	public static final String KEY = "UebergabeVeranstaltungObjekt";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -37,9 +41,8 @@ public class MainActivity extends Activity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		 
-		super.onCreate(savedInstanceState);
 
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
@@ -70,18 +73,7 @@ public class MainActivity extends Activity implements
 			break;
 		case 2:
 			mTitle = getString(R.string.title_Sportart1);
-			
-			
-			
-				
-			
-			
-			
-			
-			
-			
-			
-			
+
 			break;
 		case 3:
 			mTitle = getString(R.string.title_Sportart2);
@@ -128,23 +120,23 @@ public class MainActivity extends Activity implements
 		}
 		if (id == R.id.menu_Scoreboard) {
 			/*
-			 * Hier wird ein leeres Veranstaltungsobjekt übergeben. Dies braucht man damit die Anzeigen
-			 * Actitvity beim Beenden der Bluetoothverbindung der Stand von vorher bleibt.
+			 * Hier wird ein leeres Veranstaltungsobjekt übergeben. Dies braucht
+			 * man damit die Anzeigen Actitvity beim Beenden der
+			 * Bluetoothverbindung der Stand von vorher bleibt.
 			 */
 			Intent i = new Intent(MainActivity.this, AnzeigeActivity.class);
-            Veranstaltung leereVeranstaltung = new Veranstaltung("", "", "", "", 0, 0, "");
+			Veranstaltung leereVeranstaltung = new Veranstaltung("", "", "",
+					"", 0, 0, "");
 			byte[] uebergabe;
 			try {
 				uebergabe = serialize(leereVeranstaltung);
-				i.putExtra(KEY,uebergabe);
+				i.putExtra(KEY, uebergabe);
 				startActivity(i);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-           
+
 			return true;
 		}
 		if (id == R.id.menu_Spiele) {
@@ -194,6 +186,7 @@ public class MainActivity extends Activity implements
 					ARG_SECTION_NUMBER));
 		}
 	}
+
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);

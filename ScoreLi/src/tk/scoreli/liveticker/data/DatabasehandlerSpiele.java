@@ -141,7 +141,67 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return contact list
 		return veranstaltungliste;
 	}
+/*
+	// Getting All Contacts
+	public List<Veranstaltung> getTischtennisVeranstaltungen() {
+		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_Veranstalungen
+				+ " WHERE " + Veranstaltung_Sportart + " LIKE 'Tischtennis'";
 
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Veranstaltung veranstaltung = new Veranstaltung(
+						Integer.parseInt(cursor.getString(0)),
+						cursor.getString(1), cursor.getString(2),
+						cursor.getString(3), Integer.parseInt(cursor
+								.getString(4)), Integer.parseInt(cursor
+								.getString(5)), cursor.getString(6),
+						cursor.getString(7));
+
+				// Adding contact to list
+				veranstaltungliste.add(veranstaltung);
+			} while (cursor.moveToNext());
+		}
+
+		// return contact list
+		return veranstaltungliste;
+	}
+
+	// Getting All Contacts
+	public List<Veranstaltung> getFussballVeranstaltungen() {
+		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_Veranstalungen
+				+ " WHERE " + Veranstaltung_Sportart + " LIKE 'Fußball'";
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Veranstaltung veranstaltung = new Veranstaltung(
+						Integer.parseInt(cursor.getString(0)),
+						cursor.getString(1), cursor.getString(2),
+						cursor.getString(3), Integer.parseInt(cursor
+								.getString(4)), Integer.parseInt(cursor
+								.getString(5)), cursor.getString(6),
+						cursor.getString(7));
+
+				// Adding contact to list
+				veranstaltungliste.add(veranstaltung);
+			} while (cursor.moveToNext());
+		}
+
+		// return contact list
+		return veranstaltungliste;
+	}
+*/
 	// Updating single contact
 	public int updateVeranstaltung(Veranstaltung veranstaltung) {
 		SQLiteDatabase db = this.getWritableDatabase();

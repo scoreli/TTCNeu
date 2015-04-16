@@ -11,12 +11,22 @@
          space available using match_parent in both dimensions.
     -->
 
+    
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background" />
+        android:background="@drawable/background" >
 
+        <ListView
+            android:id="@+id/list_AuflistungSpiele"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+    </FrameLayout>
+ 
     <!--
          android:layout_gravity="start" tells DrawerLayout to treat
          this as a sliding drawer on the left side for left-to-right
@@ -29,6 +39,8 @@
          the container.
     -->
 
+    
+
     <fragment
         android:id="@+id/navigation_drawer"
         android:name="tk.scoreli.liveticker.NavigationDrawerFragment"
@@ -36,5 +48,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         tools:layout="@layout/fragment_navigation_drawer" />
+
+  
 
 </android.support.v4.widget.DrawerLayout>

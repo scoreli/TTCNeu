@@ -53,5 +53,6 @@
     <string name="title_activity_main_activitydsf">MainActivitydsf</string>
     <string name="title_activity_main_activityh">MainActivityh</string>
     <string name="text_loeschen">Löschen</string>
+    <string name="title_activity_spiele_auflistung_tt">SpieleAuflistungTTActivity</string>
 
 </resources>
