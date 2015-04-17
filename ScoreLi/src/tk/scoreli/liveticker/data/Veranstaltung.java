@@ -2,20 +2,28 @@ package tk.scoreli.liveticker.data;
 
 import java.io.Serializable;
 
+/**
+ * Bei dieser Klasse muss das Interface Serializable implementiert werden, damit
+ * es für die Bluetoothverbindung serilaisiert werden kann. Hierbei muss noch
+ * eine serialVersionUID angegeben werden.
+ * 
+ * @author philipp
+ *
+ */
 public class Veranstaltung implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	private String Heimmanschaft, Gastmannschaft, Spielbeginn, Sportart,Status;
+	private String Heimmanschaft, Gastmannschaft, Spielbeginn, Sportart,
+			Status;
 	private long _id;
 	private int SpielstandHeim, SpielstandGast;
 
 	public Veranstaltung() {
 	}
-/*
- * Status fehlt noch
- */
+
+	/*
+	 * Status fehlt noch
+	 */
 	public Veranstaltung(String heimmanschaft, String gastmannschaft,
 			String spielbeginn, String sportart, int spielstandHeim,
 			int spielstandGast, String status) {
@@ -26,12 +34,12 @@ public class Veranstaltung implements Serializable {
 		Sportart = sportart;
 		SpielstandHeim = spielstandHeim;
 		SpielstandGast = spielstandGast;
-		Status=status;
+		Status = status;
 	}
 
-	public Veranstaltung(long id,String sportart,String heimmanschaft, String gastmannschaft,
-			  int spielstandHeim,int spielstandGast, String spielbeginn, String status
-			) {
+	public Veranstaltung(long id, String sportart, String heimmanschaft,
+			String gastmannschaft, int spielstandHeim, int spielstandGast,
+			String spielbeginn, String status) {
 		super();
 		Heimmanschaft = heimmanschaft;
 		Gastmannschaft = gastmannschaft;
@@ -40,7 +48,7 @@ public class Veranstaltung implements Serializable {
 		this._id = id;
 		SpielstandHeim = spielstandHeim;
 		SpielstandGast = spielstandGast;
-		Status=status;
+		Status = status;
 	}
 
 	public String getHeimmanschaft() {
@@ -98,19 +106,21 @@ public class Veranstaltung implements Serializable {
 	public void setSpielstandGast(int spielstandGast) {
 		SpielstandGast = spielstandGast;
 	}
+
 	public String getStatus() {
 		return Status;
 	}
+
 	public void setStatus(String status) {
 		Status = status;
 	}
+
 	@Override
 	public String toString() {
-		return ""+Heimmanschaft+" gegen "+Gastmannschaft+" "+SpielstandHeim+" : "+SpielstandGast+
-				  " Spielbeginn: "
-				+ Spielbeginn +" Uhr "+ " Sportart: " + Sportart + " Status: " + Status
-				;
+		return "" + Heimmanschaft + " gegen " + Gastmannschaft + " "
+				+ SpielstandHeim + " : " + SpielstandGast + " Spielbeginn: "
+				+ Spielbeginn + " Uhr " + " Sportart: " + Sportart
+				+ " Status: " + Status;
 	}
 
-	
 }

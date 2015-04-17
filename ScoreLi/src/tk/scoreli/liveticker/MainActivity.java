@@ -25,6 +25,9 @@ import android.widget.ListView;
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	ListView Veranstaltungenliste;
+	private ArrayAdapter<Veranstaltung> adapter;
+	List<Veranstaltung> veranstaltungen;
 
 	public static final String KEY = "UebergabeVeranstaltungObjekt";
 	/**
@@ -44,7 +47,11 @@ public class MainActivity extends Activity implements
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		/**
+		 * Wird die Liste der Veranstaltungen auf in der MainActivty
+		 * initalisiert.
+		 */
+		Veranstaltungenliste = (ListView) findViewById(R.id.list_AuflistungSpiele);
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -69,14 +76,39 @@ public class MainActivity extends Activity implements
 		switch (number) {
 		case 1:
 			mTitle = getString(R.string.title_Startseite);
-
+			/**
+			 * Bei der Auswahl Startseite wird die Liste der Aktuellen
+			 * Veranstaltungen nicht angezeigt.
+			 */
+			Veranstaltungenliste.setVisibility(View.GONE);
 			break;
 		case 2:
 			mTitle = getString(R.string.title_Sportart1);
-
+			/**
+			 * Hier werden alle Tischtennisveranstaltungen angzeigt. Hierbeit
+			 * wird die Methode getTischtennisVeranstaltungen() aufgerufen.
+			 * Dabei muss die Liste in ein ArrayAdapter des Typs Veranstaltung
+			 * erzeugt werden und die Liste übergeben werden.
+			 */
+			Veranstaltungenliste.setVisibility(View.VISIBLE);
+			veranstaltungen = db.getTischtennisVeranstaltungen();
+			adapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1, veranstaltungen);
+			Veranstaltungenliste.setAdapter(adapter);
 			break;
 		case 3:
 			mTitle = getString(R.string.title_Sportart2);
+			/**
+			 * Hier werden alle Fußballveranstaltungen angzeigt. Hierbeit
+			 * wird die Methode getFußballVeranstaltungen() aufgerufen.
+			 * Dabei muss die Liste in ein ArrayAdapter des Typs Veranstaltung
+			 * erzeugt werden und die Liste übergeben werden.
+			 */
+			Veranstaltungenliste.setVisibility(View.VISIBLE);
+			veranstaltungen = db.getFussballVeranstaltungen();
+			adapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1, veranstaltungen);
+			Veranstaltungenliste.setAdapter(adapter);
 			break;
 		}
 	}
@@ -108,6 +140,7 @@ public class MainActivity extends Activity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+
 			return true;
 		}
 		if (id == R.id.menu_anmelden) {
@@ -119,7 +152,7 @@ public class MainActivity extends Activity implements
 			return true;
 		}
 		if (id == R.id.menu_Scoreboard) {
-			/*
+			/**
 			 * Hier wird ein leeres Veranstaltungsobjekt übergeben. Dies braucht
 			 * man damit die Anzeigen Actitvity beim Beenden der
 			 * Bluetoothverbindung der Stand von vorher bleibt.

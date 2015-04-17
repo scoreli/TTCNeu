@@ -19,7 +19,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "Spiele.db";
 
 	// Contacts table name
-	private static final String TABLE_Veranstalungen = "veranstaltungen";
+	private static final String TABLE_Veranstaltungen = "veranstaltungen";
 
 	// Contacts Table Columns names
 	private static final String Veranstaltung_ID = "id";
@@ -35,11 +35,14 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
-	// Creating Tables
+	/**
+	 * Mit dieser Methode wird die Sql-lite Datenbank gebaut. Hierbei wird ein
+	 * Sql-Befehl erzeugt und dieser dann ausgeführt.(execSQL)
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_Veranstaltung_TABLE = "CREATE TABLE "
-				+ TABLE_Veranstalungen + "(" + Veranstaltung_ID
+				+ TABLE_Veranstaltungen + "(" + Veranstaltung_ID
 				+ " INTEGER PRIMARY KEY," + Veranstaltung_Sportart + " TEXT,"
 				+ Veranstaltung_Heimmanschaft + " TEXT, "
 				+ Veranstaltung_Gastmanschaft + " TEXT, "
@@ -54,17 +57,18 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older table if existed
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_Veranstalungen);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_Veranstaltungen);
 
 		// Create tables again
 		onCreate(db);
 	}
 
 	/**
-	 * All CRUD(Create, Read, Update, Delete) Operations
+	 * Hier wird eine neuer Eintrag erstellt. Hierbei muss ein
+	 * Veranstaltungsobjekt erzeugt werden.
+	 *
+	 * @param veranstaltung
 	 */
-
-	// Adding new contact
 	public void addVeranstaltung(Veranstaltung veranstaltung) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -81,15 +85,22 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
 		values.put(Veranstaltung_Status, veranstaltung.getStatus());// Status
 		// Inserting Row
-		db.insert(TABLE_Veranstalungen, null, values);
+		db.insert(TABLE_Veranstaltungen, null, values);
 		db.close(); // Closing database connection
 	}
 
+	/**
+	 * Hierbei wird ein ein Veranstaltungseintrag über die id der Veranstaltung
+	 * geholt. Danach wird dieses als Veranstaltungsobjekt zurückgegeben.
+	 * 
+	 * @param id
+	 * @return
+	 */
 	// Getting single Veranstaltung
 	public Veranstaltung getVeranstaltung(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(TABLE_Veranstalungen, new String[] {
+		Cursor cursor = db.query(TABLE_Veranstaltungen, new String[] {
 				Veranstaltung_ID, Veranstaltung_Sportart,
 				Veranstaltung_Heimmanschaft, Veranstaltung_Gastmanschaft,
 				Veranstaltung_SpielstandHeim, Veranstaltung_SpielstandGast,
@@ -109,15 +120,17 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		return veranstaltung;
 	}
 
-	/*
-	 * HIer weitermachen für Veranstaltung
+	/**
+	 * Bei dieser Methode wird mit einer SQL-Abfrage alle Veranstaltungseinträge
+	 * geholt. Diese werden in einer List<> zurückgegeben.
+	 * 
+	 * @return
 	 */
 
-	// Getting All Contacts
 	public List<Veranstaltung> getAllVeranstaltungen() {
 		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_Veranstalungen;
+		String selectQuery = "SELECT  * FROM " + TABLE_Veranstaltungen;
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -141,12 +154,18 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return contact list
 		return veranstaltungliste;
 	}
-/*
-	// Getting All Contacts
+
+	/**
+	 * Bei dieser Methode wird mit einer SQL-Abfrage alle Veranstaltungseinträge
+	 * geholt die der Sportart Tischtennis angehören. Diese werden in einer
+	 * List<> zurückgegeben.
+	 * 
+	 * @return
+	 */
 	public List<Veranstaltung> getTischtennisVeranstaltungen() {
 		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_Veranstalungen
+		String selectQuery = "SELECT  * FROM " + TABLE_Veranstaltungen
 				+ " WHERE " + Veranstaltung_Sportart + " LIKE 'Tischtennis'";
 
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -172,11 +191,18 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		return veranstaltungliste;
 	}
 
-	// Getting All Contacts
+	/**
+	 * Bei dieser Methode wird mit einer SQL-Abfrage alle Veranstaltungseinträge
+	 * geholt die der Sportart Fußball angehören. Diese werden in einer List<>
+	 * zurückgegeben.
+	 * 
+	 * @return
+	 */
+
 	public List<Veranstaltung> getFussballVeranstaltungen() {
 		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_Veranstalungen
+		String selectQuery = "SELECT  * FROM " + TABLE_Veranstaltungen
 				+ " WHERE " + Veranstaltung_Sportart + " LIKE 'Fußball'";
 
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -201,7 +227,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return contact list
 		return veranstaltungliste;
 	}
-*/
+
 	// Updating single contact
 	public int updateVeranstaltung(Veranstaltung veranstaltung) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -219,7 +245,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
 		values.put(Veranstaltung_Status, veranstaltung.getStatus());// Status
 		// updating row
-		return db.update(TABLE_Veranstalungen, values, Veranstaltung_ID
+		return db.update(TABLE_Veranstaltungen, values, Veranstaltung_ID
 				+ " = ?",
 				new String[] { String.valueOf(veranstaltung.getId()) });
 	}
@@ -227,14 +253,14 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	// Deleting single contact
 	public void deleteVeranstaltung(Veranstaltung veranstaltung) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_Veranstalungen, Veranstaltung_ID + " = ?",
+		db.delete(TABLE_Veranstaltungen, Veranstaltung_ID + " = ?",
 				new String[] { String.valueOf(veranstaltung.getId()) });
 		db.close();
 	}
 
 	// Getting contacts Count
 	public int getVeranstaltungCount() {
-		String countQuery = "SELECT  * FROM " + TABLE_Veranstalungen;
+		String countQuery = "SELECT  * FROM " + TABLE_Veranstaltungen;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(countQuery, null);
 		cursor.close();

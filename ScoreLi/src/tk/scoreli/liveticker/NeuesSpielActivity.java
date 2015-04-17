@@ -101,23 +101,7 @@ public class NeuesSpielActivity extends Activity {
 			// form field with an error.
 			focusView.requestFocus();
 		} else {
-			// Show a progress spinner, and kick off a background task to
-			// perform the user login attempt.
-			// showProgress(true);
-			/*
-			 * mAuthTask = new UserLoginTask(email, password);
-			 * mAuthTask.execute((Void) null);
-			 */
-			/*
-			 * In die Datenbank schreiben
-			 */
-			// Veranstaltung servus = new Veranstaltung(heimmanschaft,
-			// gastmannschaft, spielbeginn, sportart,
-			// Integer.parseInt(spielstandHeim),
-			// Integer.parseInt(spielstandGast));
 
-			// Toast.makeText(getApplicationContext(), servus.toString(),
-			// Toast.LENGTH_LONG).show();
 			db.addVeranstaltung(new Veranstaltung(heimmanschaft,
 					gastmannschaft, spielbeginn, sportart, Integer
 							.parseInt(spielstandHeim), Integer

@@ -43,16 +43,15 @@ public class AnzeigeActivity extends Activity {
 
 	// Name of the connected device
 	private String mConnectedDeviceName = null;
-	// Array adapter for the conversation thread
-	// private ArrayAdapter<String> mConversationArrayAdapter;
 	// String buffer for outgoing messages
 	private StringBuffer mOutStringBuffer;
 	// Local Bluetooth adapter
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
 	private BluetoothService mChatService = null;
-	//Hier das sie überall zu verfügung steht.
+	// Hier das sie überall zu verfügung steht.
 	Veranstaltung zeigeVeranstaltung = new Veranstaltung();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -60,7 +59,8 @@ public class AnzeigeActivity extends Activity {
 		setContentView(R.layout.activity_anzeige);
 		init();
 		try {
-			aktualisiereScoreboard(deserialize(getIntent().getExtras().getByteArray(MainActivity.KEY)));
+			aktualisiereScoreboard(deserialize(getIntent().getExtras()
+					.getByteArray(MainActivity.KEY)));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,11 +94,6 @@ public class AnzeigeActivity extends Activity {
 		if (resultCode == Activity.RESULT_OK) {
 			// Bluetooth ist aktiv.
 		} else {
-			/*if (!mBluetoothAdapter.isEnabled()) {
-				Intent enableBtIntent = new Intent(
-						BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-			}*/
 			finish();
 		}
 	}
@@ -117,7 +112,7 @@ public class AnzeigeActivity extends Activity {
 		super.onStart();
 		if (D)
 			Log.e(TAG, "++ ON START ++");
-		
+
 		// If BT is not on, request that it be enabled.
 		// setupChat() will then be called during onActivityResult
 		if (!mBluetoothAdapter.isEnabled()) {
@@ -185,7 +180,9 @@ public class AnzeigeActivity extends Activity {
 			Log.e(TAG, "--- ON DESTROY ---");
 	}
 
-	// The Handler that gets information back from the BluetoothChatService
+	/**
+	 * The Handler that gets information back from the BluetoothChatService
+	 */
 	private final Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -219,10 +216,9 @@ public class AnzeigeActivity extends Activity {
 				// Toast.makeText(AnzeigeActivity.this, readMessage,
 				// Toast.LENGTH_SHORT).show();
 
-				
 				try {
-				//	uebergabe = deserialize(readBuf);
-				//	zeigeVeranstaltung = (Veranstaltung) uebergabe;
+					// uebergabe = deserialize(readBuf);
+					// zeigeVeranstaltung = (Veranstaltung) uebergabe;
 					zeigeVeranstaltung = deserialize(readBuf);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -231,7 +227,7 @@ public class AnzeigeActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				 aktualisiereScoreboard(zeigeVeranstaltung);
+				aktualisiereScoreboard(zeigeVeranstaltung);
 
 				break;
 			case MESSAGE_DEVICE_NAME:
@@ -246,23 +242,24 @@ public class AnzeigeActivity extends Activity {
 						msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
 						.show();
 				if (msg.getData().getString(TOAST)
-						.equals("Device connection was lost")) {// Wenn einmal
-																// die
-																// Verbindung
-																// abgebrochen
-																// ist kann sie
-																// nicht erneut
-																// aufgebaut
-																// werden(Also
-																// in gleicher
-																// Richtung)deswegen
-																// neustart
-					Intent i = new Intent(AnzeigeActivity.this, AnzeigeActivity.class);
-		           
+						.equals("Device connection was lost")) {
+					/**
+					 * Wenn einmal die Verbindung abgebrochen ist kann sie nicht
+					 * erneut aufgebaut werden(Also in gleicher
+					 * Richtung)deswegen Neustart.
+					 */
+
+					Intent i = new Intent(AnzeigeActivity.this,
+							AnzeigeActivity.class);
+
 					byte[] uebergabe;
-					try {//Daten empfangen
+					try {// Daten empfangen
+						/**
+						 * Objekt muss serialisiert werden um über Bluetooth
+						 * gesendet werden zu können.
+						 */
 						uebergabe = serialize(zeigeVeranstaltung);
-						i.putExtra(MainActivity.KEY,uebergabe);
+						i.putExtra(MainActivity.KEY, uebergabe);
 						startActivity(i);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -290,11 +287,12 @@ public class AnzeigeActivity extends Activity {
 		ObjectInputStream o = new ObjectInputStream(b);
 		return (Veranstaltung) o.readObject();
 	}
+
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);
 		o.writeObject(obj);
 		return b.toByteArray();
 	}
-	
+
 }
