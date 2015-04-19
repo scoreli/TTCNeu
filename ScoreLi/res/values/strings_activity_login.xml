@@ -14,6 +14,7 @@
     <string name="action_register">Registrieren</string>
     <string name="title_activity_register">Registrieren</string>
     <string name="prompt_password_confirm">Passwort bestätigen</string>
+    <string name="error_invalid_name">Kein gültiger Name</string>
     
 
 </resources>

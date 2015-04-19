@@ -1,4 +1,4 @@
-package tk.scoreli.liveticker;
+package tk.scoreli.liveticker.bluetooth;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,9 @@ import java.io.OutputStreamWriter;
 import java.util.Set;
 import java.util.UUID;
 
+import tk.scoreli.liveticker.R;
+import tk.scoreli.liveticker.R.id;
+import tk.scoreli.liveticker.R.layout;
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
 import android.annotation.SuppressLint;

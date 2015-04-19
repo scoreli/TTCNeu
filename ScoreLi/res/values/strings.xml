@@ -54,6 +54,8 @@
     <string name="title_activity_main_activityh">MainActivityh</string>
     <string name="text_loeschen">Löschen</string>
     <string name="title_activity_spiele_auflistung_tt">SpieleAuflistungTTActivity</string>
-    <string name="text_nochkeinMitglied">Noch kein Mitglied? Hier anmelden.</string>
+    <string name="text_nochkeinMitglied">Noch kein Mitglied? Hier registrieren.</string>
+    <string name="text_vornamenachnahme">Vorname Nachname</string>
+    <string name="text_logout">Logout</string>
 
 </resources>

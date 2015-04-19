@@ -11,8 +11,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name="tk.scoreli.liveticker.loginregister.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -27,12 +29,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="tk.scoreli.liveticker.loginregister.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name="tk.scoreli.liveticker.loginregister.RegisterActivity"
             android:label="@string/title_activity_register"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
@@ -59,7 +61,7 @@
             android:label="@string/title_activity_update_spiel" >
         </activity>
         <activity
-            android:name=".GepaarteBtActivity"
+            android:name="tk.scoreli.liveticker.bluetooth.GepaarteBtActivity"
             android:label="@string/title_activity_gepaarte_bt" >
         </activity>
         <activity

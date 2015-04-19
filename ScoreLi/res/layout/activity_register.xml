@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7401DF"
+    android:background="#64FE2E"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="tk.scoreli.liveticker.RegisterActivity" >
+    tools:context="tk.scoreli.liveticker.loginregister.RegisterActivity" >
 
     <!-- Login progress -->
 
@@ -31,6 +31,14 @@
             android:layout_width="match_parent"
             android:layout_height="222dp"
             android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/txf_vornamenachname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/text_vornamenachnahme"
+                android:inputType="textPersonName" />
 
             <AutoCompleteTextView
                 android:id="@+id/emailregister"
@@ -71,7 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_register"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
 

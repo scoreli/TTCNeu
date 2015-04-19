@@ -7,6 +7,7 @@ import java.util.List;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
+import tk.scoreli.liveticker.loginregister.LoginActivity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -222,4 +223,5 @@ public class MainActivity extends Activity implements
 		o.writeObject(obj);
 		return b.toByteArray();
 	}
+
 }
