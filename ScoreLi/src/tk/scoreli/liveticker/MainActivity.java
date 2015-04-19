@@ -99,10 +99,10 @@ public class MainActivity extends Activity implements
 		case 3:
 			mTitle = getString(R.string.title_Sportart2);
 			/**
-			 * Hier werden alle Fußballveranstaltungen angzeigt. Hierbeit
-			 * wird die Methode getFußballVeranstaltungen() aufgerufen.
-			 * Dabei muss die Liste in ein ArrayAdapter des Typs Veranstaltung
-			 * erzeugt werden und die Liste übergeben werden.
+			 * Hier werden alle Fußballveranstaltungen angzeigt. Hierbeit wird
+			 * die Methode getFußballVeranstaltungen() aufgerufen. Dabei muss
+			 * die Liste in ein ArrayAdapter des Typs Veranstaltung erzeugt
+			 * werden und die Liste übergeben werden.
 			 */
 			Veranstaltungenliste.setVisibility(View.VISIBLE);
 			veranstaltungen = db.getFussballVeranstaltungen();
@@ -145,10 +145,6 @@ public class MainActivity extends Activity implements
 		}
 		if (id == R.id.menu_anmelden) {
 			startActivity(new Intent(MainActivity.this, LoginActivity.class));
-			return true;
-		}
-		if (id == R.id.menu_Registrieren) {
-			startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 			return true;
 		}
 		if (id == R.id.menu_Scoreboard) {

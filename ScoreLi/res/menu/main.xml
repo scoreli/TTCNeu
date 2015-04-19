@@ -14,5 +14,4 @@
 	<item android:id="@+id/menu_anmelden" android:title="@string/menu_Anmelden"></item>
     <item android:id="@+id/menu_Scoreboard" android:title="@string/menu_Scoreboard"></item>
     <item android:id="@+id/menu_Spiele" android:title="@string/menu_AktuelleVeranstaltung"></item>
-    <item android:id="@+id/menu_Registrieren" android:title="@string/menu_Registrieren"></item>
 </menu>

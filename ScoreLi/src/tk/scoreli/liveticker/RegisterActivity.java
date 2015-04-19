@@ -95,7 +95,7 @@ public class RegisterActivity extends Activity implements
 						return false;
 					}
 				});
-		Button mEmailSignInButton = (Button) findViewById(R.id.email_register_in_button);
+		Button mEmailSignInButton = (Button) findViewById(R.id.btn_anmelden);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {

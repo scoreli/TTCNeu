@@ -10,6 +10,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,7 +31,8 @@ import android.widget.TextView;
 
 /**
  * Einen Loginscreen der per Email und Passwort funktioniert
- * http://www.androidhive.info/2012/01/android-login-and-registration-with-php-mysql-and-sqlite/
+ * http://www.androidhive
+ * .info/2012/01/android-login-and-registration-with-php-mysql-and-sqlite/
  * tutorial
  * 
  */
@@ -52,6 +54,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
+	private Button btnzuRegister;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		// Set up the login form.
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.emailregister);
 		populateAutoComplete();
+		btnzuRegister = (Button) findViewById(R.id.btnzuregister);
+		btnzuRegister.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(LoginActivity.this,
+						RegisterActivity.class));
+
+			}
+		});
 		mPasswordView = (EditText) findViewById(R.id.passwordregister);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -76,7 +88,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 					}
 				});
 
-		Button mEmailSignInButton = (Button) findViewById(R.id.email_register_in_button);
+		Button mEmailSignInButton = (Button) findViewById(R.id.btn_anmelden);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -119,8 +131,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			focusView = mPasswordView;
 			cancel = true;
 		}
-		/*Überprüfe ob das Passwortfeld ausgefüllt ist
-		 * 
+		/*
+		 * Überprüfe ob das Passwortfeld ausgefüllt ist
 		 */
 		if (TextUtils.isEmpty(password)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
@@ -137,21 +149,18 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			focusView = mEmailView;
 			cancel = true;
 		}
-		
-		
+
 		/*
 		 * geht noch nicht
-		 * 
 		 */
 		try {
-			String ueberpruefePasswort=db.getMitglied(email);
+			String ueberpruefePasswort = db.getMitglied(email);
 			System.out.println(ueberpruefePasswort);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
