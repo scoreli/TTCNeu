@@ -1,11 +1,21 @@
 package tk.scoreli.liveticker;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
-import tk.scoreli.liveticker.data.Mitglied;
 import tk.scoreli.liveticker.data.Veranstaltung;
+import tk.scoreli.liveticker.loginregister.AppConfig;
+import tk.scoreli.liveticker.loginregister.AppController;
+import tk.scoreli.liveticker.loginregister.SessionManager;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -13,6 +23,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 public class NeuesSpielActivity extends Activity {
 	private Spinner SpinnerSportart;
@@ -22,11 +37,24 @@ public class NeuesSpielActivity extends Activity {
 	public String[] test = { "Tischtennis", "Fußball" };
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 
+	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
+	private ProgressDialog pDialog;
+
+	// private SessionManager session;
+
+	// private SQLiteHandlerLogin dblogin;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_neues_spiel);
 		init();
+		// Progress dialog
+		pDialog = new ProgressDialog(this);
+		pDialog.setCancelable(false);
+
+		// Session manager
+		// session = new SessionManager(getApplicationContext());
+
 		ArrayAdapter<String> Sportartspinneradapter = new ArrayAdapter<String>(
 				NeuesSpielActivity.this,
 				android.R.layout.simple_spinner_dropdown_item, test);
@@ -106,10 +134,17 @@ public class NeuesSpielActivity extends Activity {
 					gastmannschaft, spielbeginn, sportart, Integer
 							.parseInt(spielstandHeim), Integer
 							.parseInt(spielstandGast), status));
-
+			try {
+				registerVeranstaltung(sportart, "5", heimmanschaft,
+						gastmannschaft, spielstandHeim, spielstandGast,
+						spielbeginn, status);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Toast.makeText(getApplicationContext(),
 					"Veranstaltung gespeichert ", Toast.LENGTH_LONG).show();
-			finish();
+
 		}
 	}
 
@@ -124,4 +159,115 @@ public class NeuesSpielActivity extends Activity {
 		txfStatus = (EditText) findViewById(R.id.txfStatus);
 	}
 
+	/**
+	 * Function to store user in MySQL database will post params(tag, name,
+	 * email, password) to register url
+	 * */
+	private void registerVeranstaltung(final String sportart,
+			final String user_id, final String heimmannschaft,
+			final String gastmannschaft, final String punkteHeim,
+			final String punkteGast, final String spielbeginn,
+			final String status) {
+		// Tag used to cancel the request
+		String tag_string_req = "req_registerveranstaltung";
+
+		pDialog.setMessage("Registering ...");
+		showDialog();
+
+		StringRequest strReq = new StringRequest(Method.POST,
+				AppConfig.URL_VERANSTALTUNGREGISTER,
+				new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAG, "Register Response: " + response.toString());
+						hideDialog();
+
+
+						try {
+							JSONObject jObj = new JSONObject(response);
+							boolean error = jObj.getBoolean("error");
+							if (!error) {
+								// User successfully stored in MySQL
+								// Now store the user in sqlite
+								// String uid = jObj.getString("uid");
+
+								// JSONObject user = jObj.getJSONObject("user");
+								// String name = user.getString("name");
+								// String email = user.getString("email");
+								// String created_at = user
+								// .getString("created_at");
+
+								// Inserting row in users table
+								// dblogin.addUser(name, email, uid,
+								// created_at);
+								/*
+								 * // Launch login activity Intent intent = new
+								 * Intent( RegisterVeranstaltung.this,
+								 * LoginActivity.class); startActivity(intent);
+								 * finish();
+								 */
+								finish();// Hat beendet da man was aufgerufen
+														// hat obwohl es beendet worden ist.
+							} else {
+								
+								// Error occurred in registration. Get the error
+								// message
+								String errorMsg = jObj.getString("error_msg");
+
+								Toast.makeText(getApplicationContext(),
+										errorMsg, Toast.LENGTH_LONG).show();
+
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+							Toast.makeText(getApplicationContext(),
+									e.toString(), Toast.LENGTH_LONG).show();
+						}
+
+					}}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAG, "Registration Error: " + error.getMessage());
+						
+						  Toast.makeText(getApplicationContext(),
+						  error.getMessage(), Toast.LENGTH_LONG).show();
+						  hideDialog();
+						 
+					}
+				}) {
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Posting params to register url
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("tag", "registerveranstaltung");// Zuerst Tag dann
+															// Daten
+				params.put("sportart", sportart);
+				params.put("user_id", user_id);
+				params.put("heimmannschaft", heimmannschaft);
+				params.put("gastmannschaft", gastmannschaft);
+				params.put("spielstandheim", punkteHeim);
+				params.put("spielstandgast", punkteGast);
+				params.put("spielbeginn", spielbeginn);
+				params.put("status", status);
+				return params;
+			}
+
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+	}
+
+	private void showDialog() {
+		if (!pDialog.isShowing())
+			pDialog.show();
+	}
+
+	private void hideDialog() {
+		if (pDialog.isShowing())
+			pDialog.dismiss();
+	}
 }

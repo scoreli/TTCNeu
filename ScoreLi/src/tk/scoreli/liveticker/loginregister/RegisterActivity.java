@@ -304,7 +304,7 @@ public class RegisterActivity extends Activity {
 			protected Map<String, String> getParams() {
 				// Posting params to register url
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "register");
+				params.put("tag", "register");//Zuerst Tag dann Daten
 				params.put("name", name);
 				params.put("email", email);
 				params.put("password", password);
