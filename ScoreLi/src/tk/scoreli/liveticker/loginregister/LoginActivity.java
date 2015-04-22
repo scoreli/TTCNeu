@@ -200,7 +200,7 @@ public class LoginActivity extends Activity {
 		showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_REGISTER, new Response.Listener<String>() {
+				AppConfig.URL_LOGIN, new Response.Listener<String>() {
 
 					@Override
 					public void onResponse(String response) {

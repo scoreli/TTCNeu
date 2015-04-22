@@ -2,7 +2,6 @@ package tk.scoreli.liveticker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
@@ -17,7 +16,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +32,8 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	/**
 	 * 
 	 */
+	
+	
 	private static final long serialVersionUID = 1L;
 	// Message types sent from the BluetoothChatService Handler
 	public static final int MESSAGE_STATE_CHANGE = 1;
@@ -63,6 +63,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
+		
 
 		/*
 		 * Komischerweise führt Android automatisch die toString methode aus und
@@ -221,6 +222,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.spiele, menu);
+		
 		return true;
 	}
 
