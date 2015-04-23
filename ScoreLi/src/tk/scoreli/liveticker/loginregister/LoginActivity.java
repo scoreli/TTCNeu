@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import tk.scoreli.liveticker.MainActivity;
 import tk.scoreli.liveticker.R;
+import tk.scoreli.liveticker.data.DatabasehandlerUUID;
+import tk.scoreli.liveticker.data.Mitglied;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -30,9 +32,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 /**
- * Einen Loginscreen der per Email und Passwort funktioniert
- * Code größtenteil übernommen und angepasst von
- * http://www.androidhive
+ * Einen Loginscreen der per Email und Passwort funktioniert Code größtenteil
+ * übernommen und angepasst von http://www.androidhive
  * .info/2012/01/android-login-and-registration-with-php-mysql-and-sqlite/
  * tutorial
  * 
@@ -43,6 +44,7 @@ public class LoginActivity extends Activity {
 	private ProgressDialog pDialog;
 	private SessionManager session;
 	private SQLiteHandlerLogin dblogin;
+	private DatabasehandlerUUID dbuuid;
 	// UI references.
 	private AutoCompleteTextView mEmailView;
 	private EditText mPasswordView;
@@ -62,6 +64,8 @@ public class LoginActivity extends Activity {
 		session = new SessionManager(getApplicationContext());
 		// SqLite database handler
 		dblogin = new SQLiteHandlerLogin(getApplicationContext());
+
+		dbuuid = new DatabasehandlerUUID(getApplicationContext());
 
 		btnLogout.setVisibility(View.GONE);
 		/*
@@ -213,6 +217,13 @@ public class LoginActivity extends Activity {
 
 							// Check for error node in json
 							if (!error) {
+								String uid = jObj.getString("uid");
+								try {
+									dbuuid.addMitglied(new Mitglied(uid));
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								// user successfully logged in
 								// Create login session
 								session.setLogin(true);
@@ -274,7 +285,7 @@ public class LoginActivity extends Activity {
 
 	private void logoutUser() {
 		session.setLogin(false);
-
+		dbuuid.deleteUsers();
 		dblogin.deleteUsers();
 
 		// Launching the login activity

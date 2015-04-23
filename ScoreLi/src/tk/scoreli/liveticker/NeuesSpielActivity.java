@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
+import tk.scoreli.liveticker.data.DatabasehandlerUUID;
+import tk.scoreli.liveticker.data.Mitglied;
 import tk.scoreli.liveticker.data.Veranstaltung;
 import tk.scoreli.liveticker.loginregister.AppConfig;
 import tk.scoreli.liveticker.loginregister.AppController;
@@ -34,8 +36,9 @@ public class NeuesSpielActivity extends Activity {
 	private EditText txfHeimmannschaft, txfGastmannschaft, txfSpielbeginn,
 			txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnSpielerstellen;
-	public String[] test = { "Tischtennis", "Fußball" };
+	public String[] test = { "Tischtennis", "Fussball","Volleyball" };
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	DatabasehandlerUUID dbuuid=new DatabasehandlerUUID(this);
 	private SessionManager session;
 	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
 	private ProgressDialog pDialog;
@@ -82,7 +85,7 @@ public class NeuesSpielActivity extends Activity {
 		String status = txfStatus.getText().toString();
 		boolean cancel = false;
 		View focusView = null;
-		boolean cancellogin=false;
+		boolean cancellogin = false;
 		if (TextUtils.isEmpty(heimmanschaft)) {
 			txfHeimmannschaft
 					.setError(getString(R.string.error_field_required));
@@ -117,33 +120,32 @@ public class NeuesSpielActivity extends Activity {
 			cancel = true;
 
 		}
-		if(!session.isLoggedIn()){
-			
-			cancellogin =true;
-}
+		if (!session.isLoggedIn()) {
+
+			cancellogin = true;
+		}
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
 			focusView.requestFocus();
-		}else if(cancellogin){
-			Toast.makeText(getApplicationContext(), "Bitte einloggen", Toast.LENGTH_SHORT).show();
-		
-		}else {
+		} else if (cancellogin) {
+			Toast.makeText(getApplicationContext(), "Bitte einloggen",
+					Toast.LENGTH_SHORT).show();
 
+		} else {
+          Mitglied abfrage=dbuuid.getMitglied();
+          
 			try {
-				registerVeranstaltung(sportart, "5", heimmanschaft,
+				registerVeranstaltung(sportart,abfrage.getUuid() , heimmanschaft,
 						gastmannschaft, spielstandHeim, spielstandGast,
 						spielbeginn, status);
-				db.addVeranstaltung(new Veranstaltung(heimmanschaft,
-						gastmannschaft, spielbeginn, sportart, Integer
-								.parseInt(spielstandHeim), Integer
-								.parseInt(spielstandGast), status));
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Toast.makeText(getApplicationContext(),
-					"Veranstaltung gespeichert ", Toast.LENGTH_LONG).show();
+					"Veranstaltung gespeichert", Toast.LENGTH_LONG).show();
 
 		}
 	}
@@ -182,8 +184,50 @@ public class NeuesSpielActivity extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAG, "Register Response: " + response.toString());
 						hideDialog();
+						try {
+							JSONObject jObj = new JSONObject(response);
+							boolean error = jObj.getBoolean("error");
+							if (!error) {
+								// User successfully stored in MySQL
+								// Now store the user in sqlite
+								// String uid = jObj.getString("uid");
 
+								 JSONObject user = jObj.getJSONObject("veranstaltung");
+								 String heimmanschaft = user.getString("name");
+								String email = user.getString("email");
+								 String created_at = user
+								 .getString("created_at");
+
+								
+								db.addVeranstaltung(new Veranstaltung(heimmanschaft,
+										gastmannschaft, spielbeginn, sportart, Integer
+												.parseInt(spielstandHeim), Integer
+												.parseInt(spielstandGast), status));
+								/*
+								 * // Launch login activity Intent intent = new
+								 * Intent( RegisterVeranstaltung.this,
+								 * LoginActivity.class); startActivity(intent);
+								 * finish();
+								 */
+								finish();// Hat beendet da man was aufgerufen
+											// hat obwohl es beendet worden ist.
+							} else {
+
+								// Error occurred in registration. Get the error
+								// message
+								String errorMsg = jObj.getString("error_msg");
+
+								Toast.makeText(getApplicationContext(),
+										errorMsg, Toast.LENGTH_LONG).show();
+
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+							Toast.makeText(getApplicationContext(),
+									e.toString(), Toast.LENGTH_LONG).show();
+						}
 					}
+
 				}, new Response.ErrorListener() {
 
 					@Override
@@ -201,8 +245,8 @@ public class NeuesSpielActivity extends Activity {
 			protected Map<String, String> getParams() {
 				// Posting params to register url
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "register");// Zuerst Tag dann
-												// Daten
+				params.put("tag", "veranstaltung");// Zuerst Tag dann
+													// Daten
 				params.put("sportart", sportart);
 				params.put("user", user_id);
 				params.put("heimmannschaft", heimmannschaft);

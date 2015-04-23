@@ -1,55 +1,39 @@
 package tk.scoreli.liveticker.data;
 
 public class Mitglied {
-	 
-    //private variables
-    long _id;
-    String email;
-    String passwort;
-     
-    // Empty constructor
-    public Mitglied(){
-         
-    }
-    // constructor
-    public Mitglied(int id, String name, String passwort){
-        this._id = id;
-        this.email = name;
-        this.passwort = passwort;
-    }
-     
-    // constructor
-    public Mitglied(String name, String passwort){
-        this.email = name;
-        this.passwort = passwort;
-    }
-    // getting ID
-    public long getID(){
-        return this._id;
-    }
-     
-    // setting id
-    public void setID(long id){
-        this._id = id;
-    }
-     
-    // getting name
-    public String getEmail(){
-        return this.email;
-    }
-     
-    // setting name
-    public void setEmail(String name){
-        this.email = name;
-    }
-     
-    // getting phone number
-    public String getPasswort(){
-        return this.passwort;
-    }
-     
-    // setting phone number
-    public void setPasswort(String phone_number){
-        this.passwort = phone_number;
-    }
+
+	// private variables
+	long _id;
+	String uuid;
+
+	public Mitglied() {
+	}
+
+	public Mitglied(String uuid) {
+		super();
+		this.uuid = uuid;
+	}
+
+	public Mitglied(long _id, String uuid) {
+		super();
+		this._id = _id;
+		this.uuid = uuid;
+	}
+
+	public long get_id() {
+		return _id;
+	}
+
+	public void set_id(long _id) {
+		this._id = _id;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
 }
