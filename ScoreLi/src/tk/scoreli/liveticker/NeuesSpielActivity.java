@@ -36,9 +36,9 @@ public class NeuesSpielActivity extends Activity {
 	private EditText txfHeimmannschaft, txfGastmannschaft, txfSpielbeginn,
 			txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnSpielerstellen;
-	public String[] test = { "Tischtennis", "Fussball","Volleyball" };
+	public String[] test = { "Tischtennis", "Fussball", "Volleyball" };
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
-	DatabasehandlerUUID dbuuid=new DatabasehandlerUUID(this);
+	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
 	private SessionManager session;
 	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
 	private ProgressDialog pDialog;
@@ -76,7 +76,7 @@ public class NeuesSpielActivity extends Activity {
 		txfSpielstandHeim.setError(null);
 		txfSpielstandGast.setError(null);
 
-		String heimmanschaft = txfHeimmannschaft.getText().toString();
+		String heimmannschaft = txfHeimmannschaft.getText().toString();
 		String gastmannschaft = txfGastmannschaft.getText().toString();
 		String spielbeginn = txfSpielbeginn.getText().toString();
 		String spielstandHeim = txfSpielstandHeim.getText().toString();
@@ -86,7 +86,7 @@ public class NeuesSpielActivity extends Activity {
 		boolean cancel = false;
 		View focusView = null;
 		boolean cancellogin = false;
-		if (TextUtils.isEmpty(heimmanschaft)) {
+		if (TextUtils.isEmpty(heimmannschaft)) {
 			txfHeimmannschaft
 					.setError(getString(R.string.error_field_required));
 			focusView = txfHeimmannschaft;
@@ -133,13 +133,13 @@ public class NeuesSpielActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 
 		} else {
-          Mitglied abfrage=dbuuid.getMitglied();
-          
+			Mitglied abfrage = dbuuid.getMitglied();
+
 			try {
-				registerVeranstaltung(sportart,abfrage.getUuid() , heimmanschaft,
-						gastmannschaft, spielstandHeim, spielstandGast,
-						spielbeginn, status);
-				
+				registerVeranstaltung(sportart, abfrage.getUuid(),
+						heimmannschaft, gastmannschaft, spielstandHeim,
+						spielstandGast, spielbeginn, status);
+
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -192,17 +192,26 @@ public class NeuesSpielActivity extends Activity {
 								// Now store the user in sqlite
 								// String uid = jObj.getString("uid");
 
-								 JSONObject user = jObj.getJSONObject("veranstaltung");
-								 String heimmanschaft = user.getString("name");
-								String email = user.getString("email");
-								 String created_at = user
-								 .getString("created_at");
+								JSONObject user = jObj
+										.getJSONObject("veranstaltung");
+								String sportartj = user.getString("sportart");
+								String heimmannschaftj = user
+										.getString("heimmannschaft");
+								String gastmannschaftj = user
+										.getString("gastmannschaft");
+								String punkteHeimj = user
+										.getString("punkteHeim");
+								String punkteGastj = user
+										.getString("punkteGast");
+								String spielbeginnj = user
+										.getString("spielbeginn");
+								String statusj = user.getString("status");
 
-								
-								db.addVeranstaltung(new Veranstaltung(heimmanschaft,
-										gastmannschaft, spielbeginn, sportart, Integer
-												.parseInt(spielstandHeim), Integer
-												.parseInt(spielstandGast), status));
+								db.addVeranstaltung(new Veranstaltung(
+										heimmannschaftj, gastmannschaftj,
+										spielbeginnj, sportartj, Integer
+												.parseInt(punkteHeimj), Integer
+												.parseInt(punkteGastj), statusj));
 								/*
 								 * // Launch login activity Intent intent = new
 								 * Intent( RegisterVeranstaltung.this,
