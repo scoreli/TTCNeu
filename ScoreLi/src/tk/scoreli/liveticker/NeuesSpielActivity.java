@@ -171,13 +171,13 @@ public class NeuesSpielActivity extends Activity {
 			final String punkteGast, final String spielbeginn,
 			final String status) {
 		// Tag used to cancel the request
-		String tag_string_req = "req_register";
+		String tag_string_req = "req_registerveranstaltung";
 
 		pDialog.setMessage("Registering ...");
 		showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_VERANSTALTUNGREGISTER,
+				AppConfig.URL_VERANSTALTUNG,
 				new Response.Listener<String>() {
 
 					@Override
@@ -283,47 +283,5 @@ public class NeuesSpielActivity extends Activity {
 			pDialog.dismiss();
 	}
 
-	private void unnötig() {
-		String response = null;
-		try {
-			JSONObject jObj = new JSONObject(response);
-			boolean error = jObj.getBoolean("error");
-			if (!error) {
-				// User successfully stored in MySQL
-				// Now store the user in sqlite
-				// String uid = jObj.getString("uid");
-
-				// JSONObject user = jObj.getJSONObject("user");
-				// String name = user.getString("name");
-				// String email = user.getString("email");
-				// String created_at = user
-				// .getString("created_at");
-
-				// Inserting row in users table
-				// dblogin.addUser(name, email, uid,
-				// created_at);
-				/*
-				 * // Launch login activity Intent intent = new Intent(
-				 * RegisterVeranstaltung.this, LoginActivity.class);
-				 * startActivity(intent); finish();
-				 */
-				finish();// Hat beendet da man was aufgerufen
-							// hat obwohl es beendet worden ist.
-			} else {
-
-				// Error occurred in registration. Get the error
-				// message
-				String errorMsg = jObj.getString("error_msg");
-
-				Toast.makeText(getApplicationContext(), errorMsg,
-						Toast.LENGTH_LONG).show();
-
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), e.toString(),
-					Toast.LENGTH_LONG).show();
-		}
-	}
-
+	
 }
