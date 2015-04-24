@@ -173,7 +173,7 @@ public class NeuesSpielActivity extends Activity {
 		// Tag used to cancel the request
 		String tag_string_req = "req_registerveranstaltung";
 
-		pDialog.setMessage("Registering ...");
+		pDialog.setMessage("Erstellen ...");
 		showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 
@@ -203,7 +204,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		List<Veranstaltung> veranstaltungliste = new ArrayList<Veranstaltung>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Veranstaltungen
-				+ " WHERE " + Veranstaltung_Sportart + " LIKE 'Fußball'";
+				+ " WHERE " + Veranstaltung_Sportart + " LIKE 'Fussball'";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -268,5 +269,13 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return count
 		return cursor.getCount();
 	}
-
+	/**
+	 * Re crate database Delete all tables and create them again
+	 * */
+	public void deleteVeranstaltungen() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		// Delete All Rows
+		db.delete(TABLE_Veranstaltungen, null, null);
+		db.close();
+		}
 }

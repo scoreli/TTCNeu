@@ -3,18 +3,35 @@ package tk.scoreli.liveticker;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.Request.Method;
+import com.android.volley.toolbox.StringRequest;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
+import tk.scoreli.liveticker.loginregister.AppConfig;
+import tk.scoreli.liveticker.loginregister.AppController;
 import tk.scoreli.liveticker.loginregister.LoginActivity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Build.VERSION;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -29,7 +47,9 @@ public class MainActivity extends Activity implements
 	ListView Veranstaltungenliste;
 	private ArrayAdapter<Veranstaltung> adapter;
 	List<Veranstaltung> veranstaltungen;
-
+	// Für die Veranstaltungen holen
+	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
+	private ProgressDialog pDialog;
 	public static final String KEY = "UebergabeVeranstaltungObjekt";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -52,6 +72,9 @@ public class MainActivity extends Activity implements
 		 * Wird die Liste der Veranstaltungen auf in der MainActivty
 		 * initalisiert.
 		 */
+		// Progress dialog
+				pDialog = new ProgressDialog(this);
+				pDialog.setCancelable(false);
 		Veranstaltungenliste = (ListView) findViewById(R.id.list_AuflistungSpiele);
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
@@ -91,6 +114,7 @@ public class MainActivity extends Activity implements
 			 * Dabei muss die Liste in ein ArrayAdapter des Typs Veranstaltung
 			 * erzeugt werden und die Liste übergeben werden.
 			 */
+			Veranstaltungholen();
 			Veranstaltungenliste.setVisibility(View.VISIBLE);
 			veranstaltungen = db.getTischtennisVeranstaltungen();
 			adapter = new ArrayAdapter<Veranstaltung>(this,
@@ -105,6 +129,7 @@ public class MainActivity extends Activity implements
 			 * die Liste in ein ArrayAdapter des Typs Veranstaltung erzeugt
 			 * werden und die Liste übergeben werden.
 			 */
+			Veranstaltungholen();
 			Veranstaltungenliste.setVisibility(View.VISIBLE);
 			veranstaltungen = db.getFussballVeranstaltungen();
 			adapter = new ArrayAdapter<Veranstaltung>(this,
@@ -224,4 +249,116 @@ public class MainActivity extends Activity implements
 		return b.toByteArray();
 	}
 
+	/**
+	 * Function to store user in MySQL database will post params(tag, name,
+	 * email, password) to register url
+	 * */
+	private void Veranstaltungholen() {
+		// Tag used to cancel the request
+		String tag_string_req = "req_holen";
+
+		pDialog.setMessage("Holen ...");
+		showDialog();
+
+		StringRequest strReq = new StringRequest(Method.POST,
+				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAG,
+								"Veranstaltung Response: "
+										+ response.toString());
+						hideDialog();
+						try {
+
+							JSONArray jObj = new JSONArray(response);
+							//boolean error = jObj.getBoolean("error");
+							boolean error=false;
+							if (!error) {
+								// User successfully stored in MySQL
+								// Now store the user in sqlite
+								db.deleteVeranstaltungen();
+							/*	JSONArray uebergabe = jObj.getJSONArray("");
+								for (int i = 0; i < uebergabe.length(); i++) {
+									JSONObject veranstaltung = uebergabe
+											.getJSONObject(i);
+									String heimmannschaft = veranstaltung
+											.getString("heimmannschaft");
+									String gastmannschaft = veranstaltung
+											.getString("gastmannschaft");
+									String punkteHeim = veranstaltung
+											.getString("punkteHeim");
+									String punkteGast = veranstaltung
+											.getString("punkteGast");
+									String status = veranstaltung
+											.getString("status");
+									String sportart = veranstaltung
+											.getString("sportart");
+									String spielbeginn = veranstaltung
+											.getString("spielbeginn");
+									db.addVeranstaltung(new Veranstaltung(
+											heimmannschaft, gastmannschaft,
+											spielbeginn, sportart, Integer
+													.parseInt(punkteHeim),
+											Integer.parseInt(punkteGast),
+											status));
+
+								}
+*/
+								Toast.makeText(getApplicationContext(),
+										"Aktualisiert", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+
+								// Error occurred in registration. Get the error
+								// message
+						//		String errorMsg = jObj.getString("error_msg");
+
+							//	Toast.makeText(getApplicationContext(),
+//										errorMsg, Toast.LENGTH_LONG).show();
+
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+							Toast.makeText(getApplicationContext(),
+									e.toString(), Toast.LENGTH_LONG).show();
+						}
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAG, "Registration Error: " + error.getMessage());
+
+						Toast.makeText(getApplicationContext(),
+								error.getMessage(), Toast.LENGTH_LONG).show();
+						hideDialog();
+
+					}
+				}) {
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Posting params to register url
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("tag", "holeveranstaltungen");
+				return params;
+			}
+
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+	}
+
+	private void showDialog() {
+		if (!pDialog.isShowing())
+			pDialog.show();
+	}
+
+	private void hideDialog() {
+		if (pDialog.isShowing())
+			pDialog.dismiss();
+	}
 }
