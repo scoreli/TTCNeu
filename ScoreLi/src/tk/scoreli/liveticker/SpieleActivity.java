@@ -4,18 +4,36 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.Request.Method;
+import com.android.volley.toolbox.StringRequest;
 
 import tk.scoreli.liveticker.bluetooth.BluetoothService;
 import tk.scoreli.liveticker.bluetooth.DeviceListActivity;
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
+import tk.scoreli.liveticker.data.DatabasehandlerUUID;
+import tk.scoreli.liveticker.data.Mitglied;
 import tk.scoreli.liveticker.data.Veranstaltung;
+import tk.scoreli.liveticker.loginregister.AppConfig;
+import tk.scoreli.liveticker.loginregister.AppController;
+import tk.scoreli.liveticker.loginregister.SessionManager;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,8 +50,10 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	/**
 	 * 
 	 */
-	
-	
+	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
+	private static final String TAG_VeranstaltungenDesUsers = "veranstaltungdesusers";
+	private ProgressDialog pDialog;
+
 	private static final long serialVersionUID = 1L;
 	// Message types sent from the BluetoothChatService Handler
 	public static final int MESSAGE_STATE_CHANGE = 1;
@@ -49,6 +69,9 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	private static final int REQUEST_CONNECT_DEVICE = 1;
 	private ListView Veranstaltungsliste;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
+	private SessionManager session;
+
 	public static final String KEY = "ID_Veranstaltung";
 	private final static int REQUEST_ENABLE_BT = 2;
 	// Name of the connected device
@@ -63,8 +86,10 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
-		
-
+		// Session manager
+				session = new SessionManager(getApplicationContext());
+				// Progress dialog
+				pDialog = new ProgressDialog(this);
 		/*
 		 * Komischerweise führt Android automatisch die toString methode aus und
 		 * gibt die Veranstaltung als String aus.
@@ -72,6 +97,15 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		 * /05/eine-listview-mit-inhalt-fullen.html
 		 * http://www.appartig.net/?e=18
 		 */
+		if (session.isLoggedIn()) {
+			Mitglied abfrage = dbuuid.getMitglied(); 
+			VeranstaltungholenDesUsers(abfrage.getUuid());
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"Bitte einloggen um Veranstaltungen anzusehen",
+					Toast.LENGTH_SHORT).show();
+		}
+
 		// Get local Bluetooth adapter
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -186,10 +220,10 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		Veranstaltung veranstaltung= new Veranstaltung();
-		 veranstaltung = (Veranstaltung) Veranstaltungsliste
+		Veranstaltung veranstaltung = new Veranstaltung();
+		veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(position);
-		
+
 		sendVeranstaltung(veranstaltung);
 		return false;
 	}
@@ -222,7 +256,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.spiele, menu);
-		
+
 		return true;
 	}
 
@@ -326,11 +360,11 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 			// Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		// Check that there's actually something to send
 		if (veranstaltung != null) {
 			// Get the message bytes and tell the BluetoothChatService to write
-			
+
 			byte[] send = null;
 			try {
 				send = serialize(veranstaltung);
@@ -338,8 +372,8 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//send=veranstaltung.getBytes();			
-			 
+			// send=veranstaltung.getBytes();
+
 			mChatService.write(send);
 
 		}
@@ -390,12 +424,126 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 			}
 		}
 	};
-	
+
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);
 		o.writeObject(obj);
 		return b.toByteArray();
 	}
-	
+
+	private void VeranstaltungholenDesUsers(final String user_id) {
+		// Tag used to cancel the request
+		String tag_string_req = "req_holendesUsers";
+
+		pDialog.setMessage("Holen ...");
+		showDialog();
+
+		StringRequest strReq = new StringRequest(Method.POST,
+				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAG,
+								"Veranstaltung Response: "
+										+ response.toString());
+						hideDialog();
+						try {
+							/*
+							 * Toast.makeText(getApplicationContext(),
+							 * response.toString(), Toast.LENGTH_SHORT) .show();
+							 */
+							JSONObject jObj = new JSONObject(response);
+							// boolean error = jObj.getBoolean("error");
+							boolean error = false;
+							if (!error) {
+								// User successfully stored in MySQL
+								// Now store the user in sqlite
+								db.deleteVeranstaltungen();
+
+								JSONArray uebergabe = jObj
+										.getJSONArray(TAG_VeranstaltungenDesUsers);
+								for (int i = 0; i < uebergabe.length(); i++) {
+									JSONObject veranstaltung = uebergabe
+											.getJSONObject(i);
+									String heimmannschaft = veranstaltung
+											.getString("heimmannschaft");
+									String gastmannschaft = veranstaltung
+											.getString("gastmannschaft");
+									String punkteHeim = veranstaltung
+											.getString("punkteHeim");
+									String punkteGast = veranstaltung
+											.getString("punkteGast");
+									String status = veranstaltung
+											.getString("status");
+									String sportart = veranstaltung
+											.getString("sportart");
+									String spielbeginn = veranstaltung
+											.getString("spielbeginn");
+									db.addVeranstaltung(new Veranstaltung(
+											heimmannschaft, gastmannschaft,
+											spielbeginn, sportart, Integer
+													.parseInt(punkteHeim),
+											Integer.parseInt(punkteGast),
+											status));
+
+								}
+
+								Toast.makeText(getApplicationContext(),
+										"Aktualisiert", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+
+								// Error occurred in registration. Get the error
+								// message
+								// String errorMsg =
+								// jObj.getString("error_msg");
+
+								// Toast.makeText(getApplicationContext(),
+								// errorMsg, Toast.LENGTH_LONG).show();
+
+							}
+						} catch (JSONException e) {
+							// JSON error
+							e.printStackTrace();
+						}
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAG, "Registration Error: " + error.getMessage());
+
+						Toast.makeText(getApplicationContext(),
+								error.getMessage(), Toast.LENGTH_LONG).show();
+						hideDialog();
+
+					}
+				}) {
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Posting params to register url
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("tag", "holeveranstaltungendesusers");
+				params.put("user", user_id);
+				return params;
+			}
+
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+	}
+
+	private void showDialog() {
+		if (!pDialog.isShowing())
+			pDialog.show();
+	}
+
+	private void hideDialog() {
+		if (pDialog.isShowing())
+			pDialog.dismiss();
+	}
 }

@@ -10,12 +10,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.Request.Method;
-import com.android.volley.toolbox.StringRequest;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
@@ -29,7 +23,6 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Build.VERSION;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,8 +34,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
+	private static final String TAG_Veranstaltungen = "veranstaltung";
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	ListView Veranstaltungenliste;
 	private ArrayAdapter<Veranstaltung> adapter;
@@ -73,8 +72,8 @@ public class MainActivity extends Activity implements
 		 * initalisiert.
 		 */
 		// Progress dialog
-				pDialog = new ProgressDialog(this);
-				pDialog.setCancelable(false);
+		pDialog = new ProgressDialog(this);
+		pDialog.setCancelable(false);
 		Veranstaltungenliste = (ListView) findViewById(R.id.list_AuflistungSpiele);
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
@@ -270,41 +269,39 @@ public class MainActivity extends Activity implements
 										+ response.toString());
 						hideDialog();
 						try {
-
-							JSONArray jObj = new JSONArray(response);
-							//boolean error = jObj.getBoolean("error");
-							boolean error=false;
+							/*Toast.makeText(getApplicationContext(),
+									response.toString(), Toast.LENGTH_SHORT)
+									.show();*/
+							JSONObject jObj = new JSONObject(response);
+							// boolean error = jObj.getBoolean("error");
+							boolean error = false;
 							if (!error) {
 								// User successfully stored in MySQL
 								// Now store the user in sqlite
 								db.deleteVeranstaltungen();
-							/*	JSONArray uebergabe = jObj.getJSONArray("");
-								for (int i = 0; i < uebergabe.length(); i++) {
-									JSONObject veranstaltung = uebergabe
-											.getJSONObject(i);
-									String heimmannschaft = veranstaltung
-											.getString("heimmannschaft");
-									String gastmannschaft = veranstaltung
-											.getString("gastmannschaft");
-									String punkteHeim = veranstaltung
-											.getString("punkteHeim");
-									String punkteGast = veranstaltung
-											.getString("punkteGast");
-									String status = veranstaltung
-											.getString("status");
-									String sportart = veranstaltung
-											.getString("sportart");
-									String spielbeginn = veranstaltung
-											.getString("spielbeginn");
-									db.addVeranstaltung(new Veranstaltung(
-											heimmannschaft, gastmannschaft,
-											spielbeginn, sportart, Integer
-													.parseInt(punkteHeim),
-											Integer.parseInt(punkteGast),
-											status));
-
-								}
-*/
+								
+								  JSONArray uebergabe = jObj.getJSONArray(TAG_Veranstaltungen);
+								  for (int i = 0; i < uebergabe.length(); i++)
+								  { JSONObject veranstaltung = uebergabe
+								  .getJSONObject(i); String heimmannschaft =
+								 veranstaltung .getString("heimmannschaft");
+								  String gastmannschaft = veranstaltung
+								  .getString("gastmannschaft"); String
+								  punkteHeim = veranstaltung
+								  .getString("punkteHeim"); String punkteGast =
+								  veranstaltung .getString("punkteGast");
+								  String status = veranstaltung
+								  .getString("status"); String sportart =
+								  veranstaltung .getString("sportart"); String
+								  spielbeginn = veranstaltung
+								  .getString("spielbeginn");
+								  db.addVeranstaltung(new Veranstaltung(
+								  heimmannschaft, gastmannschaft, spielbeginn,
+								  sportart, Integer .parseInt(punkteHeim),
+								  Integer.parseInt(punkteGast), status));
+								  
+								 }
+								 
 								Toast.makeText(getApplicationContext(),
 										"Aktualisiert", Toast.LENGTH_SHORT)
 										.show();
@@ -312,16 +309,16 @@ public class MainActivity extends Activity implements
 
 								// Error occurred in registration. Get the error
 								// message
-						//		String errorMsg = jObj.getString("error_msg");
+								// String errorMsg =
+								// jObj.getString("error_msg");
 
-							//	Toast.makeText(getApplicationContext(),
-//										errorMsg, Toast.LENGTH_LONG).show();
+								// Toast.makeText(getApplicationContext(),
+								// errorMsg, Toast.LENGTH_LONG).show();
 
 							}
 						} catch (JSONException e) {
+							// JSON error
 							e.printStackTrace();
-							Toast.makeText(getApplicationContext(),
-									e.toString(), Toast.LENGTH_LONG).show();
 						}
 					}
 
