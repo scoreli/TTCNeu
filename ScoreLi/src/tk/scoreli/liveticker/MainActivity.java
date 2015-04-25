@@ -269,9 +269,10 @@ public class MainActivity extends Activity implements
 										+ response.toString());
 						hideDialog();
 						try {
-							/*Toast.makeText(getApplicationContext(),
-									response.toString(), Toast.LENGTH_SHORT)
-									.show();*/
+							/*
+							 * Toast.makeText(getApplicationContext(),
+							 * response.toString(), Toast.LENGTH_SHORT) .show();
+							 */
 							JSONObject jObj = new JSONObject(response);
 							// boolean error = jObj.getBoolean("error");
 							boolean error = false;
@@ -279,29 +280,37 @@ public class MainActivity extends Activity implements
 								// User successfully stored in MySQL
 								// Now store the user in sqlite
 								db.deleteVeranstaltungen();
-								
-								  JSONArray uebergabe = jObj.getJSONArray(TAG_Veranstaltungen);
-								  for (int i = 0; i < uebergabe.length(); i++)
-								  { JSONObject veranstaltung = uebergabe
-								  .getJSONObject(i); String heimmannschaft =
-								 veranstaltung .getString("heimmannschaft");
-								  String gastmannschaft = veranstaltung
-								  .getString("gastmannschaft"); String
-								  punkteHeim = veranstaltung
-								  .getString("punkteHeim"); String punkteGast =
-								  veranstaltung .getString("punkteGast");
-								  String status = veranstaltung
-								  .getString("status"); String sportart =
-								  veranstaltung .getString("sportart"); String
-								  spielbeginn = veranstaltung
-								  .getString("spielbeginn");
-								  db.addVeranstaltung(new Veranstaltung(
-								  heimmannschaft, gastmannschaft, spielbeginn,
-								  sportart, Integer .parseInt(punkteHeim),
-								  Integer.parseInt(punkteGast), status));
-								  
-								 }
-								 
+
+								JSONArray uebergabe = jObj
+										.getJSONArray(TAG_Veranstaltungen);
+								for (int i = 0; i < uebergabe.length(); i++) {
+									JSONObject veranstaltung = uebergabe
+											.getJSONObject(i);
+									String idj = veranstaltung
+											.getString("veranstaltung_id");
+									String heimmannschaftj = veranstaltung
+											.getString("heimmannschaft");
+									String gastmannschaftj = veranstaltung
+											.getString("gastmannschaft");
+									String punkteHeimj = veranstaltung
+											.getString("punkteHeim");
+									String punkteGastj = veranstaltung
+											.getString("punkteGast");
+									String statusj = veranstaltung
+											.getString("status");
+									String sportartj = veranstaltung
+											.getString("sportart");
+									String spielbeginnj = veranstaltung
+											.getString("spielbeginn");
+									db.addVeranstaltung(new Veranstaltung(Long
+											.parseLong(idj), sportartj,
+											heimmannschaftj, gastmannschaftj,
+											Integer.parseInt(punkteHeimj),
+											Integer.parseInt(punkteGastj),
+											spielbeginnj, statusj));
+
+								}
+
 								Toast.makeText(getApplicationContext(),
 										"Aktualisiert", Toast.LENGTH_SHORT)
 										.show();

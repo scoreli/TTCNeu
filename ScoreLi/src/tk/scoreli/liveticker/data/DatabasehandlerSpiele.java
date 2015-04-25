@@ -74,6 +74,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
+		values.put(Veranstaltung_ID, veranstaltung.getId());
 		values.put(Veranstaltung_Sportart, veranstaltung.getSportart()); // Sportart
 		values.put(Veranstaltung_Heimmanschaft,
 				veranstaltung.getHeimmanschaft()); // Heimmannschaft

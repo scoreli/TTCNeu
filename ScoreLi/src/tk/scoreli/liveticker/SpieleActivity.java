@@ -87,9 +87,9 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spiele);
 		// Session manager
-				session = new SessionManager(getApplicationContext());
-				// Progress dialog
-				pDialog = new ProgressDialog(this);
+		session = new SessionManager(getApplicationContext());
+		// Progress dialog
+		pDialog = new ProgressDialog(this);
 		/*
 		 * Komischerweise führt Android automatisch die toString methode aus und
 		 * gibt die Veranstaltung als String aus.
@@ -98,7 +98,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		 * http://www.appartig.net/?e=18
 		 */
 		if (session.isLoggedIn()) {
-			Mitglied abfrage = dbuuid.getMitglied(); 
+			Mitglied abfrage = dbuuid.getMitglied();
 			VeranstaltungholenDesUsers(abfrage.getUuid());
 		} else {
 			Toast.makeText(getApplicationContext(),
@@ -466,26 +466,28 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 								for (int i = 0; i < uebergabe.length(); i++) {
 									JSONObject veranstaltung = uebergabe
 											.getJSONObject(i);
-									String heimmannschaft = veranstaltung
+									String idj = veranstaltung
+											.getString("veranstaltung_id");
+									String heimmannschaftj = veranstaltung
 											.getString("heimmannschaft");
-									String gastmannschaft = veranstaltung
+									String gastmannschaftj = veranstaltung
 											.getString("gastmannschaft");
-									String punkteHeim = veranstaltung
+									String punkteHeimj = veranstaltung
 											.getString("punkteHeim");
-									String punkteGast = veranstaltung
+									String punkteGastj = veranstaltung
 											.getString("punkteGast");
-									String status = veranstaltung
+									String statusj = veranstaltung
 											.getString("status");
-									String sportart = veranstaltung
+									String sportartj = veranstaltung
 											.getString("sportart");
-									String spielbeginn = veranstaltung
+									String spielbeginnj = veranstaltung
 											.getString("spielbeginn");
-									db.addVeranstaltung(new Veranstaltung(
-											heimmannschaft, gastmannschaft,
-											spielbeginn, sportart, Integer
-													.parseInt(punkteHeim),
-											Integer.parseInt(punkteGast),
-											status));
+									db.addVeranstaltung(new Veranstaltung(Long
+											.parseLong(idj), sportartj,
+											heimmannschaftj, gastmannschaftj,
+											Integer.parseInt(punkteHeimj),
+											Integer.parseInt(punkteGastj),
+											spielbeginnj, statusj));
 
 								}
 

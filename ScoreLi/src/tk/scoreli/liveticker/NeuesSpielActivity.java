@@ -177,8 +177,7 @@ public class NeuesSpielActivity extends Activity {
 		showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_VERANSTALTUNG,
-				new Response.Listener<String>() {
+				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
 
 					@Override
 					public void onResponse(String response) {
@@ -194,6 +193,7 @@ public class NeuesSpielActivity extends Activity {
 
 								JSONObject user = jObj
 										.getJSONObject("veranstaltung");
+								String idj = user.getString("veranstaltung_id");
 								String sportartj = user.getString("sportart");
 								String heimmannschaftj = user
 										.getString("heimmannschaft");
@@ -207,11 +207,13 @@ public class NeuesSpielActivity extends Activity {
 										.getString("spielbeginn");
 								String statusj = user.getString("status");
 
-								db.addVeranstaltung(new Veranstaltung(
+								db.addVeranstaltung(new Veranstaltung(Long
+										.parseLong(idj), sportartj,
 										heimmannschaftj, gastmannschaftj,
-										spielbeginnj, sportartj, Integer
-												.parseInt(punkteHeimj), Integer
-												.parseInt(punkteGastj), statusj));
+										Integer.parseInt(punkteHeimj), Integer
+												.parseInt(punkteGastj),
+										spielbeginnj, statusj));
+
 								/*
 								 * // Launch login activity Intent intent = new
 								 * Intent( RegisterVeranstaltung.this,
@@ -283,5 +285,4 @@ public class NeuesSpielActivity extends Activity {
 			pDialog.dismiss();
 	}
 
-	
 }
