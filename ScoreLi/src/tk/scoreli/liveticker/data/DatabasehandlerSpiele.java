@@ -117,7 +117,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				cursor.getString(3), Integer.parseInt(cursor.getString(4)),
 				Integer.parseInt(cursor.getString(5)), cursor.getString(6),
 				cursor.getString(7));
-
+		db.close(); // Closing database connection
 		// return contact
 		return veranstaltung;
 	}
@@ -152,7 +152,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				veranstaltungliste.add(veranstaltung);
 			} while (cursor.moveToNext());
 		}
-
+		db.close(); // Closing database connection
 		// return contact list
 		return veranstaltungliste;
 	}
@@ -188,7 +188,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				veranstaltungliste.add(veranstaltung);
 			} while (cursor.moveToNext());
 		}
-
+		db.close(); // Closing database connection
 		// return contact list
 		return veranstaltungliste;
 	}
@@ -225,7 +225,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				veranstaltungliste.add(veranstaltung);
 			} while (cursor.moveToNext());
 		}
-
+		db.close(); // Closing database connection
 		// return contact list
 		return veranstaltungliste;
 	}
@@ -246,6 +246,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				veranstaltung.getSpielstandGast()); // SpielstandGast
 		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
 		values.put(Veranstaltung_Status, veranstaltung.getStatus());// Status
+		db.close(); // Closing database connection
 		// updating row
 		return db.update(TABLE_Veranstaltungen, values, Veranstaltung_ID
 				+ " = ?",
@@ -270,6 +271,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return count
 		return cursor.getCount();
 	}
+
 	/**
 	 * Re crate database Delete all tables and create them again
 	 * */
@@ -278,5 +280,5 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// Delete All Rows
 		db.delete(TABLE_Veranstaltungen, null, null);
 		db.close();
-		}
+	}
 }

@@ -47,7 +47,7 @@ public class MainActivity extends Activity implements
 	private ArrayAdapter<Veranstaltung> adapter;
 	List<Veranstaltung> veranstaltungen;
 	// Für die Veranstaltungen holen
-	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
+	private static final String TAG = MainActivity.class.getSimpleName();
 	private ProgressDialog pDialog;
 	public static final String KEY = "UebergabeVeranstaltungObjekt";
 	/**

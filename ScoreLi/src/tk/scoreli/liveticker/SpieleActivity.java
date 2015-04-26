@@ -50,7 +50,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	/**
 	 * 
 	 */
-	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
+	private static final String TAG = SpieleActivity.class.getSimpleName();
 	private static final String TAG_VeranstaltungenDesUsers = "veranstaltungdesusers";
 	private ProgressDialog pDialog;
 
@@ -220,6 +220,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
+		
 		Veranstaltung veranstaltung = new Veranstaltung();
 		veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(position);
@@ -449,10 +450,10 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 										+ response.toString());
 						hideDialog();
 						try {
-							/*
-							 * Toast.makeText(getApplicationContext(),
-							 * response.toString(), Toast.LENGTH_SHORT) .show();
-							 */
+							
+							 Toast.makeText(getApplicationContext(),
+							  response.toString(), Toast.LENGTH_SHORT) .show();
+							 
 							JSONObject jObj = new JSONObject(response);
 							// boolean error = jObj.getBoolean("error");
 							boolean error = false;

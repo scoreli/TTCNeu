@@ -73,6 +73,7 @@ public class DatabasehandlerUUID extends SQLiteOpenHelper {
 		Mitglied mitglied = new Mitglied();
 		mitglied.set_id(Integer.parseInt(cursor.getString(0)));
 		mitglied.setUuid(cursor.getString(1));
+		db.close(); // Closing database connection
 		return mitglied;
 
 	}
