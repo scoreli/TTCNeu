@@ -36,7 +36,7 @@ public class NeuesSpielActivity extends Activity {
 	private EditText txfHeimmannschaft, txfGastmannschaft, txfSpielbeginn,
 			txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnSpielerstellen;
-	public String[] test = { "Tischtennis", "Fussball", "Volleyball" };
+	public String[] test = { "Tischtennis", "Fussball", "Handball" };
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
 	private SessionManager session;

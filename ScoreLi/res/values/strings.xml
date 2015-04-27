@@ -5,9 +5,10 @@
     <string name="title_Startseite">Startseite</string>
     <string name="title_Sportart1">Tischtennis</string>
     <string name="title_Sportart2">Fußball</string>
+    <string name="title_Sportart3">Handball</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
+    <string name="action_example">Aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
     <string name="menu_Anmelden">Anmelden</string>
     <string name="menu_Scoreboard">Scoreboard</string>
@@ -57,5 +58,6 @@
     <string name="text_nochkeinMitglied">Noch kein Mitglied? Hier registrieren.</string>
     <string name="text_vornamenachnahme">Vorname Nachname</string>
     <string name="text_logout">Logout</string>
+    
 
 </resources>

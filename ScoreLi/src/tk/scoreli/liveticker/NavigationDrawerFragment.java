@@ -29,6 +29,7 @@ import android.widget.Toast;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
+		
 
     /**
      * Remember the position of the selected item.
@@ -106,7 +107,7 @@ public class NavigationDrawerFragment extends Fragment {
                 		getString(R.string.title_Startseite),
                         getString(R.string.title_Sportart1),
                         getString(R.string.title_Sportart2),
-                        
+                        getString(R.string.title_Sportart3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -281,4 +282,5 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
 }

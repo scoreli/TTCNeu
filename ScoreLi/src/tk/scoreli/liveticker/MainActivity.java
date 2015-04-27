@@ -41,14 +41,15 @@ import com.android.volley.toolbox.StringRequest;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
-	private static final String TAG_Veranstaltungen = "veranstaltung";
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	private static final String TAG_Veranstaltungen = "veranstaltung";
+	// Für die Veranstaltungen holen
+	private static final String TAG = NavigationDrawerFragment.class
+			.getSimpleName();
+	private ProgressDialog pDialog;
 	ListView Veranstaltungenliste;
 	private ArrayAdapter<Veranstaltung> adapter;
 	List<Veranstaltung> veranstaltungen;
-	// Für die Veranstaltungen holen
-	private static final String TAG = MainActivity.class.getSimpleName();
-	private ProgressDialog pDialog;
 	public static final String KEY = "UebergabeVeranstaltungObjekt";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -131,6 +132,21 @@ public class MainActivity extends Activity implements
 			Veranstaltungholen();
 			Veranstaltungenliste.setVisibility(View.VISIBLE);
 			veranstaltungen = db.getFussballVeranstaltungen();
+			adapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1, veranstaltungen);
+			Veranstaltungenliste.setAdapter(adapter);
+			break;
+		case 4:
+			mTitle = getString(R.string.title_Sportart3);
+			/**
+			 * Hier werden alle Handballveranstaltungen angzeigt. Hierbeit wird
+			 * die Methode getHandballVeranstaltungen() aufgerufen. Dabei muss
+			 * die Liste in ein ArrayAdapter des Typs Veranstaltung erzeugt
+			 * werden und die Liste übergeben werden.
+			 */
+			Veranstaltungholen();
+			Veranstaltungenliste.setVisibility(View.VISIBLE);
+			veranstaltungen = db.getHandballVeranstaltungen();
 			adapter = new ArrayAdapter<Veranstaltung>(this,
 					android.R.layout.simple_list_item_1, veranstaltungen);
 			Veranstaltungenliste.setAdapter(adapter);

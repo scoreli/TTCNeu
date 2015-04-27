@@ -239,6 +239,117 @@ public class UpdateSpielActivity extends Activity {
 		// Adding request to request queue
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
+/**Muss noch geändert werden damit es was empfängt
+ * 
+ * @param punkteHeim
+ * @param punkteGast
+ * @param status
+ * @param veranstaltungs_id
+ */
+	private void updateVeranstaltung(final String punkteHeim,
+			final String punkteGast, final String status,
+			final String veranstaltungs_id) {
+		// Tag used to cancel the request
+		String tag_string_req = "req_updateveranstaltung";
+
+		pDialog.setMessage("Erstellen ...");
+		showDialog();
+
+		StringRequest strReq = new StringRequest(Method.POST,
+				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAG, "Register Response: " + response.toString());
+						hideDialog();
+
+						try {
+							JSONObject jObj = new JSONObject(response);
+							boolean error = jObj.getBoolean("error");
+							if (!error) {
+								// User successfully stored in MySQL
+								// Now store the user in sqlite
+								// String uid = jObj.getString("uid");
+
+								JSONObject user = jObj
+										.getJSONObject("veranstaltung");
+								String idj = user.getString("veranstaltung_id");
+								String sportartj = user.getString("sportart");
+								String heimmannschaftj = user
+										.getString("heimmannschaft");
+								String gastmannschaftj = user
+										.getString("gastmannschaft");
+								String punkteHeimj = user
+										.getString("punkteHeim");
+								String punkteGastj = user
+										.getString("punkteGast");
+								String spielbeginnj = user
+										.getString("spielbeginn");
+								String statusj = user.getString("status");
+
+								db.addVeranstaltung(new Veranstaltung(Long
+										.parseLong(idj), sportartj,
+										heimmannschaftj, gastmannschaftj,
+										Integer.parseInt(punkteHeimj), Integer
+												.parseInt(punkteGastj),
+										spielbeginnj, statusj));
+
+								/*
+								 * // Launch login activity Intent intent = new
+								 * Intent( RegisterVeranstaltung.this,
+								 * LoginActivity.class); startActivity(intent);
+								 * finish();
+								 */
+								finish();// Hat beendet da man was aufgerufen
+											// hat obwohl es beendet worden ist.
+							} else {
+
+								// Error occurred in registration. Get the error
+								// message
+								String errorMsg = jObj.getString("error_msg");
+
+								Toast.makeText(getApplicationContext(),
+										errorMsg, Toast.LENGTH_LONG).show();
+
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+							Toast.makeText(getApplicationContext(),
+									e.toString(), Toast.LENGTH_LONG).show();
+						}
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAG, "Registration Error: " + error.getMessage());
+
+						Toast.makeText(getApplicationContext(),
+								error.getMessage(), Toast.LENGTH_LONG).show();
+						hideDialog();
+
+					}
+				}) {
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Posting params to register url
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("tag", "updateveranstaltung");// Zuerst Tag dann
+				// Daten
+				params.put("punkteHeim", punkteHeim);
+				params.put("punkteGast", punkteGast);
+				params.put("veranstaltungs_id", veranstaltungs_id);
+				params.put("status", status);
+				return params;
+			}
+
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+	}
 
 	private void showDialog() {
 		if (!pDialog.isShowing())
