@@ -33,7 +33,8 @@ import com.android.volley.toolbox.StringRequest;
  * A login screen that offers login via email/password.
  */
 
-/**Auch größtenteils von Android Hive übernommen
+/**
+ * Auch größtenteils von Android Hive übernommen
  * 
  * @author philipp
  *
@@ -44,11 +45,10 @@ public class RegisterActivity extends Activity {
 	private SessionManager session;
 	private SQLiteHandlerLogin dblogin;
 
-
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	
+
 	// DatabasehandlerMitglieder db = new DatabasehandlerMitglieder(this);
 	// UI references.
 	private AutoCompleteTextView mEmailViewR;
@@ -141,7 +141,6 @@ public class RegisterActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptRegister() {
-		
 
 		// Reset errors.
 		mEmailViewR.setError(null);
@@ -234,9 +233,18 @@ public class RegisterActivity extends Activity {
 	}
 
 	/**
-	 * Function to store user in MySQL database will post params(tag, name,
-	 * email, password) to register url
-	 * */
+	 * Hierbei wird das Passwort,Email und der Name in die My SQL Datenbank
+	 * geschrieben. Dabei wird die Volley Libary Benutzt. Hierbei wird ein PHP
+	 * Script auf dem Server aberufen. Das dann mittels JSON die Abfragen regelt
+	 * und diese auch so codiert wieder zurückgibt. Dieses funktioniert mit sogenannten Tags. Nach dem Loginvorgang wird
+	 * dann diese Activity beendet und die Main gestartet.War dieser Vorgang
+	 * erfolgreich wird dieses User zurückgegeben und auf der Lokalen Datenbank
+	 * gespeichert.
+	 * 
+	 * @param name
+	 * @param email
+	 * @param password
+	 */
 	private void registerUser(final String name, final String email,
 			final String password) {
 		// Tag used to cancel the request
@@ -304,7 +312,7 @@ public class RegisterActivity extends Activity {
 			protected Map<String, String> getParams() {
 				// Posting params to register url
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "register");//Zuerst Tag dann Daten
+				params.put("tag", "register");// Zuerst Tag dann Daten
 				params.put("name", name);
 				params.put("email", email);
 				params.put("password", password);

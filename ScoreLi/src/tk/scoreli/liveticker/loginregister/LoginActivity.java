@@ -41,6 +41,10 @@ import com.android.volley.toolbox.StringRequest;
 public class LoginActivity extends Activity {
 	// LogCat tag
 	private static final String TAG = RegisterActivity.class.getSimpleName();
+	/**
+	 * Folgende Attribute sind für die Anzeige des Prozesses und für die
+	 * Session. Diese wird gestartet wenn sich ein Benutzer anmeldet.
+	 */
 	private ProgressDialog pDialog;
 	private SessionManager session;
 	private SQLiteHandlerLogin dblogin;
@@ -179,7 +183,11 @@ public class LoginActivity extends Activity {
 			// form field with an error.
 			focusView.requestFocus();
 		} else {
+			/**
+			 * Ruft den Loginprozess auf.
+			 */
 			checkLogin(email, password);
+
 		}
 	}
 
@@ -194,8 +202,16 @@ public class LoginActivity extends Activity {
 	}
 
 	/**
-	 * function to verify login details in mysql db
-	 * */
+	 * 
+	 * Hierbei wird das Passwort und die Email mit der My SQL Datenbank
+	 * verglichen. Dabei wird die Volley Libary Benutzt. Hierbei wird ein PHP
+	 * Script auf dem Server aberufen. Das dann mittels JSON die Abfragen regelt
+	 * und diese auch so codiert wieder zurückgibt.Dieses funktioniert mit sogenannten Tags. Nach dem Loginvorgang wird
+	 * dann diese Activity beendet und die Main gestartet.
+	 * 
+	 * @param email
+	 * @param password
+	 */
 	private void checkLogin(final String email, final String password) {
 		// Tag used to cancel the request
 		String tag_string_req = "req_login";

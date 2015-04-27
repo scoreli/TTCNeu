@@ -6,6 +6,10 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class SessionManager {
+	/**
+	 * Diese Klasse dient zur erstellung der Session. Dieses ist wenn der
+	 * Benutzer sich eingeloggt hat, wird eine Session gestartet.
+	 */
 	// LogCat tag
 	private static String TAG = SessionManager.class.getSimpleName();
 
@@ -20,7 +24,7 @@ public class SessionManager {
 
 	// Shared preferences file name
 	private static final String PREF_NAME = "AndroidHiveLogin";
-	
+
 	private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
 
 	public SessionManager(Context context) {
@@ -38,8 +42,8 @@ public class SessionManager {
 
 		Log.d(TAG, "User login session modified!");
 	}
-	
-	public boolean isLoggedIn(){
+
+	public boolean isLoggedIn() {
 		return pref.getBoolean(KEY_IS_LOGGEDIN, false);
 	}
 }

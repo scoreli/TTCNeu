@@ -10,7 +10,8 @@ import com.android.volley.toolbox.Volley;
 public class AppController extends Application {
 	/**
 	 * Wichtig ist hierbei das auch das Android Volley.jar eingebunden ist in
-	 * libs. Sonst schmeist es eine Nullpointer
+	 * libs. Sonst schmeist es eine Nullpointer. Diese Klasse regelt die
+	 * Anfragen an den Server.
 	 */
 	public static final String TAG = AppController.class.getSimpleName();
 
