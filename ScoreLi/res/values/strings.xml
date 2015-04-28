@@ -10,7 +10,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="menu_Anmelden">Anmelden</string>
+    <string name="menu_Account">Account</string>
     <string name="menu_Scoreboard">Scoreboard</string>
     <string name="menu_AnzeigenSteuerung">Steuerung</string>
     <string name="menu_Registrieren">Registrieren</string>

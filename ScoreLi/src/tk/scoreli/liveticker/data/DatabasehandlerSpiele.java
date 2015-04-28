@@ -3,6 +3,7 @@ package tk.scoreli.liveticker.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import tk.scoreli.liveticker.NavigationDrawerFragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,6 +36,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	public DatabasehandlerSpiele(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
+
+	
 
 	/**
 	 * Mit dieser Methode wird die Sql-lite Datenbank gebaut. Hierbei wird ein
@@ -269,6 +272,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
+		values.put(Veranstaltung_ID, veranstaltung.getId());
 		values.put(Veranstaltung_Sportart, veranstaltung.getSportart()); // Sportart
 		values.put(Veranstaltung_Heimmanschaft,
 				veranstaltung.getHeimmanschaft()); // Heimmannschaft

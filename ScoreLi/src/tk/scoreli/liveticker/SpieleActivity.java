@@ -97,6 +97,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		 * /05/eine-listview-mit-inhalt-fullen.html
 		 * http://www.appartig.net/?e=18
 		 */
+		db.deleteVeranstaltungen();
 		if (session.isLoggedIn()) {
 			Mitglied abfrage = dbuuid.getMitglied();
 			VeranstaltungholenDesUsers(abfrage.getUuid());
@@ -142,6 +143,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		// not enabled during onStart(), so we were paused to enable it...
 		// onResume() will be called when ACTION_REQUEST_ENABLE activity
 		// returns.
+		
 		try {
 			Veranstaltungsliste = (ListView) findViewById(R.id.listVeranstaltung);
 			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
@@ -163,6 +165,23 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 				mChatService.start();
 			}
 		}
+	}
+
+	public void Veranstaltungzeigen() {
+		try {
+			Veranstaltungsliste = (ListView) findViewById(R.id.listVeranstaltung);
+			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1,
+					db.getAllVeranstaltungen());
+			Veranstaltungsliste.setAdapter(listenAdapter);
+			Veranstaltungsliste.setOnItemClickListener(this);
+			Veranstaltungsliste.setOnItemLongClickListener(this);
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.toString(),
+					Toast.LENGTH_LONG).show();
+
+		}
+
 	}
 
 	@Override
@@ -220,7 +239,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		
+
 		Veranstaltung veranstaltung = new Veranstaltung();
 		veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(position);
@@ -450,10 +469,10 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 										+ response.toString());
 						hideDialog();
 						try {
-							
-							 Toast.makeText(getApplicationContext(),
-							  response.toString(), Toast.LENGTH_SHORT) .show();
-							 
+
+							// Toast.makeText(getApplicationContext(),
+							// response.toString(), Toast.LENGTH_SHORT) .show();
+
 							JSONObject jObj = new JSONObject(response);
 							// boolean error = jObj.getBoolean("error");
 							boolean error = false;
@@ -490,6 +509,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 											Integer.parseInt(punkteGastj),
 											spielbeginnj, statusj));
 
+									Veranstaltungzeigen();
 								}
 
 								Toast.makeText(getApplicationContext(),

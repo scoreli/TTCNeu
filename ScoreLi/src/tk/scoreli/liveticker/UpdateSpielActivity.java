@@ -13,6 +13,7 @@ import com.android.volley.Request.Method;
 import com.android.volley.toolbox.StringRequest;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
+import tk.scoreli.liveticker.data.DatabasehandlerUUID;
 import tk.scoreli.liveticker.data.Mitglied;
 import tk.scoreli.liveticker.data.Veranstaltung;
 import tk.scoreli.liveticker.loginregister.AppConfig;
@@ -35,9 +36,12 @@ public class UpdateSpielActivity extends Activity {
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnaktualisieren, btnloeschen;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
+	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
+
 	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
 	private ProgressDialog pDialog;
 	private SessionManager session;
+	private static final String TAG_VeranstaltungUpdate = "veranstaltungupdate";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,13 @@ public class UpdateSpielActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				aktualisieren();
+				if (session.isLoggedIn()) {
+					aktualisieren();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Bitte einloggen um Veranstaltungen zu aktualisieren",
+							Toast.LENGTH_SHORT).show();
+				}
 
 			}
 
@@ -89,7 +99,8 @@ public class UpdateSpielActivity extends Activity {
 		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
 		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
 		db.deleteVeranstaltung(updateveranstaltung);
-		Veranstaltungloeschen("" + updateveranstaltung.getId());
+		Mitglied uebertrag=dbuuid.getMitglied();
+		Veranstaltungloeschen("" + updateveranstaltung.getId(),uebertrag.getUuid());
 		finish();
 	}
 
@@ -114,15 +125,15 @@ public class UpdateSpielActivity extends Activity {
 		if (TextUtils.isEmpty(spielstatus) == false) {
 			updateveranstaltung.setStatus(spielstatus);
 		}
-
+		Mitglied uebertrag=dbuuid.getMitglied();
 		try {
-			int ka = db.updateVeranstaltung(updateveranstaltung);
+			updateVeranstaltung(""+updateveranstaltung.getSpielstandHeim(),""+ updateveranstaltung.getSpielstandGast(), updateveranstaltung.getStatus(), ""+updateveranstaltung.getId(), uebertrag.getUuid());
+			//db.updateVeranstaltung(updateveranstaltung);Geht nicht irgendwie ist schon geschlossen keine ahnung
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(),
 					Toast.LENGTH_LONG).show();
 		}
 
-		finish();
 	}
 
 	@Override
@@ -144,7 +155,8 @@ public class UpdateSpielActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void Veranstaltungloeschen(final String veranstaltungs_id) {
+	private void Veranstaltungloeschen(final String veranstaltungs_id,
+			final String user_id) {
 		// Tag used to cancel the request
 		String tag_string_req = "req_loescheVeranstaltung";
 
@@ -160,56 +172,30 @@ public class UpdateSpielActivity extends Activity {
 								"Veranstaltung Response: "
 										+ response.toString());
 						hideDialog();
-						/*
-						 * try {
-						 * 
-						 * /* Toast.makeText(getApplicationContext(),
-						 * response.toString(), Toast.LENGTH_SHORT) .show();
-						 */
-						/*
-						 * JSONObject jObj = new JSONObject(response); //
-						 * boolean error = jObj.getBoolean("error"); boolean
-						 * error = false; if (!error) { // User successfully
-						 * stored in MySQL // Now store the user in sqlite /*
-						 * db.deleteVeranstaltungen();
-						 * 
-						 * JSONArray uebergabe = jObj
-						 * .getJSONArray(TAG_VeranstaltungenDesUsers); for (int
-						 * i = 0; i < uebergabe.length(); i++) { JSONObject
-						 * veranstaltung = uebergabe .getJSONObject(i); String
-						 * idj = veranstaltung .getString("veranstaltung_id");
-						 * String heimmannschaftj = veranstaltung
-						 * .getString("heimmannschaft"); String gastmannschaftj
-						 * = veranstaltung .getString("gastmannschaft"); String
-						 * punkteHeimj = veranstaltung .getString("punkteHeim");
-						 * String punkteGastj = veranstaltung
-						 * .getString("punkteGast"); String statusj =
-						 * veranstaltung .getString("status"); String sportartj
-						 * = veranstaltung .getString("sportart"); String
-						 * spielbeginnj = veranstaltung
-						 * .getString("spielbeginn"); db.addVeranstaltung(new
-						 * Veranstaltung(Long .parseLong(idj), sportartj,
-						 * heimmannschaftj, gastmannschaftj,
-						 * Integer.parseInt(punkteHeimj),
-						 * Integer.parseInt(punkteGastj), spielbeginnj,
-						 * statusj));
-						 * 
-						 * }
-						 * 
-						 * 
-						 * Toast.makeText(getApplicationContext(),
-						 * "Aktualisiert", Toast.LENGTH_SHORT) .show(); } else {
-						 * 
-						 * // Error occurred in registration. Get the error //
-						 * message // String errorMsg = //
-						 * jObj.getString("error_msg");
-						 * 
-						 * // Toast.makeText(getApplicationContext(), //
-						 * errorMsg, Toast.LENGTH_LONG).show();
-						 * 
-						 * } } catch (JSONException e) { // JSON error
-						 * e.printStackTrace(); }
-						 */
+
+						try {
+
+							/*
+							 * Toast.makeText(getApplicationContext(),
+							 * response.toString(), Toast.LENGTH_SHORT) .show();
+							 */
+
+							JSONObject jObj = new JSONObject(response);
+							boolean error = jObj.getBoolean("error");
+							if (!error) {
+
+								Toast.makeText(getApplicationContext(),
+										"Gelöscht", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"Löschen fehlgeschlagen", Toast.LENGTH_SHORT)
+										.show();
+							}
+						} catch (JSONException e) { // JSON error
+							e.printStackTrace();
+						}
+
 					}
 
 				}, new Response.ErrorListener() {
@@ -231,6 +217,7 @@ public class UpdateSpielActivity extends Activity {
 				Map<String, String> params = new HashMap<String, String>();
 				params.put("tag", "loescheveranstaltung");
 				params.put("veranstaltungs_id", veranstaltungs_id);
+				params.put("user", user_id);
 				return params;
 			}
 
@@ -239,16 +226,18 @@ public class UpdateSpielActivity extends Activity {
 		// Adding request to request queue
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
-/**Muss noch geändert werden damit es was empfängt
- * 
- * @param punkteHeim
- * @param punkteGast
- * @param status
- * @param veranstaltungs_id
- */
+
+	/**
+	 * Muss noch geändert werden damit es was empfängt
+	 * 
+	 * @param punkteHeim
+	 * @param punkteGast
+	 * @param status
+	 * @param veranstaltungs_id
+	 */
 	private void updateVeranstaltung(final String punkteHeim,
 			final String punkteGast, final String status,
-			final String veranstaltungs_id) {
+			final String veranstaltungs_id, final String user_id) {
 		// Tag used to cancel the request
 		String tag_string_req = "req_updateveranstaltung";
 
@@ -270,7 +259,8 @@ public class UpdateSpielActivity extends Activity {
 								// User successfully stored in MySQL
 								// Now store the user in sqlite
 								// String uid = jObj.getString("uid");
-
+								/*Toast.makeText(getApplicationContext(),
+										response, Toast.LENGTH_LONG).show();
 								JSONObject user = jObj
 										.getJSONObject("veranstaltung");
 								String idj = user.getString("veranstaltung_id");
@@ -286,20 +276,17 @@ public class UpdateSpielActivity extends Activity {
 								String spielbeginnj = user
 										.getString("spielbeginn");
 								String statusj = user.getString("status");
+							
+								
 
-								db.addVeranstaltung(new Veranstaltung(Long
+								int ka = db.updateVeranstaltung(new Veranstaltung(Long
 										.parseLong(idj), sportartj,
 										heimmannschaftj, gastmannschaftj,
 										Integer.parseInt(punkteHeimj), Integer
 												.parseInt(punkteGastj),
+								
 										spielbeginnj, statusj));
-
-								/*
-								 * // Launch login activity Intent intent = new
-								 * Intent( RegisterVeranstaltung.this,
-								 * LoginActivity.class); startActivity(intent);
-								 * finish();
-								 */
+*/
 								finish();// Hat beendet da man was aufgerufen
 											// hat obwohl es beendet worden ist.
 							} else {
@@ -338,6 +325,7 @@ public class UpdateSpielActivity extends Activity {
 				Map<String, String> params = new HashMap<String, String>();
 				params.put("tag", "updateveranstaltung");// Zuerst Tag dann
 				// Daten
+				params.put("user", user_id);
 				params.put("punkteHeim", punkteHeim);
 				params.put("punkteGast", punkteGast);
 				params.put("veranstaltungs_id", veranstaltungs_id);
