@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="tk.scoreli.liveticker.loginregister.AppController"
@@ -32,26 +32,30 @@
         <activity
             android:name="tk.scoreli.liveticker.loginregister.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="tk.scoreli.liveticker.loginregister.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".AnzeigeActivity"
             android:label="@string/title_activity_anzeige"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name=".SteuerungActivity"
-            android:label="@string/title_activity_steuerung" >
+            android:label="@string/title_activity_steuerung"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SpieleActivity"
-            android:label="@string/title_activity_spiele" 
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_spiele"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".NeuesSpielActivity"
@@ -60,37 +64,32 @@
         </activity>
         <activity
             android:name=".UpdateSpielActivity"
-            android:label="@string/title_activity_update_spiel" >
+            android:label="@string/title_activity_update_spiel"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="tk.scoreli.liveticker.bluetooth.GepaarteBtActivity"
-            android:label="@string/title_activity_gepaarte_bt" >
+            android:label="@string/title_activity_gepaarte_bt"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Bluetoothtest"
-            android:label="@string/title_activity_bluetoothtest" >
-        </activity>
-        <activity
-            android:name=".bluetoothneu.Bluetoothclient"
-            android:label="@string/title_activity_bluetoothclient"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name=".bluetoothneu.BluetoothServer"
-            android:label="@string/title_activity_bluetooth_server"
-            android:screenOrientation="landscape" >
+            android:label="@string/title_activity_bluetoothtest"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".bluetooth.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_bluetoothtest" >
+            android:label="@string/title_activity_bluetoothtest"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SpieleAuflistungTTActivity"
-            android:label="@string/title_activity_spiele_auflistung_tt" >
+            android:label="@string/title_activity_spiele_auflistung_tt"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    
 
 </manifest>
