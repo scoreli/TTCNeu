@@ -5,17 +5,6 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/AnzeigeHeim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="62dp"
-        android:text="0"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="125sp" />
-
-    <TextView
         android:id="@+id/AnzeigeGast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,9 +42,22 @@
         android:id="@+id/AnzeigeStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/AnzeigekleinHeim"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="25dp"
         android:text="Status"
         android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/AnzeigeHeim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/AnzeigekleinHeim"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="62dp"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="125sp" />
 
 </RelativeLayout>

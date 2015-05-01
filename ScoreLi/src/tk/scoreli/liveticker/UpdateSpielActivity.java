@@ -98,7 +98,7 @@ public class UpdateSpielActivity extends Activity {
 		 */
 		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
 		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
-		db.deleteVeranstaltung(updateveranstaltung);
+		//db.deleteVeranstaltung(updateveranstaltung); Gleiche wie unten
 		Mitglied uebertrag=dbuuid.getMitglied();
 		Veranstaltungloeschen("" + updateveranstaltung.getId(),uebertrag.getUuid());
 		finish();

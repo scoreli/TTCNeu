@@ -50,7 +50,8 @@
         </activity>
         <activity
             android:name=".SpieleActivity"
-            android:label="@string/title_activity_spiele" >
+            android:label="@string/title_activity_spiele" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".NeuesSpielActivity"
@@ -91,8 +92,5 @@
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>
