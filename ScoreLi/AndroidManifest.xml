@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="tk.scoreli.liveticker.loginregister.AppController"
+        android:name=".loginregister.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -30,16 +30,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="tk.scoreli.liveticker.loginregister.LoginActivity"
+            android:name=".loginregister.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name="tk.scoreli.liveticker.loginregister.RegisterActivity"
+            android:name=".loginregister.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".AnzeigeActivity"
@@ -63,12 +63,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".UpdateSpielActivity"
-            android:label="@string/title_activity_update_spiel"
+            android:name=".ImSpielActivity"
+            android:label="@string/title_activity_ImSpiel"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="tk.scoreli.liveticker.bluetooth.GepaarteBtActivity"
+            android:name=".bluetooth.GepaarteBtActivity"
             android:label="@string/title_activity_gepaarte_bt"
             android:screenOrientation="portrait" >
         </activity>
@@ -89,7 +89,5 @@
             android:screenOrientation="portrait" >
         </activity>
     </application>
-
-    
 
 </manifest>

@@ -91,6 +91,12 @@ public class AnzeigeActivity extends Activity {
 		setContentView(R.layout.activity_anzeige);
 		init();
 		try {
+			/**
+			 * Hier wird das Scoreboard aktualisiert. Beim ersten Starten wird
+			 * das schon vollführt,weil beim Beenden/Abreisen der Verbindung die
+			 * Activity neugeladen wird. Dann wird der zuletz gespeicherte wert
+			 * übergeben.
+			 */
 			aktualisiereScoreboard(deserialize(getIntent().getExtras()
 					.getByteArray(MainActivity.KEY)));
 		} catch (ClassNotFoundException e) {
@@ -106,7 +112,11 @@ public class AnzeigeActivity extends Activity {
 		// Get local Bluetooth adapter
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		// If the adapter is null, then Bluetooth is not supported
+		/**
+		 * Wenn kein BluetoothAdapter gefunden wurde wird die Activity beendet
+		 * beendet und eine Meldung ausgegeben.
+		 * 
+		 */
 		if (mBluetoothAdapter == null) {
 			Toast.makeText(this, "Bluetooth is not available",
 					Toast.LENGTH_LONG).show();
@@ -114,10 +124,10 @@ public class AnzeigeActivity extends Activity {
 			return;
 		}
 		/**
-		 * Das wird benötigt um bei Berührung die Anzeigenelemente auszublenden (Fullscreenactivity)
-		 * Das bewirkt auch das die Anzeigenelemente ausgeblendet
-		 * werden. Außerdem ist jetzt die Nervige ActivityBeschriftung weg.
-		 * http://www
+		 * Das wird benötigt um bei Berührung die Anzeigenelemente auszublenden
+		 * (Fullscreenactivity) Das bewirkt auch das die Anzeigenelemente
+		 * ausgeblendet werden. Außerdem ist jetzt die Nervige
+		 * ActivityBeschriftung weg. http://www
 		 * .android-hilfe.de/android-app-entwicklung/123750-titelleiste
 		 * -ausblenden-oder-faerben.html
 		 */
@@ -156,6 +166,10 @@ public class AnzeigeActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Bei dieser Methode werden die Elemente für das Layout initialisiert.
+	 * 
+	 */
 	private void init() {
 		AnzeigeHeima = (TextView) findViewById(R.id.AnzeigeHeim);
 		AnzeigekleinHeima = (TextView) findViewById(R.id.AnzeigekleinHeim);
@@ -239,7 +253,9 @@ public class AnzeigeActivity extends Activity {
 	}
 
 	/**
-	 * The Handler that gets information back from the BluetoothChatService
+	 * Der Handler empfängt Nachrichten der BluetoothService klasse. Denn nur
+	 * durch einen Handler können Daten von einem Thread abgerufen werden.
+	 * 
 	 */
 	private final Handler mHandler = new Handler() {
 		@Override
@@ -331,6 +347,13 @@ public class AnzeigeActivity extends Activity {
 		}
 	};
 
+	/**
+	 * Hier wird das Scoreboard aktualisiert. Dabei wird ein
+	 * Veranstaltungsobjekt übergeben und davon die einzelnen Eigenschaften
+	 * geholt und angezeigt.
+	 * 
+	 * @param veranstaltung
+	 */
 	public void aktualisiereScoreboard(Veranstaltung veranstaltung) {
 		AnzeigeHeima.setText("" + veranstaltung.getSpielstandHeim());
 		AnzeigekleinHeima.setText(veranstaltung.getHeimmanschaft());
@@ -339,6 +362,15 @@ public class AnzeigeActivity extends Activity {
 		AnzeigeStatusa.setText(veranstaltung.getStatus());
 	}
 
+	/**
+	 * Diese Methode wandelt das Serialisierte Objekt wieder zu einem Objekt. In
+	 * unserem Fall ein Veranstaltungsobjekt.
+	 * 
+	 * @param bytes
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public static Veranstaltung deserialize(byte[] bytes) throws IOException,
 			ClassNotFoundException {
 		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
@@ -346,6 +378,15 @@ public class AnzeigeActivity extends Activity {
 		return (Veranstaltung) o.readObject();
 	}
 
+	/**
+	 * Diese Methode serialisiert ein beliebiges Objekt,damit es über Bluetooth
+	 * oder zwischen Activity übergeben werden kann. In unserem Fall ist es ein
+	 * Veranstaltungsobjekt.
+	 * 
+	 * @param obj
+	 * @return
+	 * @throws IOException
+	 */
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);

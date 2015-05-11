@@ -12,30 +12,79 @@
         android:text="@string/txt_Spielstand"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/txfHeimmannschaftAktualisiere"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/txfHeimmannschaftAktualisiere"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="@string/txt_Heimmannschaft"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/txfGastmannschaftAktualisiere"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/txfHeimmannschaftAktualisiere"
+            android:ems="10"
+            android:hint="@string/txt_Gastmannschaft"
+            android:inputType="number" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/button1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txfHeimmannschaftAktualisiere"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/txfHeimmannschaftAktualisiere"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/button2"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txfGastmannschaftAktualisiere"
+            android:layout_alignTop="@+id/txfGastmannschaftAktualisiere"
+            android:layout_toRightOf="@+id/txfGastmannschaftAktualisiere"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/button3"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/button1"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/button1"
+            android:text="-" />
+
+        <Button
+            android:id="@+id/button4"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/button2"
+            android:layout_alignTop="@+id/button2"
+            android:layout_toRightOf="@+id/button2"
+            android:text="-" />
+    </RelativeLayout>
+
+    <Switch
+        android:id="@+id/switch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/txt_Heimmannschaft"
-        android:inputType="number" >
-
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/txfGastmannschaftAktualisiere"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/txt_Gastmannschaft"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/text_ScoreboardAn" />
 
     <EditText
         android:id="@+id/txfAktualisiereStatus"

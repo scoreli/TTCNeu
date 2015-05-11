@@ -32,7 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class UpdateSpielActivity extends Activity {
+public class ImSpielActivity extends Activity {
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnaktualisieren, btnloeschen;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
@@ -101,7 +101,9 @@ public class UpdateSpielActivity extends Activity {
 		//db.deleteVeranstaltung(updateveranstaltung); Gleiche wie unten
 		Mitglied uebertrag=dbuuid.getMitglied();
 		Veranstaltungloeschen("" + updateveranstaltung.getId(),uebertrag.getUuid());
-		finish();
+		Toast.makeText(getApplicationContext(), "Gelöscht", Toast.LENGTH_SHORT).show();
+
+		//finish();
 	}
 
 	private void aktualisieren() {
@@ -287,8 +289,9 @@ public class UpdateSpielActivity extends Activity {
 								
 										spielbeginnj, statusj));
 */
-								finish();// Hat beendet da man was aufgerufen
+								//finish();// Hat beendet da man was aufgerufen
 											// hat obwohl es beendet worden ist.
+								Toast.makeText(getApplicationContext(), "Aktualisiert", Toast.LENGTH_SHORT).show();
 							} else {
 
 								// Error occurred in registration. Get the error

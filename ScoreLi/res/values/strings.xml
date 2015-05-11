@@ -35,7 +35,7 @@
     <string name="txt_Spielstand">Spielstand:</string>
     <string name="txt_Status">Status</string>
     <string name="txt_Aktualisieren">Aktualisieren</string>
-    <string name="title_activity_update_spiel">Aktualisiere Spiel</string>
+    <string name="title_activity_ImSpiel">Im Spiel</string>
     <string name="txt_Bluetoothan">Bluetooth an</string>
     <string name="txt_Bluetooth">Bluetooth</string>
     <string name="txt_gepaartegeräte">Gepaarte Geräte</string>
@@ -58,6 +58,7 @@
     <string name="text_nochkeinMitglied">Noch kein Mitglied? Hier registrieren.</string>
     <string name="text_vornamenachnahme">Vorname Nachname</string>
     <string name="text_logout">Logout</string>
+    <string name="text_ScoreboardAn">Scoreboard</string>
     
 
 </resources>

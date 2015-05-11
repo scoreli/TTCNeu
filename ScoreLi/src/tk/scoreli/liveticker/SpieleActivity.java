@@ -230,7 +230,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		// Hier wird das Objekt geholt der Liste und unten die Id geholt
 		Veranstaltung veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(pos);
-		Intent i = new Intent(SpieleActivity.this, UpdateSpielActivity.class);
+		Intent i = new Intent(SpieleActivity.this, ImSpielActivity.class);
 		i.putExtra(KEY, veranstaltung.getId());
 		startActivity(i);
 
