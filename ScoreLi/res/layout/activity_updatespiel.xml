@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/txvSpielstandAktualiereSpiel"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_Spielstand"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -58,6 +58,7 @@
             android:layout_alignTop="@+id/txfGastmannschaftAktualisiere"
             android:layout_toRightOf="@+id/txfGastmannschaftAktualisiere"
             android:text="-" />
+
     </RelativeLayout>
 
     <Switch

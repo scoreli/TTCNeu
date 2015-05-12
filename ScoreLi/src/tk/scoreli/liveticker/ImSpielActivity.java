@@ -51,7 +51,7 @@ public class ImSpielActivity extends Activity implements
 	private Switch switch_scoreboard;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
-private boolean freigabe = false;
+	private boolean freigabe = false;
 	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
 	private ProgressDialog pDialog;
 	private SessionManager session;
@@ -228,11 +228,9 @@ private boolean freigabe = false;
 			Toast.makeText(getApplicationContext(), e.toString(),
 					Toast.LENGTH_LONG).show();
 		}
-		if(switch_scoreboard.isChecked()&&freigabe
-				){
+		if (switch_scoreboard.isChecked() && freigabe) {
 			sendVeranstaltung(updateveranstaltung);
 		}
-		
 
 	}
 
@@ -481,25 +479,7 @@ private boolean freigabe = false;
 	@Override
 	public synchronized void onResume() {
 		super.onResume();
-		// if(D) Log.e(TAG, "+ ON RESUME +");
 
-		// Performing this check in onResume() covers the case in which BT was
-		// not enabled during onStart(), so we were paused to enable it...
-		// onResume() will be called when ACTION_REQUEST_ENABLE activity
-		// returns.
-		/*
-		 * try { Veranstaltungsliste = (ListView)
-		 * findViewById(R.id.listVeranstaltung); ListAdapter listenAdapter = new
-		 * ArrayAdapter<Veranstaltung>(this,
-		 * android.R.layout.simple_list_item_1, db.getAllVeranstaltungen());
-		 * Veranstaltungsliste.setAdapter(listenAdapter);
-		 * Veranstaltungsliste.setOnItemClickListener(this);
-		 * Veranstaltungsliste.setOnItemLongClickListener(this); } catch
-		 * (Exception e) { Toast.makeText(getApplicationContext(), e.toString(),
-		 * Toast.LENGTH_LONG).show();
-		 * 
-		 * }
-		 */
 		if (mChatService != null) {
 			// Only if the state is STATE_NONE, do we know that we haven't
 			// started already
@@ -508,15 +488,6 @@ private boolean freigabe = false;
 				mChatService.start();
 			}
 		}
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		// If BT is not on, request that it be enabled.
-		// setupChat() will then be called during onActivityResult
-
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -550,7 +521,9 @@ private boolean freigabe = false;
 					// User did not enable Bluetooth or an error occured
 					// Toast.makeText(this, R.string.bt_not_enabled_leaving,
 					// Toast.LENGTH_SHORT).show();
-					finish();
+					Toast.makeText(getApplicationContext(),
+							"Bluetooth muss aktiviert sein", Toast.LENGTH_SHORT)
+							.show();
 				}
 			}
 		} catch (Exception e) {
@@ -564,30 +537,6 @@ private boolean freigabe = false;
 		mChatService = new BluetoothService(this, mHandlerHier);
 		// Initialize the buffer for outgoing messages
 		mOutStringBuffer = new StringBuffer("");
-	}
-
-	private void Bluetoothaktivieren() {
-		boolean bluetoothadapter = true;
-		/**
-		 * Hat das Gerät Bluetooth ?
-		 */
-		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
-				.getDefaultAdapter();
-		if (mBluetoothAdapter == null) {
-			Toast.makeText(getApplicationContext(),
-					"Bluetooth gerät nicht gefunden", Toast.LENGTH_SHORT)
-					.show();
-			bluetoothadapter = false;
-		}
-		/**
-		 * BluetoothAdapter Aktivieren wenn er nicht schon an ist.
-		 */
-		if (!mBluetoothAdapter.isEnabled() && bluetoothadapter == true) {
-			Intent enableBtIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		}
-
 	}
 
 	private void sendVeranstaltung(Veranstaltung veranstaltung) {
@@ -650,7 +599,7 @@ private boolean freigabe = false;
 				Toast.makeText(getApplicationContext(),
 						"Connected to " + mConnectedDeviceName,
 						Toast.LENGTH_SHORT).show();
-				freigabe=true;
+				freigabe = true;
 				break;
 			case MESSAGE_TOAST:
 				Toast.makeText(getApplicationContext(),
@@ -661,9 +610,9 @@ private boolean freigabe = false;
 						.equals("Unable to connect device")
 						|| msg.getData().getString(TOAST)
 								.equals("Device connection was lost")) {
-				switch_scoreboard.setChecked(false);	
-					
-					
+					switch_scoreboard.setChecked(false);
+
+					freigabe = false;
 
 				}
 
