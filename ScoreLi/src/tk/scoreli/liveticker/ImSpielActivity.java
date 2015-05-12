@@ -192,7 +192,7 @@ public class ImSpielActivity extends Activity implements
 		Toast.makeText(getApplicationContext(), "Gelöscht", Toast.LENGTH_SHORT)
 				.show();
 
-		// finish();
+		 finish();
 	}
 
 	private void aktualisieren() {
