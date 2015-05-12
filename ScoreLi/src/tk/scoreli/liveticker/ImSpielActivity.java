@@ -37,6 +37,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request.Method;
@@ -47,6 +48,7 @@ import com.android.volley.toolbox.StringRequest;
 public class ImSpielActivity extends Activity implements
 		OnCheckedChangeListener {
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
+	private TextView statusScoreboard;
 	private Button btnaktualisieren, btnloeschen;
 	private Switch switch_scoreboard;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
@@ -165,7 +167,11 @@ public class ImSpielActivity extends Activity implements
 			}
 
 		} else {
-			// do stuff when Switch if OFF
+			// Stop the Bluetooth chat services
+			if (mChatService != null){
+				mChatService.stop();
+			// if(D) Log.e(TAG, "--- ON DESTROY ---");
+		}
 		}
 	}
 
@@ -176,7 +182,7 @@ public class ImSpielActivity extends Activity implements
 		btnaktualisieren = (Button) findViewById(R.id.btnaktualisieren);
 		btnloeschen = (Button) findViewById(R.id.btnloeschen);
 		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
-
+statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
 	}
 
 	private void loeschen() {
