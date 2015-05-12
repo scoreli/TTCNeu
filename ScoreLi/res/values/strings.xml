@@ -59,6 +59,10 @@
     <string name="text_vornamenachnahme">Vorname Nachname</string>
     <string name="text_logout">Logout</string>
     <string name="text_ScoreboardAn">Scoreboard</string>
+    <string name="text_Heimkurz">Heim</string>
+    <string name="text_GastKurz">Gast</string>
+    <string name="text_HeimPlus">Heim +1</string>
+    <string name="text_GastPlus">Gast +1</string>
     
 
 </resources>

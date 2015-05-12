@@ -23,7 +23,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:ems="10"
-            android:hint="@string/txt_Heimmannschaft"
+            android:hint="@string/text_Heimkurz"
             android:inputType="number" />
 
         <EditText
@@ -33,55 +33,35 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/txfHeimmannschaftAktualisiere"
             android:ems="10"
-            android:hint="@string/txt_Gastmannschaft"
+            android:hint="@string/text_GastKurz"
             android:inputType="number" >
 
             <requestFocus />
         </EditText>
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btnminus1heim"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/txfHeimmannschaftAktualisiere"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/txfHeimmannschaftAktualisiere"
-            android:text="+" />
+            android:text="-" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnminus1gast"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/txfGastmannschaftAktualisiere"
             android:layout_alignTop="@+id/txfGastmannschaftAktualisiere"
             android:layout_toRightOf="@+id/txfGastmannschaftAktualisiere"
-            android:text="+" />
-
-        <Button
-            android:id="@+id/button3"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/button1"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/button1"
-            android:text="-" />
-
-        <Button
-            android:id="@+id/button4"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/button2"
-            android:layout_alignTop="@+id/button2"
-            android:layout_toRightOf="@+id/button2"
             android:text="-" />
     </RelativeLayout>
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/switch_scoreboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_ScoreboardAn" />
@@ -92,6 +72,27 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/txt_Status" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp" >
+
+        <Button
+            android:id="@+id/btnplus1heim"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/text_HeimPlus" />
+
+        <Button
+            android:id="@+id/btnplus1gast"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/text_GastPlus" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnaktualisieren"
