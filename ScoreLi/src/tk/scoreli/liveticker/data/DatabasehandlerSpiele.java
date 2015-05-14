@@ -112,9 +112,9 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				Veranstaltung_Spielbeginn, Veranstaltung_Status },
 				Veranstaltung_ID + "=?", new String[] { String.valueOf(id) },
 				null, null, null, null);
-		if (cursor != null)
+		if (cursor != null){
 			cursor.moveToFirst();
-
+		}
 		Veranstaltung veranstaltung = new Veranstaltung(Integer.parseInt(cursor
 				.getString(0)), cursor.getString(1), cursor.getString(2),
 				cursor.getString(3), Integer.parseInt(cursor.getString(4)),
@@ -122,6 +122,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				cursor.getString(7));
 		db.close(); // Closing database connection
 		// return contact
+		
 		return veranstaltung;
 	}
 
@@ -284,11 +285,13 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				veranstaltung.getSpielstandGast()); // SpielstandGast
 		values.put(Veranstaltung_Spielbeginn, veranstaltung.getSpielbeginn());// Spielbeginn
 		values.put(Veranstaltung_Status, veranstaltung.getStatus());// Status
-		db.close(); // Closing database connection
-		// updating row
-		return db.update(TABLE_Veranstaltungen, values, Veranstaltung_ID
+		db.update(TABLE_Veranstaltungen, values, Veranstaltung_ID
 				+ " = ?",
-				new String[] { String.valueOf(veranstaltung.getId()) });
+				new String[] { String.valueOf(veranstaltung.getId())}) ;
+		// updating row
+		db.close(); // Closing database connection
+		return 1;
+		
 	}
 
 	// Deleting single contact

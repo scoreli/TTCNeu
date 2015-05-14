@@ -12,10 +12,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
+import tk.scoreli.liveticker.data.Mitglied;
 import tk.scoreli.liveticker.data.Veranstaltung;
 import tk.scoreli.liveticker.loginregister.AppConfig;
 import tk.scoreli.liveticker.loginregister.AppController;
 import tk.scoreli.liveticker.loginregister.LoginActivity;
+import tk.scoreli.liveticker.loginregister.SessionManager;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -42,7 +44,7 @@ import com.android.volley.toolbox.StringRequest;
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
-
+	private SessionManager session;
 	ListView Veranstaltungenliste;
 	private ArrayAdapter<Veranstaltung> adapter;
 	List<Veranstaltung> veranstaltungen;
@@ -72,13 +74,14 @@ public class MainActivity extends Activity implements
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-
+		// Session manager
+		session = new SessionManager(getApplicationContext());
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 	}
-	
+
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
@@ -144,7 +147,6 @@ public class MainActivity extends Activity implements
 		}
 	}
 
-
 	public void restoreActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -201,7 +203,12 @@ public class MainActivity extends Activity implements
 			return true;
 		}
 		if (id == R.id.menu_Spiele) {
-			startActivity(new Intent(MainActivity.this, SpieleActivity.class));
+			if (session.isLoggedIn()) {
+				startActivity(new Intent(MainActivity.this,
+						SpieleActivity.class));
+			} else {
+				Toast.makeText(getApplicationContext(),"Bitte Einloggen",Toast.LENGTH_SHORT).show();
+			}
 			return true;
 		}
 

@@ -49,7 +49,8 @@ public class ImSpielActivity extends Activity implements
 		OnCheckedChangeListener {
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private TextView statusScoreboard;
-	private Button btnaktualisieren, btnloeschen;
+	private Button btnaktualisieren, btnloeschen, btnheimplusein,
+			btngastpluseins, btnheimminuseins, btngastminuseins;
 	private Switch switch_scoreboard;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
@@ -88,11 +89,15 @@ public class ImSpielActivity extends Activity implements
 		setContentView(R.layout.activity_updatespiel);
 		init();
 		switch_scoreboard.setOnCheckedChangeListener(this);
-
+		statusScoreboard.setText("Nicht Verbunden");
 		// Session manager
 		session = new SessionManager(getApplicationContext());
 		// Progress dialog
 		pDialog = new ProgressDialog(this);
+		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+		Veranstaltung uebergabeveranstaltung = db.getVeranstaltung((int) i);
+		plusminusHeim(0, uebergabeveranstaltung);
+
 		btnaktualisieren.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -124,6 +129,50 @@ public class ImSpielActivity extends Activity implements
 			}
 
 		});
+		btnheimplusein.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				Veranstaltung uebergabeveranstaltung = db
+						.getVeranstaltung((int) i);
+				plusminusHeim(1, uebergabeveranstaltung);
+			}
+		});
+		btngastpluseins.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				Veranstaltung uebergabeveranstaltung = db
+						.getVeranstaltung((int) i);
+				plusminusGast(1, uebergabeveranstaltung);
+			}
+		});
+		btnheimminuseins.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				Veranstaltung uebergabeveranstaltung = db
+						.getVeranstaltung((int) i);
+				plusminusHeim(-1, uebergabeveranstaltung);
+			}
+		});
+		btngastminuseins.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				Veranstaltung uebergabeveranstaltung = db
+						.getVeranstaltung((int) i);
+				plusminusGast(-1, uebergabeveranstaltung);
+			}
+		});
 		/*
 		 * switch_scoreboard.setOnClickListener(new OnClickListener() {
 		 * 
@@ -135,10 +184,45 @@ public class ImSpielActivity extends Activity implements
 		 */
 	}
 
+	public void plusminusHeim(int i, Veranstaltung veranstaltung) {
+		int uebergabe = veranstaltung.getSpielstandHeim();
+		boolean freigabe =i>0|| uebergabe>0&&i<1;
+		if (freigabe) {
+			uebergabe = uebergabe + i;
+			veranstaltung.setSpielstandHeim(uebergabe);
+		}
+		txfSpielstandHeim.setHint("Heim: " + veranstaltung.getSpielstandHeim());
+		txfSpielstandGast.setHint("Gast: " + veranstaltung.getSpielstandGast());
+		try {
+			db.updateVeranstaltung(veranstaltung);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void plusminusGast(int i, Veranstaltung veranstaltung) {
+		int uebergabe = veranstaltung.getSpielstandGast();
+		boolean freigabe =i>0|| uebergabe>0&&i<1;
+		if (freigabe) {
+			uebergabe = uebergabe + i;
+			veranstaltung.setSpielstandGast(uebergabe);
+		}
+		txfSpielstandHeim.setHint("Heim: " + veranstaltung.getSpielstandHeim());
+		txfSpielstandGast.setHint("Gast: " + veranstaltung.getSpielstandGast());
+		try {
+			db.updateVeranstaltung(veranstaltung);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-		Toast.makeText(this, "The Switch is " + (isChecked ? "on" : "off"),
-				Toast.LENGTH_SHORT).show();
+		// Toast.makeText(this, "The Switch is " + (isChecked ? "on" : "off"),
+		// Toast.LENGTH_SHORT).show();
 		if (isChecked) {
 			// Get local Bluetooth adapter
 			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -168,10 +252,10 @@ public class ImSpielActivity extends Activity implements
 
 		} else {
 			// Stop the Bluetooth chat services
-			if (mChatService != null){
+			if (mChatService != null) {
 				mChatService.stop();
-			// if(D) Log.e(TAG, "--- ON DESTROY ---");
-		}
+				// if(D) Log.e(TAG, "--- ON DESTROY ---");
+			}
 		}
 	}
 
@@ -181,8 +265,13 @@ public class ImSpielActivity extends Activity implements
 		txfStatus = (EditText) findViewById(R.id.txfAktualisiereStatus);
 		btnaktualisieren = (Button) findViewById(R.id.btnaktualisieren);
 		btnloeschen = (Button) findViewById(R.id.btnloeschen);
+		btnheimplusein = (Button) findViewById(R.id.btnplus1heim);
+		btngastpluseins = (Button) findViewById(R.id.btnplus1gast);
+		btnheimminuseins = (Button) findViewById(R.id.btnminus1heim);
+		btngastminuseins = (Button) findViewById(R.id.btnminus1gast);
 		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
-statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
+		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
+
 	}
 
 	private void loeschen() {
@@ -198,7 +287,7 @@ statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
 		Toast.makeText(getApplicationContext(), "Gelöscht", Toast.LENGTH_SHORT)
 				.show();
 
-		 finish();
+		finish();
 	}
 
 	private void aktualisieren() {
@@ -223,12 +312,16 @@ statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
 			updateveranstaltung.setStatus(spielstatus);
 		}
 		Mitglied uebertrag = dbuuid.getMitglied();
+
 		try {
 			updateVeranstaltung("" + updateveranstaltung.getSpielstandHeim(),
 					"" + updateveranstaltung.getSpielstandGast(),
 					updateveranstaltung.getStatus(),
 					"" + updateveranstaltung.getId(), uebertrag.getUuid());
-			// db.updateVeranstaltung(updateveranstaltung);Geht nicht irgendwie
+			// long k = getIntent().getExtras().getLong(SpieleActivity.KEY);
+			// Veranstaltung h = db.getVeranstaltung((int) k);
+			int j = db.updateVeranstaltung(updateveranstaltung);
+			// Geht nicht irgendwie
 			// ist schon geschlossen keine ahnung
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(),
@@ -530,6 +623,7 @@ statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
 					Toast.makeText(getApplicationContext(),
 							"Bluetooth muss aktiviert sein", Toast.LENGTH_SHORT)
 							.show();
+					switch_scoreboard.setChecked(false);
 				}
 			}
 		} catch (Exception e) {
@@ -606,6 +700,7 @@ statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
 						"Connected to " + mConnectedDeviceName,
 						Toast.LENGTH_SHORT).show();
 				freigabe = true;
+				statusScoreboard.setText("Verbunden");
 				break;
 			case MESSAGE_TOAST:
 				Toast.makeText(getApplicationContext(),
@@ -617,7 +712,7 @@ statusScoreboard=(TextView)findViewById(R.id.statusscoreboard);
 						|| msg.getData().getString(TOAST)
 								.equals("Device connection was lost")) {
 					switch_scoreboard.setChecked(false);
-
+					statusScoreboard.setText("Nicht Verbunden");
 					freigabe = false;
 
 				}

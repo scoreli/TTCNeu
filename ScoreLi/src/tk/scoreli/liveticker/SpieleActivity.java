@@ -1,8 +1,5 @@
 package tk.scoreli.liveticker;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +7,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.Request.Method;
-import com.android.volley.toolbox.StringRequest;
 
 import tk.scoreli.liveticker.bluetooth.BluetoothService;
 import tk.scoreli.liveticker.bluetooth.DeviceListActivity;
@@ -28,11 +20,8 @@ import tk.scoreli.liveticker.loginregister.SessionManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,8 +34,13 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 public class SpieleActivity extends Activity implements OnItemClickListener,
-		OnItemLongClickListener, Serializable {
+		Serializable {
 	/**
 	 * 
 	 */
@@ -106,18 +100,15 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 					"Bitte einloggen um Veranstaltungen anzusehen",
 					Toast.LENGTH_SHORT).show();
 		}
-
-		// Get local Bluetooth adapter
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-		// If the adapter is null, then Bluetooth is not supported
-		if (mBluetoothAdapter == null) {
-			Toast.makeText(this, "Bluetooth is not available",
-					Toast.LENGTH_LONG).show();
-			finish();
-			return;
-		}
-
+		/*
+		 * // Get local Bluetooth adapter mBluetoothAdapter =
+		 * BluetoothAdapter.getDefaultAdapter();
+		 * 
+		 * // If the adapter is null, then Bluetooth is not supported if
+		 * (mBluetoothAdapter == null) { Toast.makeText(this,
+		 * "Bluetooth is not available", Toast.LENGTH_LONG).show(); finish();
+		 * return; }
+		 */
 		try {
 			Veranstaltungsliste = (ListView) findViewById(R.id.listVeranstaltung);
 			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
@@ -125,7 +116,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 					db.getAllVeranstaltungen());
 			Veranstaltungsliste.setAdapter(listenAdapter);
 			Veranstaltungsliste.setOnItemClickListener(this);
-			Veranstaltungsliste.setOnItemLongClickListener(this);
+			// Veranstaltungsliste.setOnItemLongClickListener(this);
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(),
 					Toast.LENGTH_LONG).show();
@@ -143,7 +134,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		// not enabled during onStart(), so we were paused to enable it...
 		// onResume() will be called when ACTION_REQUEST_ENABLE activity
 		// returns.
-		
+
 		try {
 			Veranstaltungsliste = (ListView) findViewById(R.id.listVeranstaltung);
 			ListAdapter listenAdapter = new ArrayAdapter<Veranstaltung>(this,
@@ -151,20 +142,18 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 					db.getAllVeranstaltungen());
 			Veranstaltungsliste.setAdapter(listenAdapter);
 			Veranstaltungsliste.setOnItemClickListener(this);
-			Veranstaltungsliste.setOnItemLongClickListener(this);
+			// Veranstaltungsliste.setOnItemLongClickListener(this);
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(),
 					Toast.LENGTH_LONG).show();
 
 		}
-		if (mChatService != null) {
-			// Only if the state is STATE_NONE, do we know that we haven't
-			// started already
-			if (mChatService.getState() == BluetoothService.STATE_NONE) {
-				// Start the Bluetooth chat services
-				mChatService.start();
-			}
-		}
+		/*
+		 * if (mChatService != null) { // Only if the state is STATE_NONE, do we
+		 * know that we haven't // started already if (mChatService.getState()
+		 * == BluetoothService.STATE_NONE) { // Start the Bluetooth chat
+		 * services mChatService.start(); } }
+		 */
 	}
 
 	public void Veranstaltungzeigen() {
@@ -175,7 +164,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 					db.getAllVeranstaltungen());
 			Veranstaltungsliste.setAdapter(listenAdapter);
 			Veranstaltungsliste.setOnItemClickListener(this);
-			Veranstaltungsliste.setOnItemLongClickListener(this);
+			// Veranstaltungsliste.setOnItemLongClickListener(this);
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(),
 					Toast.LENGTH_LONG).show();
@@ -184,44 +173,27 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 
 	}
 
-	@Override
-	public synchronized void onPause() {
-		super.onPause();
-		// if(D) Log.e(TAG, "- ON PAUSE -");
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		// if(D) Log.e(TAG, "-- ON STOP --");
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		// Stop the Bluetooth chat services
-		if (mChatService != null)
-			mChatService.stop();
-		// if(D) Log.e(TAG, "--- ON DESTROY ---");
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		// If BT is not on, request that it be enabled.
-		// setupChat() will then be called during onActivityResult
-		if (!mBluetoothAdapter.isEnabled()) {
-			Intent enableIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-			// Otherwise, setup the chat session
-		} else {
-			if (mChatService == null)
-				setupUebertragung();
-		}
-	}
-
+	/*
+	 * @Override public synchronized void onPause() { super.onPause(); // if(D)
+	 * Log.e(TAG, "- ON PAUSE -"); }
+	 * 
+	 * @Override public void onStop() { super.onStop(); // if(D) Log.e(TAG,
+	 * "-- ON STOP --"); }
+	 * 
+	 * @Override public void onDestroy() { super.onDestroy(); // Stop the
+	 * Bluetooth chat services if (mChatService != null) mChatService.stop(); //
+	 * if(D) Log.e(TAG, "--- ON DESTROY ---"); }
+	 * 
+	 * @Override public void onStart() { super.onStart();
+	 * 
+	 * // If BT is not on, request that it be enabled. // setupChat() will then
+	 * be called during onActivityResult if (!mBluetoothAdapter.isEnabled()) {
+	 * Intent enableIntent = new Intent(
+	 * BluetoothAdapter.ACTION_REQUEST_ENABLE);
+	 * startActivityForResult(enableIntent, REQUEST_ENABLE_BT); // Otherwise,
+	 * setup the chat session } else { if (mChatService == null)
+	 * setupUebertragung(); } }
+	 */
 	/*
 	 * Hier fehlt noch das die Id von der Veranstaltung angezeigt wird.
 	 */
@@ -236,18 +208,15 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 
 	}
 
-	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-
-		Veranstaltung veranstaltung = new Veranstaltung();
-		veranstaltung = (Veranstaltung) Veranstaltungsliste
-				.getItemAtPosition(position);
-
-		sendVeranstaltung(veranstaltung);
-		return false;
-	}
-
+	/*
+	 * @Override public boolean onItemLongClick(AdapterView<?> parent, View
+	 * view, int position, long id) {
+	 * 
+	 * Veranstaltung veranstaltung = new Veranstaltung(); veranstaltung =
+	 * (Veranstaltung) Veranstaltungsliste .getItemAtPosition(position);
+	 * 
+	 * sendVeranstaltung(veranstaltung); return false; }
+	 */
 	/*
 	 * 
 	 * 
@@ -292,166 +261,105 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 
 			return true;
 		}
-		if (id == R.id.menu_Bluetooth_an) {
-			Bluetoothaktivieren();
-
-		}
-		if (id == R.id.menu_gerätverbinden) {
-			Intent serverIntent = new Intent(this, DeviceListActivity.class);
-			startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-			return true;
-		}
-
+		
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		try {
-			switch (requestCode) {
-			case REQUEST_CONNECT_DEVICE:
-				// When DeviceListActivity returns with a device to connect
-				if (resultCode == Activity.RESULT_OK) {
-					// Get the device MAC address
-					String address = data.getExtras().getString(
-							DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-
-					// Get the BLuetoothDevice object
-					BluetoothDevice device = mBluetoothAdapter
-							.getRemoteDevice(address);
-					// Attempt to connect to the device
-
-					mChatService.connect(device);
-				}
-				break;
-			case REQUEST_ENABLE_BT:
-				// When the request to enable Bluetooth returns
-				if (resultCode == Activity.RESULT_OK) {
-					// Bluetooth is now enabled, so set up a chat session
-					setupUebertragung();
-				} else {
-					// User did not enable Bluetooth or an error occured
-					// Toast.makeText(this, R.string.bt_not_enabled_leaving,
-					// Toast.LENGTH_SHORT).show();
-					finish();
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void setupUebertragung() {
-		// Initialize the BluetoothChatService to perform bluetooth connections
-		mChatService = new BluetoothService(this, mHandlerHier);
-		// Initialize the buffer for outgoing messages
-		mOutStringBuffer = new StringBuffer("");
-	}
-
-	private void Bluetoothaktivieren() {
-		boolean bluetoothadapter = true;
-		/**
-		 * Hat das Gerät Bluetooth ?
-		 */
-		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
-				.getDefaultAdapter();
-		if (mBluetoothAdapter == null) {
-			Toast.makeText(getApplicationContext(),
-					"Bluetooth gerät nicht gefunden", Toast.LENGTH_SHORT)
-					.show();
-			bluetoothadapter = false;
-		}
-		/**
-		 * BluetoothAdapter Aktivieren wenn er nicht schon an ist.
-		 */
-		if (!mBluetoothAdapter.isEnabled() && bluetoothadapter == true) {
-			Intent enableBtIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		}
-
-	}
-
-	private void sendVeranstaltung(Veranstaltung veranstaltung) {
-		// Check that we're actually connected before trying anything
-		if (mChatService.getState() != BluetoothService.STATE_CONNECTED) {
-			// Toast.makeText(this, R.string.not_connected,
-			// Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		// Check that there's actually something to send
-		if (veranstaltung != null) {
-			// Get the message bytes and tell the BluetoothChatService to write
-
-			byte[] send = null;
-			try {
-				send = serialize(veranstaltung);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// send=veranstaltung.getBytes();
-
-			mChatService.write(send);
-
-		}
-	}
-
-	private final Handler mHandlerHier = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MESSAGE_STATE_CHANGE:
-
-				switch (msg.arg1) {
-				case BluetoothService.STATE_CONNECTED:
-					// mTitle.setText(R.string.title_connected_to);
-					// mTitle.append(mConnectedDeviceName);
-					// mConversationArrayAdapter.clear();
-					break;
-				case BluetoothService.STATE_CONNECTING:
-					// mTitle.setText(R.string.title_connecting);
-					break;
-				case BluetoothService.STATE_LISTEN:
-				case BluetoothService.STATE_NONE:
-					// mTitle.setText(R.string.title_not_connected);
-					break;
-				}
-				break;
-			case MESSAGE_WRITE:
-				byte[] writeBuf = (byte[]) msg.obj;
-				// construct a string from the buffer
-				String writeMessage = new String(writeBuf);
-				// mConversationArrayAdapter.add("Me:  " + writeMessage);
-				break;
-
-			case MESSAGE_DEVICE_NAME:
-				// save the connected device's name
-				mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-				Toast.makeText(getApplicationContext(),
-						"Connected to " + mConnectedDeviceName,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case MESSAGE_TOAST:
-				Toast.makeText(getApplicationContext(),
-						msg.getData().getString(TOAST),
-
-						Toast.LENGTH_SHORT).show();
-
-				break;
-			}
-		}
-	};
-
-	public static byte[] serialize(Object obj) throws IOException {
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		ObjectOutputStream o = new ObjectOutputStream(b);
-		o.writeObject(obj);
-		return b.toByteArray();
-	}
-
+	/*
+	 * public void onActivityResult(int requestCode, int resultCode, Intent
+	 * data) {
+	 * 
+	 * try { switch (requestCode) { case REQUEST_CONNECT_DEVICE: // When
+	 * DeviceListActivity returns with a device to connect if (resultCode ==
+	 * Activity.RESULT_OK) { // Get the device MAC address String address =
+	 * data.getExtras().getString( DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+	 * 
+	 * // Get the BLuetoothDevice object BluetoothDevice device =
+	 * mBluetoothAdapter .getRemoteDevice(address); // Attempt to connect to the
+	 * device
+	 * 
+	 * mChatService.connect(device); } break; case REQUEST_ENABLE_BT: // When
+	 * the request to enable Bluetooth returns if (resultCode ==
+	 * Activity.RESULT_OK) { // Bluetooth is now enabled, so set up a chat
+	 * session setupUebertragung(); } else { // User did not enable Bluetooth or
+	 * an error occured // Toast.makeText(this, R.string.bt_not_enabled_leaving,
+	 * // Toast.LENGTH_SHORT).show(); finish(); } } } catch (Exception e) { //
+	 * TODO Auto-generated catch block e.printStackTrace(); } }
+	 */
+	/*
+	 * private void setupUebertragung() { // Initialize the BluetoothChatService
+	 * to perform bluetooth connections mChatService = new
+	 * BluetoothService(this, mHandlerHier); // Initialize the buffer for
+	 * outgoing messages mOutStringBuffer = new StringBuffer(""); }
+	 * 
+	 * private void Bluetoothaktivieren() { boolean bluetoothadapter = true; /**
+	 * Hat das Gerät Bluetooth ?
+	 */
+	/*
+	 * BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+	 * .getDefaultAdapter(); if (mBluetoothAdapter == null) {
+	 * Toast.makeText(getApplicationContext(), "Bluetooth gerät nicht gefunden",
+	 * Toast.LENGTH_SHORT) .show(); bluetoothadapter = false; } /**
+	 * BluetoothAdapter Aktivieren wenn er nicht schon an ist.
+	 */
+	/*
+	 * if (!mBluetoothAdapter.isEnabled() && bluetoothadapter == true) { Intent
+	 * enableBtIntent = new Intent( BluetoothAdapter.ACTION_REQUEST_ENABLE);
+	 * startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT); }
+	 * 
+	 * }
+	 * 
+	 * private void sendVeranstaltung(Veranstaltung veranstaltung) { // Check
+	 * that we're actually connected before trying anything if
+	 * (mChatService.getState() != BluetoothService.STATE_CONNECTED) { //
+	 * Toast.makeText(this, R.string.not_connected, //
+	 * Toast.LENGTH_SHORT).show(); return; }
+	 * 
+	 * // Check that there's actually something to send if (veranstaltung !=
+	 * null) { // Get the message bytes and tell the BluetoothChatService to
+	 * write
+	 * 
+	 * byte[] send = null; try { send = serialize(veranstaltung); } catch
+	 * (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
+	 * } // send=veranstaltung.getBytes();
+	 * 
+	 * mChatService.write(send);
+	 * 
+	 * } }
+	 * 
+	 * private final Handler mHandlerHier = new Handler() {
+	 * 
+	 * @Override public void handleMessage(Message msg) { switch (msg.what) {
+	 * case MESSAGE_STATE_CHANGE:
+	 * 
+	 * switch (msg.arg1) { case BluetoothService.STATE_CONNECTED: //
+	 * mTitle.setText(R.string.title_connected_to); //
+	 * mTitle.append(mConnectedDeviceName); //
+	 * mConversationArrayAdapter.clear(); break; case
+	 * BluetoothService.STATE_CONNECTING: //
+	 * mTitle.setText(R.string.title_connecting); break; case
+	 * BluetoothService.STATE_LISTEN: case BluetoothService.STATE_NONE: //
+	 * mTitle.setText(R.string.title_not_connected); break; } break; case
+	 * MESSAGE_WRITE: byte[] writeBuf = (byte[]) msg.obj; // construct a string
+	 * from the buffer String writeMessage = new String(writeBuf); //
+	 * mConversationArrayAdapter.add("Me:  " + writeMessage); break;
+	 * 
+	 * case MESSAGE_DEVICE_NAME: // save the connected device's name
+	 * mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+	 * Toast.makeText(getApplicationContext(), "Connected to " +
+	 * mConnectedDeviceName, Toast.LENGTH_SHORT).show(); break; case
+	 * MESSAGE_TOAST: Toast.makeText(getApplicationContext(),
+	 * msg.getData().getString(TOAST),
+	 * 
+	 * Toast.LENGTH_SHORT).show();
+	 * 
+	 * break; } } };
+	 * 
+	 * public static byte[] serialize(Object obj) throws IOException {
+	 * ByteArrayOutputStream b = new ByteArrayOutputStream(); ObjectOutputStream
+	 * o = new ObjectOutputStream(b); o.writeObject(obj); return
+	 * b.toByteArray(); }
+	 */
 	private void VeranstaltungholenDesUsers(final String user_id) {
 		// Tag used to cancel the request
 		String tag_string_req = "req_holendesUsers";
