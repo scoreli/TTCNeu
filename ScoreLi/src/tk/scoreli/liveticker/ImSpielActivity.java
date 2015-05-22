@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -50,7 +51,8 @@ public class ImSpielActivity extends Activity implements
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private TextView statusScoreboard;
 	private Button btnaktualisieren, btnloeschen, btnheimplusein,
-			btngastpluseins, btnheimminuseins, btngastminuseins;
+			btngastpluseins, btnheimminuseins, btngastminuseins, btnzurueck;
+	private CheckBox checkboxbeenden;
 	private Switch switch_scoreboard;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
@@ -173,6 +175,14 @@ public class ImSpielActivity extends Activity implements
 				plusminusGast(-1, uebergabeveranstaltung);
 			}
 		});
+		btnzurueck.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+
+			}
+		});
 		/*
 		 * switch_scoreboard.setOnClickListener(new OnClickListener() {
 		 * 
@@ -182,11 +192,27 @@ public class ImSpielActivity extends Activity implements
 		 * 
 		 * } })
 		 */
+		checkboxbeenden
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						// TODO Auto-generated method stub
+						if(isChecked){
+							Veranstaltungbeenden("","");
+						Toast.makeText(getApplicationContext(), "Beendent", Toast.LENGTH_SHORT).show();
+
+						}}
+
+					
+				});
+
 	}
 
 	public void plusminusHeim(int i, Veranstaltung veranstaltung) {
 		int uebergabe = veranstaltung.getSpielstandHeim();
-		boolean freigabe =i>0|| uebergabe>0&&i<1;
+		boolean freigabe = i > 0 || uebergabe > 0 && i < 1;
 		if (freigabe) {
 			uebergabe = uebergabe + i;
 			veranstaltung.setSpielstandHeim(uebergabe);
@@ -204,7 +230,7 @@ public class ImSpielActivity extends Activity implements
 
 	public void plusminusGast(int i, Veranstaltung veranstaltung) {
 		int uebergabe = veranstaltung.getSpielstandGast();
-		boolean freigabe =i>0|| uebergabe>0&&i<1;
+		boolean freigabe = i > 0 || uebergabe > 0 && i < 1;
 		if (freigabe) {
 			uebergabe = uebergabe + i;
 			veranstaltung.setSpielstandGast(uebergabe);
@@ -271,7 +297,8 @@ public class ImSpielActivity extends Activity implements
 		btngastminuseins = (Button) findViewById(R.id.btnminus1gast);
 		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
 		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
-
+		btnzurueck = (Button) findViewById(R.id.btn_zurueck);
+		checkboxbeenden = (CheckBox) findViewById(R.id.checkBox_veranstaltungbeendet);
 	}
 
 	private void loeschen() {
@@ -280,7 +307,7 @@ public class ImSpielActivity extends Activity implements
 		 */
 		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
 		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
-		// db.deleteVeranstaltung(updateveranstaltung); Gleiche wie unten
+		db.deleteVeranstaltung(updateveranstaltung);
 		Mitglied uebertrag = dbuuid.getMitglied();
 		Veranstaltungloeschen("" + updateveranstaltung.getId(),
 				uebertrag.getUuid());
@@ -351,7 +378,77 @@ public class ImSpielActivity extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	private void Veranstaltungbeenden(final String veranstaltungs_id,
+			final String user_id) {
+		// Tag used to cancel the request
+				String tag_string_req = "req_beendeVeranstaltung";
 
+				pDialog.setMessage("Beenden der Veranstaltung ...");
+				showDialog();
+
+				StringRequest strReq = new StringRequest(Method.POST,
+						AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
+
+							@Override
+							public void onResponse(String response) {
+								Log.d(TAG,
+										"Veranstaltung Response: "
+												+ response.toString());
+								hideDialog();
+
+								try {
+
+									/*
+									 * Toast.makeText(getApplicationContext(),
+									 * response.toString(), Toast.LENGTH_SHORT) .show();
+									 */
+
+									JSONObject jObj = new JSONObject(response);
+									boolean error = jObj.getBoolean("error");
+									if (!error) {
+
+										Toast.makeText(getApplicationContext(),
+												"Beendet", Toast.LENGTH_SHORT).show();
+									} else {
+										Toast.makeText(getApplicationContext(),
+												"Beenden fehlgeschlagen",
+												Toast.LENGTH_SHORT).show();
+									}
+								} catch (JSONException e) { // JSON error
+									e.printStackTrace();
+								}
+
+							}
+
+						}, new Response.ErrorListener() {
+
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								Log.e(TAG, "Registration Error: " + error.getMessage());
+
+								Toast.makeText(getApplicationContext(),
+										error.getMessage(), Toast.LENGTH_LONG).show();
+								hideDialog();
+
+							}
+						}) {
+
+					@Override
+					protected Map<String, String> getParams() {
+						// Posting params to register url
+						Map<String, String> params = new HashMap<String, String>();
+						params.put("tag", "beendeveranstaltung");
+						params.put("veranstaltungs_id", veranstaltungs_id);
+						params.put("user", user_id);
+						return params;
+					}
+
+				};
+
+				// Adding request to request queue
+				AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+		
+	}
 	private void Veranstaltungloeschen(final String veranstaltungs_id,
 			final String user_id) {
 		// Tag used to cancel the request

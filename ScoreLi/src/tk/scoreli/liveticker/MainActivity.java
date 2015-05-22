@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements
 			 */
 			Intent i = new Intent(MainActivity.this, AnzeigeActivity.class);
 			Veranstaltung leereVeranstaltung = new Veranstaltung("", "", "",
-					"", 0, 0, "");
+					"", 0, 0, "123456789zrrdrzretzrez");
 			byte[] uebergabe;
 			try {
 				uebergabe = serialize(leereVeranstaltung);

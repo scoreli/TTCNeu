@@ -12,14 +12,12 @@ import tk.scoreli.liveticker.util.SystemUiHider;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -176,7 +174,7 @@ public class AnzeigeActivity extends Activity {
 		AnzeigeGasta = (TextView) findViewById(R.id.AnzeigeGast);
 		AnzeigekleinGasta = (TextView) findViewById(R.id.AnzeigekleinGast);
 		AnzeigeStatusa = (TextView) findViewById(R.id.AnzeigeStatus);
-
+		
 	}
 
 	@Override
@@ -359,9 +357,29 @@ public class AnzeigeActivity extends Activity {
 		AnzeigekleinHeima.setText(veranstaltung.getHeimmanschaft());
 		AnzeigeGasta.setText("" + veranstaltung.getSpielstandGast());
 		AnzeigekleinGasta.setText(veranstaltung.getGastmannschaft());
+		boolean fit =false;
+		int laenge=veranstaltung.getStatus().length();
+		float uebergang=AnzeigeStatusa.getTextSize();
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		AnzeigeStatusa.setText(veranstaltung.getStatus());
+		AnzeigeStatusa.measure(0, 0);
+		int breite = AnzeigeStatusa.getWidth();
+		Toast.makeText(getApplicationContext(), ""+uebergang+"d"+breite, Toast.LENGTH_SHORT).show();
+		//onWindowFocusChanged(true);
 	}
-
+	@Override
+	 public void onWindowFocusChanged(boolean hasFocus) {
+	  // TODO Auto-generated method stub
+	  super.onWindowFocusChanged(hasFocus);
+	  //Here you can get the size!
+	  int breite = AnzeigeStatusa.getWidth();
+		Toast.makeText(getApplicationContext(), ""+breite, Toast.LENGTH_SHORT).show();
+	 }
 	/**
 	 * Diese Methode wandelt das Serialisierte Objekt wieder zu einem Objekt. In
 	 * unserem Fall ein Veranstaltungsobjekt.
@@ -427,4 +445,5 @@ public class AnzeigeActivity extends Activity {
 	 * mHideHandler.removeCallbacks(mHideRunnable);
 	 * mHideHandler.postDelayed(mHideRunnable, delayMillis); }
 	 */
+	
 }
