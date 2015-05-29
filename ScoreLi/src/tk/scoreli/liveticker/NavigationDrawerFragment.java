@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.Veranstaltung;
+import tk.scoreli.liveticker.internet.InternetService;
 import tk.scoreli.liveticker.loginregister.AppConfig;
 import tk.scoreli.liveticker.loginregister.AppController;
 import android.app.ActionBar;
@@ -81,17 +82,21 @@ public class NavigationDrawerFragment extends Fragment {
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-
+private InternetService internetService;
 	public NavigationDrawerFragment() {
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		 db = new DatabasehandlerSpiele(getActivity());
+		/**
+		 *
+		 */
+		internetService=new InternetService(getActivity());
+		// db = new DatabasehandlerSpiele(getActivity());
 		// Progress dialog
-		pDialog = new ProgressDialog(getActivity());
-		pDialog.setCancelable(false);
+	//	pDialog = new ProgressDialog(getActivity());
+	//	pDialog.setCancelable(false);
 		// Read in the flag indicating whether or not the user has demonstrated
 		// awareness of the
 		// drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -299,7 +304,7 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 
 		if (item.getItemId() == R.id.action_example) {
-			Veranstaltungholen();
+			internetService.Veranstaltungholen();
 			Toast.makeText(getActivity(), "Aktualisiert", Toast.LENGTH_SHORT)
 					.show();
 			return true;
