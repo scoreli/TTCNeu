@@ -261,7 +261,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 
 			return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
 

@@ -15,6 +15,7 @@ import tk.scoreli.liveticker.data.DatabasehandlerSpiele;
 import tk.scoreli.liveticker.data.DatabasehandlerUUID;
 import tk.scoreli.liveticker.data.Mitglied;
 import tk.scoreli.liveticker.data.Veranstaltung;
+import tk.scoreli.liveticker.internet.InternetService;
 import tk.scoreli.liveticker.loginregister.AppConfig;
 import tk.scoreli.liveticker.loginregister.AppController;
 import tk.scoreli.liveticker.loginregister.SessionManager;
@@ -48,12 +49,17 @@ import com.android.volley.toolbox.StringRequest;
 
 public class ImSpielActivity extends Activity implements
 		OnCheckedChangeListener {
+	/**
+	 * Werte für die initalisierung von Im Spiel
+	 * 
+	 */
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private TextView statusScoreboard;
 	private Button btnaktualisieren, btnloeschen, btnheimplusein,
 			btngastpluseins, btnheimminuseins, btngastminuseins, btnzurueck;
 	private CheckBox checkboxbeenden;
 	private Switch switch_scoreboard;
+
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
 	private boolean freigabe = false;
@@ -85,11 +91,19 @@ public class ImSpielActivity extends Activity implements
 	// Member object for the chat services
 	private BluetoothService mChatService = null;
 
+	/**
+	 * Für die Internet Klasse
+	 * 
+	 */
+	private InternetService internetservice;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_updatespiel);
 		init();
+		internetservice = new InternetService(this);
+
 		switch_scoreboard.setOnCheckedChangeListener(this);
 		statusScoreboard.setText("Nicht Verbunden");
 		// Session manager
@@ -199,13 +213,14 @@ public class ImSpielActivity extends Activity implements
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						// TODO Auto-generated method stub
-						if(isChecked){
-							Veranstaltungbeenden("","");
-						Toast.makeText(getApplicationContext(), "Beendent", Toast.LENGTH_SHORT).show();
+						if (isChecked) {
+							internetservice.Veranstaltungbeenden("", "");
+							Toast.makeText(getApplicationContext(), "Beendent",
+									Toast.LENGTH_SHORT).show();
 
-						}}
+						}
+					}
 
-					
 				});
 
 	}
@@ -309,7 +324,7 @@ public class ImSpielActivity extends Activity implements
 		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
 		db.deleteVeranstaltung(updateveranstaltung);
 		Mitglied uebertrag = dbuuid.getMitglied();
-		Veranstaltungloeschen("" + updateveranstaltung.getId(),
+		internetservice.Veranstaltungloeschen("" + updateveranstaltung.getId(),
 				uebertrag.getUuid());
 		Toast.makeText(getApplicationContext(), "Gelöscht", Toast.LENGTH_SHORT)
 				.show();
@@ -341,8 +356,9 @@ public class ImSpielActivity extends Activity implements
 		Mitglied uebertrag = dbuuid.getMitglied();
 
 		try {
-			updateVeranstaltung("" + updateveranstaltung.getSpielstandHeim(),
-					"" + updateveranstaltung.getSpielstandGast(),
+			internetservice.updateVeranstaltung(
+					"" + updateveranstaltung.getSpielstandHeim(), ""
+							+ updateveranstaltung.getSpielstandGast(),
 					updateveranstaltung.getStatus(),
 					"" + updateveranstaltung.getId(), uebertrag.getUuid());
 			// long k = getIntent().getExtras().getLong(SpieleActivity.KEY);
@@ -377,271 +393,6 @@ public class ImSpielActivity extends Activity implements
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-	private void Veranstaltungbeenden(final String veranstaltungs_id,
-			final String user_id) {
-		// Tag used to cancel the request
-				String tag_string_req = "req_beendeVeranstaltung";
-
-				pDialog.setMessage("Beenden der Veranstaltung ...");
-				showDialog();
-
-				StringRequest strReq = new StringRequest(Method.POST,
-						AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
-
-							@Override
-							public void onResponse(String response) {
-								Log.d(TAG,
-										"Veranstaltung Response: "
-												+ response.toString());
-								hideDialog();
-
-								try {
-
-									/*
-									 * Toast.makeText(getApplicationContext(),
-									 * response.toString(), Toast.LENGTH_SHORT) .show();
-									 */
-
-									JSONObject jObj = new JSONObject(response);
-									boolean error = jObj.getBoolean("error");
-									if (!error) {
-
-										Toast.makeText(getApplicationContext(),
-												"Beendet", Toast.LENGTH_SHORT).show();
-									} else {
-										Toast.makeText(getApplicationContext(),
-												"Beenden fehlgeschlagen",
-												Toast.LENGTH_SHORT).show();
-									}
-								} catch (JSONException e) { // JSON error
-									e.printStackTrace();
-								}
-
-							}
-
-						}, new Response.ErrorListener() {
-
-							@Override
-							public void onErrorResponse(VolleyError error) {
-								Log.e(TAG, "Registration Error: " + error.getMessage());
-
-								Toast.makeText(getApplicationContext(),
-										error.getMessage(), Toast.LENGTH_LONG).show();
-								hideDialog();
-
-							}
-						}) {
-
-					@Override
-					protected Map<String, String> getParams() {
-						// Posting params to register url
-						Map<String, String> params = new HashMap<String, String>();
-						params.put("tag", "beendeveranstaltung");
-						params.put("veranstaltungs_id", veranstaltungs_id);
-						params.put("user", user_id);
-						return params;
-					}
-
-				};
-
-				// Adding request to request queue
-				AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-		
-	}
-	private void Veranstaltungloeschen(final String veranstaltungs_id,
-			final String user_id) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_loescheVeranstaltung";
-
-		pDialog.setMessage("Löschen ...");
-		showDialog();
-
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
-
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAG,
-								"Veranstaltung Response: "
-										+ response.toString());
-						hideDialog();
-
-						try {
-
-							/*
-							 * Toast.makeText(getApplicationContext(),
-							 * response.toString(), Toast.LENGTH_SHORT) .show();
-							 */
-
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							if (!error) {
-
-								Toast.makeText(getApplicationContext(),
-										"Gelöscht", Toast.LENGTH_SHORT).show();
-							} else {
-								Toast.makeText(getApplicationContext(),
-										"Löschen fehlgeschlagen",
-										Toast.LENGTH_SHORT).show();
-							}
-						} catch (JSONException e) { // JSON error
-							e.printStackTrace();
-						}
-
-					}
-
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAG, "Registration Error: " + error.getMessage());
-
-						Toast.makeText(getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						hideDialog();
-
-					}
-				}) {
-
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "loescheveranstaltung");
-				params.put("veranstaltungs_id", veranstaltungs_id);
-				params.put("user", user_id);
-				return params;
-			}
-
-		};
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-	}
-
-	/**
-	 * Muss noch geändert werden damit es was empfängt
-	 * 
-	 * @param punkteHeim
-	 * @param punkteGast
-	 * @param status
-	 * @param veranstaltungs_id
-	 */
-	private void updateVeranstaltung(final String punkteHeim,
-			final String punkteGast, final String status,
-			final String veranstaltungs_id, final String user_id) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_updateveranstaltung";
-
-		pDialog.setMessage("Aktualisieren ...");
-		showDialog();
-
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
-
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAG, "Register Response: " + response.toString());
-						hideDialog();
-
-						try {
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							if (!error) {
-								// User successfully stored in MySQL
-								// Now store the user in sqlite
-								// String uid = jObj.getString("uid");
-								/*
-								 * Toast.makeText(getApplicationContext(),
-								 * response, Toast.LENGTH_LONG).show();
-								 * JSONObject user = jObj
-								 * .getJSONObject("veranstaltung"); String idj =
-								 * user.getString("veranstaltung_id"); String
-								 * sportartj = user.getString("sportart");
-								 * String heimmannschaftj = user
-								 * .getString("heimmannschaft"); String
-								 * gastmannschaftj = user
-								 * .getString("gastmannschaft"); String
-								 * punkteHeimj = user .getString("punkteHeim");
-								 * String punkteGastj = user
-								 * .getString("punkteGast"); String spielbeginnj
-								 * = user .getString("spielbeginn"); String
-								 * statusj = user.getString("status");
-								 * 
-								 * 
-								 * 
-								 * int ka = db.updateVeranstaltung(new
-								 * Veranstaltung(Long .parseLong(idj),
-								 * sportartj, heimmannschaftj, gastmannschaftj,
-								 * Integer.parseInt(punkteHeimj), Integer
-								 * .parseInt(punkteGastj),
-								 * 
-								 * spielbeginnj, statusj));
-								 */
-								// finish();// Hat beendet da man was aufgerufen
-								// hat obwohl es beendet worden ist.
-								Toast.makeText(getApplicationContext(),
-										"Aktualisiert", Toast.LENGTH_SHORT)
-										.show();
-							} else {
-
-								// Error occurred in registration. Get the error
-								// message
-								String errorMsg = jObj.getString("error_msg");
-
-								Toast.makeText(getApplicationContext(),
-										errorMsg, Toast.LENGTH_LONG).show();
-
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-							Toast.makeText(getApplicationContext(),
-									e.toString(), Toast.LENGTH_LONG).show();
-						}
-					}
-
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAG, "Registration Error: " + error.getMessage());
-
-						Toast.makeText(getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						hideDialog();
-
-					}
-				}) {
-
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "updateveranstaltung");// Zuerst Tag dann
-				// Daten
-				params.put("user", user_id);
-				params.put("punkteHeim", punkteHeim);
-				params.put("punkteGast", punkteGast);
-				params.put("veranstaltungs_id", veranstaltungs_id);
-				params.put("status", status);
-				return params;
-			}
-
-		};
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-	}
-
-	private void showDialog() {
-		if (!pDialog.isShowing())
-			pDialog.show();
-	}
-
-	private void hideDialog() {
-		if (pDialog.isShowing())
-			pDialog.dismiss();
 	}
 
 	public static byte[] serialize(Object obj) throws IOException {
