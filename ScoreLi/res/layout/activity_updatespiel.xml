@@ -64,14 +64,8 @@
     <Switch
         android:id="@+id/switch_scoreboard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:text="@string/text_ScoreboardAn" />
-
-    <CheckBox
-        android:id="@+id/checkBox_veranstaltungbeendet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_Veranstaltungbeenden" />
 
     <EditText
         android:id="@+id/txfAktualisiereStatus"

@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,7 +24,9 @@ public class NeuesSpielActivity extends Activity {
 	private EditText txfHeimmannschaft, txfGastmannschaft, txfSpielbeginn,
 			txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnSpielerstellen;
+	//private CheckBox veranstaltungbeendet;
 	public String[] test = { "Tischtennis", "Fussball", "Handball" };
+	//private int istbeendet=0;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
 	private SessionManager session;
@@ -55,6 +60,7 @@ public class NeuesSpielActivity extends Activity {
 
 			}
 		});
+		
 	}
 
 	public void Spielerstellen() {
@@ -148,6 +154,7 @@ public class NeuesSpielActivity extends Activity {
 		txfSpielbeginn = (EditText) findViewById(R.id.txfSpielbeginn);
 		btnSpielerstellen = (Button) findViewById(R.id.btnNeuesSpiel);
 		txfStatus = (EditText) findViewById(R.id.txfStatus);
+		
 	}
 
 }

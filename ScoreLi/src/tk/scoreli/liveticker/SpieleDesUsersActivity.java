@@ -39,12 +39,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-public class SpieleActivity extends Activity implements OnItemClickListener,
+public class SpieleDesUsersActivity extends Activity implements OnItemClickListener,
 		Serializable {
 	/**
 	 * 
 	 */
-	private static final String TAG = SpieleActivity.class.getSimpleName();
+	private static final String TAG = SpieleDesUsersActivity.class.getSimpleName();
 	private static final String TAG_VeranstaltungenDesUsers = "veranstaltungdesusers";
 	private ProgressDialog pDialog;
 
@@ -202,7 +202,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		// Hier wird das Objekt geholt der Liste und unten die Id geholt
 		Veranstaltung veranstaltung = (Veranstaltung) Veranstaltungsliste
 				.getItemAtPosition(pos);
-		Intent i = new Intent(SpieleActivity.this, ImSpielActivity.class);
+		Intent i = new Intent(SpieleDesUsersActivity.this, ImSpielActivity.class);
 		i.putExtra(KEY, veranstaltung.getId());
 		startActivity(i);
 
@@ -256,7 +256,7 @@ public class SpieleActivity extends Activity implements OnItemClickListener,
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.spiel_neueVeranstaltung) {
-			startActivity(new Intent(SpieleActivity.this,
+			startActivity(new Intent(SpieleDesUsersActivity.this,
 					NeuesSpielActivity.class));
 
 			return true;

@@ -57,24 +57,34 @@ public class ImSpielActivity extends Activity implements
 	private TextView statusScoreboard;
 	private Button btnaktualisieren, btnloeschen, btnheimplusein,
 			btngastpluseins, btnheimminuseins, btngastminuseins, btnzurueck;
-	private CheckBox checkboxbeenden;
+	// private CheckBox checkboxbeenden;
 	private Switch switch_scoreboard;
-
+	/**
+	 * Für die Aktualisierung der Spielstände ist eine Datenbankanbindung
+	 * notwendig
+	 * 
+	 */
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
+	/**
+	 * Wird auf true gesetzt sobald eine erfolgreiche Verbindung zwischen zwei
+	 * Geräten erfolgt ist.
+	 */
 	private boolean freigabe = false;
-	private static final String TAG = NeuesSpielActivity.class.getSimpleName();
-	private ProgressDialog pDialog;
-	private SessionManager session;
-	private static final String TAG_VeranstaltungUpdate = "veranstaltungupdate";
+	// private ProgressDialog pDialog;
+
 	private static final long serialVersionUID = 1L;
-	// Message types sent from the BluetoothChatService Handler
+	/**
+	 * Der Handler aus der Bluetoothservice Klasse sendet nur Zahlen
+	 */
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
 	public static final int MESSAGE_WRITE = 3;
 	public static final int MESSAGE_DEVICE_NAME = 4;
 	public static final int MESSAGE_TOAST = 5;
-	// Key names received from the BluetoothChatService Handler
+	/**
+	 * Diese Schlüsselnamen sind von dem Bluetooth Service Handler
+	 */
 	public static final String DEVICE_NAME = "device_name";
 	public static final String TOAST = "toast";
 
@@ -103,128 +113,129 @@ public class ImSpielActivity extends Activity implements
 		setContentView(R.layout.activity_updatespiel);
 		init();
 		internetservice = new InternetService(this);
-
+		/**
+		 * Für den Switch von nöten.
+		 */
 		switch_scoreboard.setOnCheckedChangeListener(this);
 		statusScoreboard.setText("Nicht Verbunden");
-		// Session manager
-		session = new SessionManager(getApplicationContext());
 		// Progress dialog
-		pDialog = new ProgressDialog(this);
-		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+		// pDialog = new ProgressDialog(this);
+		/**
+		 * Hier werden die Daten geholt die beim Aufrufen der Activity übergeben
+		 * wurden. So bekommt man die aktuelle Veranstaltungsid heraus.
+		 */
+		long i = getIntent().getExtras().getLong(SpieleDesUsersActivity.KEY);
 		Veranstaltung uebergabeveranstaltung = db.getVeranstaltung((int) i);
+		//
 		plusminusHeim(0, uebergabeveranstaltung);
 
 		btnaktualisieren.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (session.isLoggedIn()) {
-					aktualisieren();
-				} else {
-					Toast.makeText(
-							getApplicationContext(),
-							"Bitte einloggen um Veranstaltungen zu aktualisieren",
-							Toast.LENGTH_SHORT).show();
-				}
+
+				aktualisieren();
 
 			}
-
 		});
 		btnloeschen.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (session.isLoggedIn()) {
-					loeschen();
-				} else {
-					Toast.makeText(getApplicationContext(),
-							"Bitte einloggen um Veranstaltungen zu löschen",
-							Toast.LENGTH_SHORT).show();
-				}
 
+				loeschen();
 			}
-
 		});
 		btnheimplusein.setOnClickListener(new OnClickListener() {
-
+			/**
+			 * Wird der Button Heim plus eins gedrückt, wird nochmal die
+			 * Veranstaltung geholt und dann mit der Methode plusminusEins
+			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
+			 * aktualisiert.
+			 */
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				long i = getIntent().getExtras().getLong(
+						SpieleDesUsersActivity.KEY);
 				Veranstaltung uebergabeveranstaltung = db
 						.getVeranstaltung((int) i);
 				plusminusHeim(1, uebergabeveranstaltung);
 			}
 		});
 		btngastpluseins.setOnClickListener(new OnClickListener() {
-
+			/**
+			 * Wird der Button Gast plus eins gedrückt, wird nochmal die
+			 * Veranstaltung geholt und dann mit der Methode plusminusEins
+			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
+			 * aktualisiert.
+			 */
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				long i = getIntent().getExtras().getLong(
+						SpieleDesUsersActivity.KEY);
 				Veranstaltung uebergabeveranstaltung = db
 						.getVeranstaltung((int) i);
 				plusminusGast(1, uebergabeveranstaltung);
 			}
 		});
 		btnheimminuseins.setOnClickListener(new OnClickListener() {
-
+			/**
+			 * Wird der Button Heim minus eins gedrückt, wird nochmal die
+			 * Veranstaltung geholt und dann mit der Methode plusminusEins
+			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
+			 * aktualisiert.
+			 */
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				long i = getIntent().getExtras().getLong(
+						SpieleDesUsersActivity.KEY);
 				Veranstaltung uebergabeveranstaltung = db
 						.getVeranstaltung((int) i);
 				plusminusHeim(-1, uebergabeveranstaltung);
 			}
 		});
 		btngastminuseins.setOnClickListener(new OnClickListener() {
-
+			/**
+			 * Wird der Button Gast minus eins gedrückt, wird nochmal die
+			 * Veranstaltung geholt und dann mit der Methode plusminusEins
+			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
+			 * aktualisiert.
+			 */
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+				long i = getIntent().getExtras().getLong(
+						SpieleDesUsersActivity.KEY);
 				Veranstaltung uebergabeveranstaltung = db
 						.getVeranstaltung((int) i);
 				plusminusGast(-1, uebergabeveranstaltung);
 			}
 		});
 		btnzurueck.setOnClickListener(new OnClickListener() {
-
+			/**
+			 * Wird der Button zurück gedrückt wird die Acitivty beendet und man
+			 * gelangt auf die Veranstaltungen des Users.
+			 */
 			@Override
 			public void onClick(View v) {
 				finish();
 
 			}
 		});
-		/*
-		 * switch_scoreboard.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) { Intent serverIntent = new
-		 * Intent(getApplicationContext(), DeviceListActivity.class);
-		 * startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-		 * 
-		 * } })
-		 */
-		checkboxbeenden
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						// TODO Auto-generated method stub
-						if (isChecked) {
-							internetservice.Veranstaltungbeenden("", "");
-							Toast.makeText(getApplicationContext(), "Beendent",
-									Toast.LENGTH_SHORT).show();
-
-						}
-					}
-
-				});
 
 	}
 
+	/**
+	 * Bei dieser Methode wird der Wert des Parameters i dem Spielstand der
+	 * Heimmannschaft der zu bearbeitenden Mannschaft addiert. Außerdem
+	 * aktualisiert die Methode noch den Spielstand den sie als Hint ausgibt.
+	 * 
+	 * @param i
+	 * @param veranstaltung
+	 */
 	public void plusminusHeim(int i, Veranstaltung veranstaltung) {
 		int uebergabe = veranstaltung.getSpielstandHeim();
 		boolean freigabe = i > 0 || uebergabe > 0 && i < 1;
@@ -243,6 +254,14 @@ public class ImSpielActivity extends Activity implements
 
 	}
 
+	/**
+	 * Bei dieser Methode wird der Wert des Parameters i dem Spielstand der
+	 * Gastmannschaft der zu bearbeitenden Mannschaft addiert. Außerdem
+	 * aktualisiert die Methode noch den Spielstand den sie als Hint ausgibt.
+	 * 
+	 * @param i
+	 * @param veranstaltung
+	 */
 	public void plusminusGast(int i, Veranstaltung veranstaltung) {
 		int uebergabe = veranstaltung.getSpielstandGast();
 		boolean freigabe = i > 0 || uebergabe > 0 && i < 1;
@@ -260,20 +279,32 @@ public class ImSpielActivity extends Activity implements
 		}
 	}
 
+	/**
+	 * Diese Methode wird von dem System aufgerufen sobald der Zustand des
+	 * Schalter/Switch für die Verbindung des Scoreboards geändert wurde.
+	 * 
+	 * @param buttonView
+	 * @param isChecked
+	 */
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-		// Toast.makeText(this, "The Switch is " + (isChecked ? "on" : "off"),
-		// Toast.LENGTH_SHORT).show();
 		if (isChecked) {
 			// Get local Bluetooth adapter
 			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-			// If the adapter is null, then Bluetooth is not supported
+			/**
+			 * Ist kein Bluetoothadapter gefunden worden oder nicht unterstützt
+			 * wird die Methode wieder beendet
+			 */
 			if (mBluetoothAdapter == null) {
-				Toast.makeText(this, "Bluetooth is not available",
+				Toast.makeText(this, "Bluetooth ist nicht verfügbar",
 						Toast.LENGTH_LONG).show();
 				finish();
 				return;
 			}
+			/**
+			 * Jetzt wird getestet ob Bluetooth schon aktiviert ist oder noch
+			 * aktiviert werden muss. Ist Bluetooth schon aktiviert wird die
+			 * setupUbertragung() Methode aufgerufen
+			 */
 			if (!mBluetoothAdapter.isEnabled()) {
 				Intent enableIntent = new Intent(
 						BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -300,6 +331,9 @@ public class ImSpielActivity extends Activity implements
 		}
 	}
 
+	/**
+	 * Initialisieren der grafischen Elementen
+	 */
 	private void init() {
 		txfSpielstandHeim = (EditText) findViewById(R.id.txfHeimmannschaftAktualisiere);
 		txfSpielstandGast = (EditText) findViewById(R.id.txfGastmannschaftAktualisiere);
@@ -313,14 +347,20 @@ public class ImSpielActivity extends Activity implements
 		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
 		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
 		btnzurueck = (Button) findViewById(R.id.btn_zurueck);
-		checkboxbeenden = (CheckBox) findViewById(R.id.checkBox_veranstaltungbeendet);
+
 	}
 
+	/**
+	 * Diese Methode löscht die Veranstaltung auf der internen Datenbank.
+	 * Zusätzlich wird dieses Spiel auch noch im Internet gelöscht. Dies erfolgt
+	 * durch die Veranstaltungloeschen Methode von der InternetService Activty
+	 * Außerdem wird noch danach Gelöscht in form eines Toasts ausgegeben.
+	 */
 	private void loeschen() {
-		/*
+		/**
 		 * Hier wird die Zahl(id) der Veranstaltung geholt
 		 */
-		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+		long i = getIntent().getExtras().getLong(SpieleDesUsersActivity.KEY);
 		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
 		db.deleteVeranstaltung(updateveranstaltung);
 		Mitglied uebertrag = dbuuid.getMitglied();
@@ -332,11 +372,22 @@ public class ImSpielActivity extends Activity implements
 		finish();
 	}
 
+	/**
+	 * Diese Methode aktualisiert die Veranstaltung auf der internen Datenbank.
+	 * Dazu werden die Daten aus den TextViews geholt um dann den Text daraus
+	 * die einzelnen Spielstände zu aktualisieren. Zusätzlich wird dieses Spiel
+	 * auch noch im Internet aktualisiert. Dies erfolgt durch die
+	 * updateveranstaltung Methode von der InternetService Activty. Außerdem
+	 * wird noch danach Gelöscht in form eines Toasts ausgegeben. Zustätzlich
+	 * wird am ende geprüft ob eine Verbindung zum Scoreboard vorhanden ist.
+	 * Trifft dieses zu wird auch die Veranstaltung auf das Scoreboard
+	 * übertragen.
+	 */
 	private void aktualisieren() {
 		/*
 		 * Hier wird die Zahl(id) der Veranstaltung geholt
 		 */
-		long i = getIntent().getExtras().getLong(SpieleActivity.KEY);
+		long i = getIntent().getExtras().getLong(SpieleDesUsersActivity.KEY);
 		Veranstaltung updateveranstaltung = db.getVeranstaltung((int) i);
 		String spielstandheim = txfSpielstandHeim.getText().toString();
 		String spielstandgast = txfSpielstandGast.getText().toString();
@@ -361,8 +412,6 @@ public class ImSpielActivity extends Activity implements
 							+ updateveranstaltung.getSpielstandGast(),
 					updateveranstaltung.getStatus(),
 					"" + updateveranstaltung.getId(), uebertrag.getUuid());
-			// long k = getIntent().getExtras().getLong(SpieleActivity.KEY);
-			// Veranstaltung h = db.getVeranstaltung((int) k);
 			int j = db.updateVeranstaltung(updateveranstaltung);
 			// Geht nicht irgendwie
 			// ist schon geschlossen keine ahnung
@@ -394,7 +443,15 @@ public class ImSpielActivity extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	/**
+	 * Diese Methode serialisiert ein beliebiges Objekt,damit es über Bluetooth
+	 * oder zwischen Activitys übergeben werden kann. In unserem Fall ist es ein
+	 * Veranstaltungsobjekt.
+	 * 
+	 * @param obj
+	 * @return
+	 * @throws IOException
+	 */
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);

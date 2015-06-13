@@ -409,6 +409,8 @@ public class InternetService extends Activity {
 				params.put("punkteGast", punkteGast);
 				params.put("veranstaltungs_id", veranstaltungs_id);
 				params.put("status", status);
+				
+
 				return params;
 			}
 
@@ -523,6 +525,7 @@ public class InternetService extends Activity {
 				params.put("punkteGast", punkteGast);
 				params.put("spielbeginn", spielbeginn);
 				params.put("status", status);
+				
 				return params;
 			}
 

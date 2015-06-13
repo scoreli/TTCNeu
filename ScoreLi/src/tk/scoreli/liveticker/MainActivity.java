@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements
 			 */
 			Intent i = new Intent(MainActivity.this, AnzeigeActivity.class);
 			Veranstaltung leereVeranstaltung = new Veranstaltung("", "", "",
-					"", 0, 0, "123456789zrrdrzretzrez");
+					"", 0, 0, "");
 			byte[] uebergabe;
 			try {
 				uebergabe = serialize(leereVeranstaltung);
@@ -205,7 +205,7 @@ public class MainActivity extends Activity implements
 		if (id == R.id.menu_Spiele) {
 			if (session.isLoggedIn()) {
 				startActivity(new Intent(MainActivity.this,
-						SpieleActivity.class));
+						SpieleDesUsersActivity.class));
 			} else {
 				Toast.makeText(getApplicationContext(),"Bitte Einloggen",Toast.LENGTH_SHORT).show();
 			}

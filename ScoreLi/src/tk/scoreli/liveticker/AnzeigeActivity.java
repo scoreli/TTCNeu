@@ -12,7 +12,6 @@ import tk.scoreli.liveticker.util.SystemUiHider;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,7 +27,7 @@ public class AnzeigeActivity extends Activity {
 	private static final String TAG = "Bluetooth";
 	private static final boolean D = true;
 
-	// Message types sent from the BluetoothChatService Handler
+	// Der Handler empfängt nur Zahlen und diese werden hier zugeordnet
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
 	public static final int MESSAGE_WRITE = 3;
@@ -42,12 +41,10 @@ public class AnzeigeActivity extends Activity {
 	Veranstaltung veranstaltung;
 
 	// Layout Views
-	private TextView mTitle;
+	// private TextView mTitle;
 
 	// Name of the connected device
 	private String mConnectedDeviceName = null;
-	// String buffer for outgoing messages
-	private StringBuffer mOutStringBuffer;
 	// Local Bluetooth adapter
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
@@ -151,8 +148,9 @@ public class AnzeigeActivity extends Activity {
 	}
 
 	/**
-	 * Wird geprüft ob Bluetooth auch aktiviert wurde. Sonst wird wieder gefragt
-	 * usw.
+	 * Wird geprüft ob Bluetooth auch aktiviert wurde. Wenn Bluetooth nicht
+	 * aktiviert wurde wird die Activity beendet und man gelangt auf den
+	 * Hauptbildschirm zurück.
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
@@ -174,7 +172,7 @@ public class AnzeigeActivity extends Activity {
 		AnzeigeGasta = (TextView) findViewById(R.id.AnzeigeGast);
 		AnzeigekleinGasta = (TextView) findViewById(R.id.AnzeigekleinGast);
 		AnzeigeStatusa = (TextView) findViewById(R.id.AnzeigeStatus);
-		
+
 	}
 
 	@Override
@@ -201,10 +199,13 @@ public class AnzeigeActivity extends Activity {
 		super.onResume();
 		if (D)
 			Log.e(TAG, "+ ON RESUME +");
-		// Performing this check in onResume() covers the case in which BT was
-		// not enabled during onStart(), so we were paused to enable it...
-		// onResume() will be called when ACTION_REQUEST_ENABLE activity
-		// returns.
+		/**
+		 * Performing this check in onResume() covers the case in which BT was
+		 * not enabled during onStart(), so we were paused to enable it...
+		 * onResume() will be called when ACTION_REQUEST_ENABLE activity
+		 * returns.
+		 */
+
 		if (mChatService != null) {
 			// Only if the state is STATE_NONE, do we know that we haven't
 			// started already
@@ -223,7 +224,7 @@ public class AnzeigeActivity extends Activity {
 		mChatService = new BluetoothService(this, mHandler);
 
 		// Initialize the buffer for outgoing messages
-		mOutStringBuffer = new StringBuffer("");
+		// mOutStringBuffer = new StringBuffer("");
 	}
 
 	@Override
@@ -277,20 +278,18 @@ public class AnzeigeActivity extends Activity {
 					break;
 				}
 				break;
-
+			/**
+			 * Hier wird die Empfangene serialliesierte Veranstaltung
+			 * deserialisiert. Nach erfolgreicher Umwandlung erfolgt die Anzeige
+			 * auf dem Scoreboard.
+			 */
 			case MESSAGE_READ:
 
 				byte[] readBuf = (byte[]) msg.obj;
 				System.out.println(readBuf);
 				// construct a string from the valid bytes in the buffer
-				// #
-				// String readMessage = new S(readBuf, 0, msg.arg1);
-				// Toast.makeText(AnzeigeActivity.this, readMessage,
-				// Toast.LENGTH_SHORT).show();
 
 				try {
-					// uebergabe = deserialize(readBuf);
-					// zeigeVeranstaltung = (Veranstaltung) uebergabe;
 					zeigeVeranstaltung = deserialize(readBuf);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -303,23 +302,29 @@ public class AnzeigeActivity extends Activity {
 				aktualisiereScoreboard(zeigeVeranstaltung);
 				break;
 			case MESSAGE_DEVICE_NAME:
-				// save the connected device's name
+				/**
+				 * Hier wird der Name des Verbundenen Gerätes angezeigt
+				 */
 				mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
 				Toast.makeText(getApplicationContext(),
 						"Verbunden mit " + mConnectedDeviceName,
 						Toast.LENGTH_SHORT).show();
 				break;
+			/**
+			 * Die BluetoothService Klasse meldet ein Ereignis. Wenn die
+			 * Verbindung verloren geht, wird "Device connection was lost"
+			 * gesendet. Nach trennen der Verbindung ist es nicht möglich die
+			 * Verbindung erneut aufzubauen. Deswegen wird sobald diese
+			 * Nachricht empfangen wird die Activity nochmal aufgerufen. Dabei
+			 * übergibt sie den aktuellen Spielstand wieder sich selber. Somit
+			 * bleibt der Spielstand erhalten.
+			 */
 			case MESSAGE_TOAST:
 				Toast.makeText(getApplicationContext(),
 						msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
 						.show();
 				if (msg.getData().getString(TOAST)
 						.equals("Device connection was lost")) {
-					/**
-					 * Wenn einmal die Verbindung abgebrochen ist kann sie nicht
-					 * erneut aufgebaut werden(Also in gleicher
-					 * Richtung)deswegen Neustart.
-					 */
 
 					Intent i = new Intent(AnzeigeActivity.this,
 							AnzeigeActivity.class);
@@ -357,32 +362,19 @@ public class AnzeigeActivity extends Activity {
 		AnzeigekleinHeima.setText(veranstaltung.getHeimmanschaft());
 		AnzeigeGasta.setText("" + veranstaltung.getSpielstandGast());
 		AnzeigekleinGasta.setText(veranstaltung.getGastmannschaft());
-		boolean fit =false;
-		int laenge=veranstaltung.getStatus().length();
-		float uebergang=AnzeigeStatusa.getTextSize();
-		try {
-			Thread.sleep(50);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		AnzeigeStatusa.setText(veranstaltung.getStatus());
-		AnzeigeStatusa.measure(0, 0);
-		int breite = AnzeigeStatusa.getWidth();
-		Toast.makeText(getApplicationContext(), ""+uebergang+"d"+breite, Toast.LENGTH_SHORT).show();
-		//onWindowFocusChanged(true);
 	}
-	@Override
-	 public void onWindowFocusChanged(boolean hasFocus) {
-	  // TODO Auto-generated method stub
-	  super.onWindowFocusChanged(hasFocus);
-	  //Here you can get the size!
-	  int breite = AnzeigeStatusa.getWidth();
-		Toast.makeText(getApplicationContext(), ""+breite, Toast.LENGTH_SHORT).show();
-	 }
+
+	/*
+	 * @Override public void onWindowFocusChanged(boolean hasFocus) { // TODO
+	 * Auto-generated method stub super.onWindowFocusChanged(hasFocus); // Here
+	 * you can get the size! int breite = AnzeigeStatusa.getWidth();
+	 * Toast.makeText(getApplicationContext(), "" + breite, Toast.LENGTH_SHORT)
+	 * .show(); }
+	 */
 	/**
-	 * Diese Methode wandelt das Serialisierte Objekt wieder zu einem Objekt. In
-	 * unserem Fall ein Veranstaltungsobjekt.
+	 * Diese Methode wandelt das serialisierte Objekt wieder zu einem Objekt um.
+	 * In unserem Fall ein Veranstaltungsobjekt.
 	 * 
 	 * @param bytes
 	 * @return
@@ -398,7 +390,7 @@ public class AnzeigeActivity extends Activity {
 
 	/**
 	 * Diese Methode serialisiert ein beliebiges Objekt,damit es über Bluetooth
-	 * oder zwischen Activity übergeben werden kann. In unserem Fall ist es ein
+	 * oder zwischen Activitys übergeben werden kann. In unserem Fall ist es ein
 	 * Veranstaltungsobjekt.
 	 * 
 	 * @param obj
@@ -411,15 +403,15 @@ public class AnzeigeActivity extends Activity {
 		o.writeObject(obj);
 		return b.toByteArray();
 	}
+
+	// Im Beispiel von Android noch intigriert doch geht auch ohne.
 	/*
-	 * Im Beispiel von Android noch intigriert doch geht auch ohne.
-	 * 
 	 * @Override protected void onPostCreate(Bundle savedInstanceState) {
 	 * super.onPostCreate(savedInstanceState);
 	 * 
-	 * // Trigger the initial hide() shortly after the activity has been //
-	 * created, to briefly hint to the user that UI controls // are available.
-	 * delayedHide(100); }
+	 * // Trigger the initial hide() shortly after the activity has been // //
+	 * created, to briefly hint to the user that UI controls // are //
+	 * available. delayedHide(100); }
 	 * 
 	 * /** Touch listener to use for in-layout UI controls to delay hiding the
 	 * system UI. This is to prevent the jarring behavior of controls going away
@@ -445,5 +437,4 @@ public class AnzeigeActivity extends Activity {
 	 * mHideHandler.removeCallbacks(mHideRunnable);
 	 * mHideHandler.postDelayed(mHideRunnable, delayMillis); }
 	 */
-	
 }
