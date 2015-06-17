@@ -443,6 +443,7 @@ public class ImSpielActivity extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 	/**
 	 * Diese Methode serialisiert ein beliebiges Objekt,damit es über Bluetooth
 	 * oder zwischen Activitys übergeben werden kann. In unserem Fall ist es ein
@@ -494,6 +495,15 @@ public class ImSpielActivity extends Activity implements
 		}
 	}
 
+	/**
+	 * Grundsätzlich wird diese Methode aufgerufen sobald man eine andere
+	 * Activity gestartet hat oder ein Broadcast. Wie zum Beispiel die Bluetooth
+	 * Aktivierung. Diese wird nach dem der Auswahl des Gerätes aufgerufen das
+	 * gepaart werden soll. Dabei wird die Adresse geholt und dann diese dann
+	 * dem BluetoothService übergeben um so eine Verbindung aufbauen zu können.
+	 * 
+	 * 
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		try {
@@ -544,6 +554,13 @@ public class ImSpielActivity extends Activity implements
 		mOutStringBuffer = new StringBuffer("");
 	}
 
+	/**
+	 * Veranstaltung wird geschickt. Über die BluetoothServiceKlasse geschickt.
+	 * Es wird ein ByteArray über Bluetooth geschickt deswegen muss das Objekt
+	 * serialisiert werden.
+	 * 
+	 * @param veranstaltung
+	 */
 	private void sendVeranstaltung(Veranstaltung veranstaltung) {
 		// Check that we're actually connected before trying anything
 		if (mChatService.getState() != BluetoothService.STATE_CONNECTED) {
@@ -552,9 +569,7 @@ public class ImSpielActivity extends Activity implements
 			return;
 		}
 
-		// Check that there's actually something to send
 		if (veranstaltung != null) {
-			// Get the message bytes and tell the BluetoothChatService to write
 
 			byte[] send = null;
 			try {
@@ -570,6 +585,11 @@ public class ImSpielActivity extends Activity implements
 		}
 	}
 
+	/**
+	 * Der Handler empfängt Nachrichten der BluetoothService klasse. Denn nur
+	 * durch einen Handler können Daten von einem Thread abgerufen werden.
+	 * 
+	 */
 	private final Handler mHandlerHier = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -607,6 +627,10 @@ public class ImSpielActivity extends Activity implements
 				freigabe = true;
 				statusScoreboard.setText("Verbunden");
 				break;
+			/**
+			 * Wird nicht Verbunden geschickt, geht der Scoreboardswitcher
+			 * wieder auf die Off Position.
+			 */
 			case MESSAGE_TOAST:
 				Toast.makeText(getApplicationContext(),
 						msg.getData().getString(TOAST),

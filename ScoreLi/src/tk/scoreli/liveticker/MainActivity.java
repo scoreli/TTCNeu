@@ -185,7 +185,9 @@ public class MainActivity extends Activity implements
 			/**
 			 * Hier wird ein leeres Veranstaltungsobjekt übergeben. Dies braucht
 			 * man damit die Anzeigen Actitvity beim Beenden der
-			 * Bluetoothverbindung der Stand von vorher bleibt.
+			 * Bluetoothverbindung der Stand von vorher bleibt. Außerdem wird
+			 * auch dieses Objekt serialisiert da es dann einfacher zum
+			 * Übergeben ist.
 			 */
 			Intent i = new Intent(MainActivity.this, AnzeigeActivity.class);
 			Veranstaltung leereVeranstaltung = new Veranstaltung("", "", "",
@@ -203,11 +205,15 @@ public class MainActivity extends Activity implements
 			return true;
 		}
 		if (id == R.id.menu_Spiele) {
+			/**
+			 * Kann nur aufgerufen werden wenn man eingeloggt ist.
+			 */
 			if (session.isLoggedIn()) {
 				startActivity(new Intent(MainActivity.this,
 						SpieleDesUsersActivity.class));
 			} else {
-				Toast.makeText(getApplicationContext(),"Bitte Einloggen",Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Bitte Einloggen",
+						Toast.LENGTH_SHORT).show();
 			}
 			return true;
 		}
@@ -255,6 +261,15 @@ public class MainActivity extends Activity implements
 		}
 	}
 
+	/**
+	 * Diese Methode serialisiert ein beliebiges Objekt,damit es über Bluetooth
+	 * oder zwischen Activitys übergeben werden kann. In unserem Fall ist es ein
+	 * Veranstaltungsobjekt.
+	 * 
+	 * @param obj
+	 * @return
+	 * @throws IOException
+	 */
 	public static byte[] serialize(Object obj) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		ObjectOutputStream o = new ObjectOutputStream(b);

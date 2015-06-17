@@ -32,7 +32,7 @@ import android.widget.Toast;
  */
 public class NavigationDrawerFragment extends Fragment {
 	// Für die Veranstaltungen holen
-	
+
 	/**
 	 * Remember the position of the selected item.
 	 */
@@ -69,9 +69,7 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/**
-		 *
-		 */
+
 		internetService = new InternetService(getActivity());
 		// db = new DatabasehandlerSpiele(getActivity());
 		// Progress dialog
@@ -115,6 +113,9 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
+		/**
+		 * Hier kann man die Einzelen..
+		 */
 		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(),
 				android.R.layout.simple_list_item_activated_1,
@@ -282,7 +283,9 @@ public class NavigationDrawerFragment extends Fragment {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-
+/**
+ * Beim Drücken des Aktualisieren Buttons wird die Methode von Internet Service Aufgerufen.
+ */
 		if (item.getItemId() == R.id.action_example) {
 			internetService.Veranstaltungholen();
 			Toast.makeText(getActivity(), "Aktualisiert", Toast.LENGTH_SHORT)

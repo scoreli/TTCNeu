@@ -25,14 +25,16 @@ import com.android.volley.Request.Method;
 import com.android.volley.toolbox.StringRequest;
 
 public class InternetService extends Activity {
-	private static final String TAGregister = NeuesSpielActivity.class.getSimpleName();
-	
+	private static final String TAGregister = NeuesSpielActivity.class
+			.getSimpleName();
+
 	DatabasehandlerSpiele db;
 	private static final String TAG_Veranstaltungen = "veranstaltung";
 	// Für die Veranstaltungen holen
 	private static final String TAGholen = NavigationDrawerFragment.class
 			.getSimpleName();
-	private static final String TAGimSpiel = ImSpielActivity.class.getSimpleName();
+	private static final String TAGimSpiel = ImSpielActivity.class
+			.getSimpleName();
 
 	private ProgressDialog pDialog;
 	Activity hans;
@@ -48,21 +50,149 @@ public class InternetService extends Activity {
 		db = new DatabasehandlerSpiele(servus.getApplicationContext());
 		hans = servus;
 		// Progress dialog
-		//Geht nicht 
-		//pDialog = new ProgressDialog(servus.getApplicationContext());
-		 //pDialog.setCancelable(false);
+		// Geht nicht
+		// pDialog = new ProgressDialog(servus.getApplicationContext());
+		// pDialog.setCancelable(false);
 	}
 
 	/**
-	 * Function to store user in MySQL database will post params(tag, name,
-	 * email, password) to register url
+	 * Diese Methode dient zur Speicherung einer Veranstaltungen online. Dazu
+	 * werden die einzelnen Attribute übergeben. Dieses wird mit der Android
+	 * Volley Bibliotehk realisiert. Dabei wird mit JSON gearbeitet. Dazu wird
+	 * erst ein Anfangstag geschickt. Laut diesem entscheidet der Server welche
+	 * Methode/Zweig ausgeführt werden sollen. Dabei sind dann noch weitere Tags
+	 * versehen die dann mit den Eigenschaften der neuen Veranstaltungen
+	 * versehen sind. Diese werden dann auch geholt. Nach diesem Vorgang wartet
+	 * die Methode auf das Rückarray und speichert dieses dann auch in der
+	 * internen Datenbank ab. Das heißt es wird nur eins gespeichert wenn die
+	 * Speicherung online auch erfolgreich war. Nach diesem Prinzip funktioniert
+	 * jede Methode so die mit dem Internet etwas zu tun hat.
+	 * */
+	public void registerVeranstaltung(final String sportart,
+			final String user_id, final String heimmannschaft,
+			final String gastmannschaft, final String punkteHeim,
+			final String punkteGast, final String spielbeginn,
+			final String status) {
+		// Tag used to cancel the request
+		String tag_string_req = "req_registerveranstaltung";
+
+		// pDialog.setMessage("Erstellen ...");
+		// showDialog();
+
+		StringRequest strReq = new StringRequest(Method.POST,
+				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAGregister,
+								"Register Response: " + response.toString());
+						// hideDialog();
+						try {
+							JSONObject jObj = new JSONObject(response);
+							boolean error = jObj.getBoolean("error");
+							if (!error) {
+								// User successfully stored in MySQL
+								// Now store the user in sqlite
+								// String uid = jObj.getString("uid");
+
+								JSONObject user = jObj
+										.getJSONObject("veranstaltung");
+								String idj = user.getString("veranstaltung_id");
+								String sportartj = user.getString("sportart");
+								String heimmannschaftj = user
+										.getString("heimmannschaft");
+								String gastmannschaftj = user
+										.getString("gastmannschaft");
+								String punkteHeimj = user
+										.getString("punkteHeim");
+								String punkteGastj = user
+										.getString("punkteGast");
+								String spielbeginnj = user
+										.getString("spielbeginn");
+								String statusj = user.getString("status");
+
+								db.addVeranstaltung(new Veranstaltung(Long
+										.parseLong(idj), sportartj,
+										heimmannschaftj, gastmannschaftj,
+										Integer.parseInt(punkteHeimj), Integer
+												.parseInt(punkteGastj),
+										spielbeginnj, statusj));
+
+								/*
+								 * // Launch login activity Intent intent = new
+								 * Intent( RegisterVeranstaltung.this,
+								 * LoginActivity.class); startActivity(intent);
+								 * finish();
+								 */
+								hans.finish();// Hat beendet da man was
+												// aufgerufen
+												// hat obwohl es beendet worden
+												// ist.
+							} else {
+
+								// Error occurred in registration. Get the error
+								// message
+								String errorMsg = jObj.getString("error_msg");
+
+								Toast.makeText(hans.getApplicationContext(),
+										errorMsg, Toast.LENGTH_LONG).show();
+
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+							Toast.makeText(hans.getApplicationContext(),
+									e.toString(), Toast.LENGTH_LONG).show();
+						}
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAGregister,
+								"Registration Error: " + error.getMessage());
+
+						Toast.makeText(hans.getApplicationContext(),
+								error.getMessage(), Toast.LENGTH_LONG).show();
+						// hideDialog();
+
+					}
+				}) {
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Posting params to register url
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("tag", "veranstaltung");// Zuerst Tag dann
+													// Daten
+				params.put("sportart", sportart);
+				params.put("user", user_id);
+				params.put("heimmannschaft", heimmannschaft);
+				params.put("gastmannschaft", gastmannschaft);
+				params.put("punkteHeim", punkteHeim);
+				params.put("punkteGast", punkteGast);
+				params.put("spielbeginn", spielbeginn);
+				params.put("status", status);
+
+				return params;
+			}
+
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+	}
+
+	/**
+	 * Die Funktion holt alle Veranstaltungen und speichert diese in die
+	 * Internet My_Sqllite Datenbank ab.
 	 * */
 	public void Veranstaltungholen() {
 		// Tag used to cancel the request
 		String tag_string_req = "req_holen";
 
-		//pDialog.setMessage("Holen ...");
-	//	showDialog();
+		// pDialog.setMessage("Holen ...");
+		// showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
@@ -70,8 +200,7 @@ public class InternetService extends Activity {
 					@Override
 					public void onResponse(String response) {
 						Log.d(TAGholen,
-								"Veranstaltung Holen: "
-										+ response.toString());
+								"Veranstaltung Holen: " + response.toString());
 						// hideDialog();
 						try {
 							/*
@@ -162,84 +291,14 @@ public class InternetService extends Activity {
 		// Adding request to request queue
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
+
 	public void Veranstaltungbeenden(final String veranstaltungs_id,
 			final String user_id) {
 		// Tag used to cancel the request
-				String tag_string_req = "req_beendeVeranstaltung";
+		String tag_string_req = "req_beendeVeranstaltung";
 
-			//	pDialog.setMessage("Beenden der Veranstaltung ...");
-				//showDialog();
-
-				StringRequest strReq = new StringRequest(Method.POST,
-						AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
-
-							@Override
-							public void onResponse(String response) {
-								Log.d(TAGimSpiel,
-										"Veranstaltung Response: "
-												+ response.toString());
-								//hideDialog();
-
-								try {
-
-									/*
-									 * Toast.makeText(getApplicationContext(),
-									 * response.toString(), Toast.LENGTH_SHORT) .show();
-									 */
-
-									JSONObject jObj = new JSONObject(response);
-									boolean error = jObj.getBoolean("error");
-									if (!error) {
-
-										Toast.makeText(hans.getApplicationContext(),
-												"Beendet", Toast.LENGTH_SHORT).show();
-									} else {
-										Toast.makeText(hans.getApplicationContext(),
-												"Beenden fehlgeschlagen",
-												Toast.LENGTH_SHORT).show();
-									}
-								} catch (JSONException e) { // JSON error
-									e.printStackTrace();
-								}
-
-							}
-
-						}, new Response.ErrorListener() {
-
-							@Override
-							public void onErrorResponse(VolleyError error) {
-								Log.e(TAGimSpiel, "Beenden Error: " + error.getMessage());
-
-								Toast.makeText(hans.getApplicationContext(),
-										error.getMessage(), Toast.LENGTH_LONG).show();
-							//	hideDialog();
-
-							}
-						}) {
-
-					@Override
-					protected Map<String, String> getParams() {
-						// Posting params to register url
-						Map<String, String> params = new HashMap<String, String>();
-						params.put("tag", "beendeveranstaltung");
-						params.put("veranstaltungs_id", veranstaltungs_id);
-						params.put("user", user_id);
-						return params;
-					}
-
-				};
-
-				// Adding request to request queue
-				AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-		
-	}
-	public void Veranstaltungloeschen(final String veranstaltungs_id,
-			final String user_id) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_loescheVeranstaltung";
-
-		//pDialog.setMessage("Löschen ...");
-		//showDialog();
+		// pDialog.setMessage("Beenden der Veranstaltung ...");
+		// showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
@@ -249,7 +308,80 @@ public class InternetService extends Activity {
 						Log.d(TAGimSpiel,
 								"Veranstaltung Response: "
 										+ response.toString());
-						//hideDialog();
+						// hideDialog();
+
+						try {
+
+							/*
+							 * Toast.makeText(getApplicationContext(),
+							 * response.toString(), Toast.LENGTH_SHORT) .show();
+							 */
+
+							JSONObject jObj = new JSONObject(response);
+							boolean error = jObj.getBoolean("error");
+							if (!error) {
+
+								Toast.makeText(hans.getApplicationContext(),
+										"Beendet", Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(hans.getApplicationContext(),
+										"Beenden fehlgeschlagen",
+										Toast.LENGTH_SHORT).show();
+							}
+						} catch (JSONException e) { // JSON error
+							e.printStackTrace();
+						}
+
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAGimSpiel,
+								"Beenden Error: " + error.getMessage());
+
+						Toast.makeText(hans.getApplicationContext(),
+								error.getMessage(), Toast.LENGTH_LONG).show();
+						// hideDialog();
+
+					}
+				}) {
+
+			@Override
+			protected Map<String, String> getParams() {
+				// Posting params to register url
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("tag", "beendeveranstaltung");
+				params.put("veranstaltungs_id", veranstaltungs_id);
+				params.put("user", user_id);
+				return params;
+			}
+
+		};
+
+		// Adding request to request queue
+		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+	}
+
+	public void Veranstaltungloeschen(final String veranstaltungs_id,
+			final String user_id) {
+		// Tag used to cancel the request
+		String tag_string_req = "req_loescheVeranstaltung";
+
+		// pDialog.setMessage("Löschen ...");
+		// showDialog();
+
+		StringRequest strReq = new StringRequest(Method.POST,
+				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
+
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAGimSpiel,
+								"Veranstaltung Response: "
+										+ response.toString());
+						// hideDialog();
 
 						try {
 
@@ -279,11 +411,12 @@ public class InternetService extends Activity {
 
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGimSpiel, "Registration Error: " + error.getMessage());
+						Log.e(TAGimSpiel,
+								"Registration Error: " + error.getMessage());
 
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage(), Toast.LENGTH_LONG).show();
-						//hideDialog();
+						// hideDialog();
 
 					}
 				}) {
@@ -318,16 +451,17 @@ public class InternetService extends Activity {
 		// Tag used to cancel the request
 		String tag_string_req = "req_updateveranstaltung";
 
-		//pDialog.setMessage("Aktualisieren ...");
-		//showDialog();
+		// pDialog.setMessage("Aktualisieren ...");
+		// showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
 
 					@Override
 					public void onResponse(String response) {
-						Log.d(TAGimSpiel, "Register Response: " + response.toString());
-						//hideDialog();
+						Log.d(TAGimSpiel,
+								"Register Response: " + response.toString());
+						// hideDialog();
 
 						try {
 							JSONObject jObj = new JSONObject(response);
@@ -389,11 +523,12 @@ public class InternetService extends Activity {
 
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGimSpiel, "Registration Error: " + error.getMessage());
+						Log.e(TAGimSpiel,
+								"Registration Error: " + error.getMessage());
 
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage(), Toast.LENGTH_LONG).show();
-						//hideDialog();
+						// hideDialog();
 
 					}
 				}) {
@@ -409,7 +544,6 @@ public class InternetService extends Activity {
 				params.put("punkteGast", punkteGast);
 				params.put("veranstaltungs_id", veranstaltungs_id);
 				params.put("status", status);
-				
 
 				return params;
 			}
@@ -420,120 +554,6 @@ public class InternetService extends Activity {
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
 
-	/**
-	 * Function to store user in MySQL database will post params(tag, name,
-	 * email, password) to register url
-	 * */
-	public void registerVeranstaltung(final String sportart,
-			final String user_id, final String heimmannschaft,
-			final String gastmannschaft, final String punkteHeim,
-			final String punkteGast, final String spielbeginn,
-			final String status) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_registerveranstaltung";
-
-		//pDialog.setMessage("Erstellen ...");
-	//	showDialog();
-
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
-
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAGregister, "Register Response: " + response.toString());
-						//hideDialog();
-						try {
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							if (!error) {
-								// User successfully stored in MySQL
-								// Now store the user in sqlite
-								// String uid = jObj.getString("uid");
-
-								JSONObject user = jObj
-										.getJSONObject("veranstaltung");
-								String idj = user.getString("veranstaltung_id");
-								String sportartj = user.getString("sportart");
-								String heimmannschaftj = user
-										.getString("heimmannschaft");
-								String gastmannschaftj = user
-										.getString("gastmannschaft");
-								String punkteHeimj = user
-										.getString("punkteHeim");
-								String punkteGastj = user
-										.getString("punkteGast");
-								String spielbeginnj = user
-										.getString("spielbeginn");
-								String statusj = user.getString("status");
-
-								db.addVeranstaltung(new Veranstaltung(Long
-										.parseLong(idj), sportartj,
-										heimmannschaftj, gastmannschaftj,
-										Integer.parseInt(punkteHeimj), Integer
-												.parseInt(punkteGastj),
-										spielbeginnj, statusj));
-
-								/*
-								 * // Launch login activity Intent intent = new
-								 * Intent( RegisterVeranstaltung.this,
-								 * LoginActivity.class); startActivity(intent);
-								 * finish();
-								 */
-								hans.finish();// Hat beendet da man was aufgerufen
-											// hat obwohl es beendet worden ist.
-							} else {
-
-								// Error occurred in registration. Get the error
-								// message
-								String errorMsg = jObj.getString("error_msg");
-
-								Toast.makeText(hans.getApplicationContext(),
-										errorMsg, Toast.LENGTH_LONG).show();
-
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-							Toast.makeText(hans.getApplicationContext(),
-									e.toString(), Toast.LENGTH_LONG).show();
-						}
-					}
-
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGregister, "Registration Error: " + error.getMessage());
-
-						Toast.makeText(hans.getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						//hideDialog();
-
-					}
-				}) {
-
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "veranstaltung");// Zuerst Tag dann
-													// Daten
-				params.put("sportart", sportart);
-				params.put("user", user_id);
-				params.put("heimmannschaft", heimmannschaft);
-				params.put("gastmannschaft", gastmannschaft);
-				params.put("punkteHeim", punkteHeim);
-				params.put("punkteGast", punkteGast);
-				params.put("spielbeginn", spielbeginn);
-				params.put("status", status);
-				
-				return params;
-			}
-
-		};
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-	}
 	private void showDialog() {
 		if (!pDialog.isShowing())
 			pDialog.show();
