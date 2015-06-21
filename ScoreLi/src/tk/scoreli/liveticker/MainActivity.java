@@ -144,6 +144,20 @@ public class MainActivity extends Activity implements
 					android.R.layout.simple_list_item_1, veranstaltungen);
 			Veranstaltungenliste.setAdapter(adapter);
 			break;
+		case 5:
+			mTitle = getString(R.string.title_Sportart4);
+			/**
+			 * Hier werden alle Volleyballveranstaltungen angzeigt. Hierbeit wird
+			 * die Methode getVolleyballVeranstaltungen() aufgerufen. Dabei muss
+			 * die Liste in ein ArrayAdapter des Typs Veranstaltung erzeugt
+			 * werden und die Liste übergeben werden.
+			 */
+			Veranstaltungenliste.setVisibility(View.VISIBLE);
+			veranstaltungen = db.getVolleyballVeranstaltungen();
+			adapter = new ArrayAdapter<Veranstaltung>(this,
+					android.R.layout.simple_list_item_1, veranstaltungen);
+			Veranstaltungenliste.setAdapter(adapter);
+			break;
 		}
 	}
 

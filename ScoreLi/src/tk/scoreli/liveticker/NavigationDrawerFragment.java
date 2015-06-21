@@ -123,7 +123,8 @@ public class NavigationDrawerFragment extends Fragment {
 						getString(R.string.title_Startseite),
 						getString(R.string.title_Sportart1),
 						getString(R.string.title_Sportart2),
-						getString(R.string.title_Sportart3), }));
+						getString(R.string.title_Sportart3),
+						getString(R.string.title_Sportart4),}));
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
 	}

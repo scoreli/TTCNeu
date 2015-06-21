@@ -25,7 +25,7 @@ public class NeuesSpielActivity extends Activity {
 			txfSpielstandHeim, txfSpielstandGast, txfStatus;
 	private Button btnSpielerstellen;
 	//private CheckBox veranstaltungbeendet;
-	public String[] test = { "Tischtennis", "Fussball", "Handball" };
+	public String[] test = { "Tischtennis", "Fussball", "Handball","Volleyball" };
 	//private int istbeendet=0;
 	DatabasehandlerSpiele db = new DatabasehandlerSpiele(this);
 	DatabasehandlerUUID dbuuid = new DatabasehandlerUUID(this);
