@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/preference_ptext_unter16_key"
+        android:title="@string/ptext_unter16"
+        android:summary="Änderungskonstante +4" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/preference_ptext_unter21_key"
+        android:title="@string/ptext_unter21"
+        android:summary="Änderungskonstante +4" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/preference_ptext_unter1jahrkein_key"
+        android:title="@string/ptext_unter1jahrkein " 
+        android:summary="Änderungskonstante +4"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/preference_ptext_wenigerals30_key"
+        android:title="@string/ptext_wenigerals30"
+        android:summary="Änderungskonstante +4" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/preference_ptext_nachwuchsausgleich_key"
+        android:title="@string/ptext_nachwuchsausgleich" 
+        android:summary="Änderungskonstante +2"/>
+
+</PreferenceScreen>

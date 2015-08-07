@@ -1,6 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="tk.scoreli.liveticker.SpieleActivity" >
-    <item android:id="@+id/spiel_neueVeranstaltung" android:title="@string/spiel_neuVeranstaltung"></item>
-
-</menu>
