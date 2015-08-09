@@ -51,6 +51,7 @@ public class TTRFragment extends Fragment {
 		View root = inflater.inflate(R.layout.fragment_ttrrechner, container,
 				false);
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
+		ttra.requestFocus();
 		ttrb0 = (EditText) root.findViewById(R.id.etxt_ttrb0);
 		ttrb1 = (EditText) root.findViewById(R.id.etxt_ttrb1);
 		ttrb2 = (EditText) root.findViewById(R.id.etxt_ttrb2);

@@ -16,11 +16,14 @@ public Benutzer(int _id, String uuid, String name, String vorname, int admin) {
 	this.vorname = vorname;
 	this.admin = admin;
 }
-public Benutzer(String uuid){
+public Benutzer(int _id,String uuid,int admin){
 	this.uuid = uuid;
+	this._id = _id;
+	this.admin = admin;
+
 
 }
-public long get_id() {
+public int get_id() {
 	return _id;
 }
 
