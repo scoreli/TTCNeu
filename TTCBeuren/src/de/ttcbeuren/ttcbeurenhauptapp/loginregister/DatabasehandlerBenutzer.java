@@ -66,7 +66,7 @@ public class DatabasehandlerBenutzer extends SQLiteOpenHelper {
 	 * 
 	 * @param mitglied
 	 */
-	public void addBenutzer(Benutzer benutzer) {
+	public void addMitglied(Benutzer benutzer) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
