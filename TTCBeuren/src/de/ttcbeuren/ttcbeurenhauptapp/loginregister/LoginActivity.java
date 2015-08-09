@@ -25,8 +25,14 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.RegisterActivity;
 
 /**
  * A login screen that offers login via email/password.
@@ -34,7 +40,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.R;
 public class LoginActivity extends Activity {
 
 	// LogCat tag
-	// private static final String TAG = RegisterActivity.class.getSimpleName();
+	 private static final String TAG = LoginActivity.class.getSimpleName();
 	/**
 	 * Folgende Attribute sind für die Anzeige des Prozesses und für die
 	 * Session. Diese wird gestartet wenn sich ein Benutzer anmeldet.
@@ -43,14 +49,14 @@ public class LoginActivity extends Activity {
 	private SessionManager session;
 	// private SQLiteHandlerLogin dblogin;
 	// Fehlt noch muss hinzugefügt werden.
-	// private DatabasehandlerUUID dbuuid;
+	 private DatabasehandlerUUID dbuuid;
 	// UI references.
 	private AutoCompleteTextView mEmailView;
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
 	private Button btnLogout, mEmailSignInButton, btnaccountdelete,
-			btnaccpasswordchange;
+			btnaccpasswordchange,btnzuregister;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +110,16 @@ public class LoginActivity extends Activity {
 		}
 
 		);
-
+btnzuregister.setOnClickListener(new OnClickListener() {
+	
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(LoginActivity.this,
+				RegisterActivity.class);
+		startActivity(intent);
+		
+	}
+});
 		btnLogout.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -159,7 +174,8 @@ public class LoginActivity extends Activity {
 		btnLogout = (Button) findViewById(R.id.btn_logout);
 		btnaccountdelete = (Button) findViewById(R.id.btn_acc_loeschen);
 		btnaccpasswordchange = (Button) findViewById(R.id.btn_passwortaendern);
-		mEmailSignInButton = (Button) findViewById(R.id.btn_anmelden);
+		btnzuregister=(Button)findViewById(R.id.btn_zuregister);
+		mEmailSignInButton = (Button) findViewById(R.id.btn_registrieren);
 		mPasswordView = (EditText) findViewById(R.id.passwordregister);
 		mLoginFormView = findViewById(R.id.register_form);
 		mProgressView = findViewById(R.id.register_progress);
@@ -249,8 +265,8 @@ public class LoginActivity extends Activity {
 
 		pDialog.setMessage("Einloggen ...");
 		showDialog();
-
-		StringRequest strReq = new StringRequest(Method.POST,
+//Post geht hier irgendwie nicht
+		StringRequest strReq = new StringRequest(1,
 				AppConfig.URL_LOGIN, new Response.Listener<String>() {
 
 					@Override
@@ -261,12 +277,15 @@ public class LoginActivity extends Activity {
 						try {
 							JSONObject jObj = new JSONObject(response);
 							boolean error = jObj.getBoolean("error");
-
+/**Benutzer 
+ * HInzufügen 
+ * 
+ */
 							// Check for error node in json
 							if (!error) {
 								String uid = jObj.getString("uid");
 								try {
-									dbuuid.addMitglied(new Mitglied(uid));
+									dbuuid.addBenutzer(new Benutzer(uid));
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -277,7 +296,7 @@ public class LoginActivity extends Activity {
 
 								// Launch main activity
 								Intent intent = new Intent(LoginActivity.this,
-										MainActivity.class);
+										MainActivityStartseite.class);
 								startActivity(intent);
 								finish();
 							} else {
