@@ -131,6 +131,15 @@ public class MainActivityStartseite extends Activity implements
 					LoginActivity.class));
 			return true;
 		}
+		if (id == R.id.menu_spiel_erstellen) {
+			startActivity(new Intent(MainActivityStartseite.this,
+					NeuesSpielActivity.class));
+			return true;
+		}
+		if (id == R.id.menu_erstellen_newsfeed) {
+			
+			return true;
+		}
 
 		return super.onOptionsItemSelected(item);
 	}

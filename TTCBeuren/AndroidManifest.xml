@@ -9,7 +9,7 @@
         android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-<!-- android name muss sonst schmeist appcontroller eine exeption -->
+    <!-- android name muss sonst schmeist appcontroller eine exeption -->
     <application
         android:name=".loginregister.AppController"
         android:allowBackup="true"
@@ -39,8 +39,26 @@
                 android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
         </activity>
         <activity
-            android:name="de.ttcbeuren.ttcbeurenhauptapp.loginregister.RegisterActivity"
-            android:label="@string/title_activity_register" >
+            android:name=".loginregister.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:parentActivityName=".loginregister.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".NeuesSpielActivity"
+            android:label="@string/title_activity_neues_spiel"
+            android:parentActivityName=".MainActivityStartseite" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

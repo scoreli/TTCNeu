@@ -42,4 +42,7 @@
     <string name="error_invalid_vorname">Ungültiger Vorname</string>
     <string name="error_invalid_password_confirm">Passwörter stimmen nicht überein</string>
     <string name="error_field_registercode">Registercode muss anderst sein</string>
+    <string name="text_erstellen">Erstellen</string>
+    <string name="text_spielerstellen">Neues Spiel</string>
+    <string name="text_neuerNewsfeed">Neuer Newsfeed</string>
 </resources>
