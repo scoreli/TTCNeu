@@ -21,7 +21,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/etxt_ttra"
         android:ems="10"
-        android:hint="@string/text_gegener1ttr"
+        android:hint="@string/text_gegener1TTR"
         android:inputType="number" />
 
     <EditText
