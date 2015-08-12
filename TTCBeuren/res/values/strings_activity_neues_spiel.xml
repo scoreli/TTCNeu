@@ -11,8 +11,8 @@
     <string name="text_Beginn">Beginn:</string>
     <string name="text_spielstand">Spielstand:</string>
     <string name="text_Spielsystem">Spielsystem:</string>
-    <string name="text_heim">:Heim</string>
-    <string name="text_gast">Gast:</string>
+    <string name="text_beurenneuesSpiel">:Beuren</string>
+    <string name="text_gegner">Gegner:</string>
     <string name="text_spieldatum">Spieldatum:</string>
     <string name="text_Status">Status</string>
     <string name="text_SpielIstEntschieden">Spiel ist entschieden</string>
