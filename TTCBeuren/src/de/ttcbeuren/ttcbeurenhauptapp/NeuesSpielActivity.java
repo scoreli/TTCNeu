@@ -1,8 +1,5 @@
 package de.ttcbeuren.ttcbeurenhauptapp;
 
-import java.sql.Date;
-import java.sql.Time;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -22,6 +18,9 @@ import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
+import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
 public class NeuesSpielActivity extends Activity {
 	private CheckBox checkbeurenistheim, checkspielistentschieden;
@@ -33,6 +32,7 @@ public class NeuesSpielActivity extends Activity {
 	private DatePicker date_spieldatum;
 	private TextView etxtspielende;
 	private EditText txt_status;
+	DatabasehandlerSpiele dbspiele;
 	/**
 	 * Noch durch Datenbank oder XML Datei ersetzen.
 	 */
@@ -56,6 +56,7 @@ public class NeuesSpielActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_neues_spiel);
 		init();
+		dbspiele = new DatabasehandlerSpiele(this);
 
 		/**
 		 * Bitte noch durch eine Automatik ersetzen.
@@ -82,7 +83,6 @@ public class NeuesSpielActivity extends Activity {
 			@Override
 			public void onValueChange(NumberPicker picker, int oldVal,
 					int newVal) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -132,10 +132,16 @@ public class NeuesSpielActivity extends Activity {
 		 * werden. Da SQl Date nur die Jahre die seit 1900 vergangen sind
 		 * benötigt.
 		 */
-		Date spieldatum = new Date(date_spieldatum.getYear() - (1900),
-				date_spieldatum.getMonth(), date_spieldatum.getDayOfMonth());
-		Time spielbegintime = new Time(tpSpielbeginn.getCurrentHour(),
-				tpSpielbeginn.getCurrentMinute(), 0);
+		String spieldatumstring = "" + date_spieldatum.getYear() + "-"
+				+ date_spieldatum.getMonth() + "-"
+				+ date_spieldatum.getDayOfMonth() + " "
+				+ tpSpielbeginn.getCurrentHour() + ":"
+				+ tpSpielbeginn.getCurrentMinute() + ":" + 30;
+
+		// Date spieldatum = new Date(date_spieldatum.getYear() - (1900),
+		// date_spieldatum.getMonth(), date_spieldatum.getDayOfMonth());
+		// Time spielbegintime = new Time(tpSpielbeginn.getCurrentHour(),
+		// tpSpielbeginn.getCurrentMinute(), 0);
 
 		int spielendestunde = 0;
 		int spielendeminute = 0;
@@ -168,14 +174,25 @@ public class NeuesSpielActivity extends Activity {
 
 		}
 		if (checkspielistentschieden.isChecked()) {
-			Time spielendetime = new Time(tpSpielende.getCurrentHour(),
-					tpSpielende.getCurrentMinute(), 0);
-			 neuesSpiel = new Spiel(0, Integer.parseInt(PunkteHeim),
+			// Time spielendetime = new Time(tpSpielende.getCurrentHour(),
+			// tpSpielende.getCurrentMinute(), 0);
+			String spielendeString = "" + tpSpielende.getCurrentHour() + ":"
+					+ tpSpielende.getCurrentMinute() + ":" + 30;
+			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
 					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
 					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
-					status, spielbegintime, spielendetime, 1, spieldatum);
+					status, spieldatumstring, spielendeString, 1);
+			dbspiele.addSpiel(neuesSpiel);
+
+		} else {
+			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
+					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
+					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
+					status, spieldatumstring, 0);
+			dbspiele.addSpiel(neuesSpiel);
 		}
-		Toast.makeText(getApplicationContext(), neuesSpiel.toString(), Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
+				Toast.LENGTH_LONG).show();
 	}
 
 	private void init() {
