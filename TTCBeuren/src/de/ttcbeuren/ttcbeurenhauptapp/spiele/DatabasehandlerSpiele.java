@@ -85,7 +85,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Hier wird das Mitglied in der Datenbank eingspeichert.
+	 * Hier wird ein Spiel in der Datenbank eingspeichert.
 	 * 
 	 * @param mitglied
 	 */
@@ -94,7 +94,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		//values.put(SPIELE_ID, spiel.getSpiel_id());
+		// values.put(SPIELE_ID, spiel.getSpiel_id());
 		values.put(SPIELE_punkteHeim, "" + spiel.getPunkteHeim()); // Ist INT
 		values.put(SPIELE_punkteGast, "" + spiel.getPunkteGast()); // Ist INT
 		values.put(SPIELE_spielsystem, spiel.getSpielsystem());
@@ -108,8 +108,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(SPIELE_spielende, spiel.getSpielende());
 		values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist
 																			// INT
-		Log.d("Date",
-				"Register Response: " );
+		Log.d("Date", "Register Response: ");
 		// Insert in Datenbank
 		db.insert(TABLE_Spiele, null, values);
 		db.close(); // Closing database connection
@@ -154,7 +153,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	 * @return
 	 */
 
-	public List<Spiel> getAllVeranstaltungen() {
+	public List<Spiel> getAllSpiele() {
 		List<Spiel> spielliste = new ArrayList<Spiel>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Spiele;
@@ -181,24 +180,178 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		// return contact list
 		return spielliste;
 	}
+	/**
+	 * Bei dieser Methode wird mit einer SQL-Abfrage alle Veranstaltungseinträge
+	 * geholt. Diese werden in einer List<> zurückgegeben.
+	 * 
+	 * @return
+	 */
+
+	public List<Spiel> getAllLiveSpiele() {
+		List<Spiel> spielliste = new ArrayList<Spiel>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_Spiele+" WHERE "+SPIELE_istspielbeendet+" = 0 ";
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Spiel uebergabeSpiel = new Spiel(Integer.parseInt(cursor
+						.getString(0)), Integer.parseInt(cursor.getString(1)),
+						Integer.parseInt(cursor.getString(2)),
+						cursor.getString(3), cursor.getString(4),
+						cursor.getString(5), cursor.getString(6),
+						cursor.getString(7), cursor.getString(8),
+						cursor.getString(9), cursor.getString(10),
+						Integer.parseInt(cursor.getString(12)));
+				// Adding contact to list
+				spielliste.add(uebergabeSpiel);
+			} while (cursor.moveToNext());
+		}
+		db.close(); // Closing database connection
+		// return contact list
+		return spielliste;
+	}
+	/**
+	 * Bei dieser Methode wird mit einer SQL-Abfrage alle Veranstaltungseinträge
+	 * geholt. Diese werden in einer List<> zurückgegeben.
+	 * 
+	 * @return
+	 */
+
+	public List<Spiel> getAllBeendetSpiele() {
+		List<Spiel> spielliste = new ArrayList<Spiel>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_Spiele+" WHERE "+SPIELE_istspielbeendet+" = 1 ";
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Spiel uebergabeSpiel = new Spiel(Integer.parseInt(cursor
+						.getString(0)), Integer.parseInt(cursor.getString(1)),
+						Integer.parseInt(cursor.getString(2)),
+						cursor.getString(3), cursor.getString(4),
+						cursor.getString(5), cursor.getString(6),
+						cursor.getString(7), cursor.getString(8),
+						cursor.getString(9), cursor.getString(10),
+						Integer.parseInt(cursor.getString(12)));
+				// Adding contact to list
+				spielliste.add(uebergabeSpiel);
+			} while (cursor.moveToNext());
+		}
+		db.close(); // Closing database connection
+		// return contact list
+		return spielliste;
+	}
+	/**
+	 * Bei dieser Methode wird mit einer SQL-Abfrage alle Veranstaltungseinträge
+	 * geholt. Diese werden in einer List<> zurückgegeben.
+	 * 
+	 * @return
+	 */
+
+	public List<Spiel> getVariableSpiele(String mannschaftsart, String nummer,int istbeendet) {
+		List<Spiel> spielliste = new ArrayList<Spiel>();
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_Spiele + " WHERE ("
+				+ SPIELE_heimverein + " LIKE 'TTC Beuren a.d. Aach'" + " AND "
+				+ SPIELE_heimvereinsnummer + " LIKE '" + nummer + "'"
+				+ ") OR (" + SPIELE_gastverein + " LIKE 'TTC Beuren a.d. Aach'"
+				+ " AND " + SPIELE_gastvereinsnummer + " LIKE '" + nummer + "'"
+				+ ") AND " + SPIELE_mannschaftsart + " LIKE '" + mannschaftsart
+				+ "'"+" AND "+ SPIELE_istspielbeendet+" = "+istbeendet;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Spiel uebergabeSpiel = new Spiel(Integer.parseInt(cursor
+						.getString(0)), Integer.parseInt(cursor.getString(1)),
+						Integer.parseInt(cursor.getString(2)),
+						cursor.getString(3), cursor.getString(4),
+						cursor.getString(5), cursor.getString(6),
+						cursor.getString(7), cursor.getString(8),
+						cursor.getString(9), cursor.getString(10),
+						Integer.parseInt(cursor.getString(12)));
+				// Adding contact to list
+				spielliste.add(uebergabeSpiel);
+			} while (cursor.moveToNext());
+		}
+		db.close(); // Closing database connection
+		// return contact list
+		return spielliste;
+	}
 
 	/**
-	 * Hier wird ein Mitglied mit hilfe einer SQL-Abfrage gelöscht. Der
+	 * Hier wird das Mitglied in der Datenbank eingspeichert.
+	 * 
+	 * @param mitglied
+	 */
+	public void updateSpiel(Spiel spiel) {
+
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		// values.put(SPIELE_ID, spiel.getSpiel_id());
+		values.put(SPIELE_punkteHeim, "" + spiel.getPunkteHeim()); // Ist INT
+		values.put(SPIELE_punkteGast, "" + spiel.getPunkteGast()); // Ist INT
+		values.put(SPIELE_spielsystem, spiel.getSpielsystem());
+		values.put(SPIELE_mannschaftsart, spiel.getMannschaftsart());
+		values.put(SPIELE_heimverein, spiel.getHeimverein());
+		values.put(SPIELE_heimvereinsnummer, spiel.getHeimvereinsnummer());
+		values.put(SPIELE_gastverein, spiel.getGastverein());
+		values.put(SPIELE_gastvereinsnummer, spiel.getGastvereinsnummer());
+		values.put(SPIELE_status, spiel.getStatus());
+		values.put(SPIELE_spielbegin, spiel.getSpielbegindatumtime());
+		values.put(SPIELE_spielende, spiel.getSpielende());
+		values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist
+																			// INT
+		Log.d("Date", "Register Response: ");
+		// Insert in Datenbank
+		db.update(TABLE_Spiele, values, SPIELE_ID + " =?",
+				new String[] { String.valueOf(spiel.getSpiel_id()) });
+		db.close(); // Closing database connection
+	}
+
+	/**
+	 * Hier wird ein Spiel mit hilfe einer SQL-Abfrage gelöscht. Der
 	 * Eintrag/Mitglied wird mit der ID-Referenziert.
 	 * 
-	 * @param benutzer
+	 * @param spiel
 	 */
-	public void deleteMitglied(Benutzer benutzer) {
+	public void deleteSpiel(Spiel spiel) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_Spiele, SPIELE_ID + " = ?",
-				new String[] { String.valueOf(benutzer.get_id()) });
+				new String[] { String.valueOf(spiel.getSpiel_id()) });
 		db.close();
+	}
+
+	/**
+	 * Hier werden alle Spieleinträge gezählt.
+	 * 
+	 * @return
+	 */
+	public int getSpieleCount() {
+		String countQuery = "SELECT  * FROM " + TABLE_Spiele;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(countQuery, null);
+		cursor.close();
+
+		// return count
+		return cursor.getCount();
 	}
 
 	/**
 	 * Mit dieser Methode werden alle Einträger der Datenbank gelöscht.
 	 */
-	public void deleteUsers() {
+	public void deleteSpiele() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		// Delete All Rows
 		db.delete(TABLE_Spiele, null, null);

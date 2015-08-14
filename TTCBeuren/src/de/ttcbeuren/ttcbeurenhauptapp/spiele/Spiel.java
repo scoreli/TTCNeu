@@ -199,11 +199,8 @@ public class Spiel {
 
 	@Override
 	public String toString() {
-		return heimverein + " " + heimvereinsnummer + " gegen " + gastverein
-				+ " " + gastvereinsnummer + " " + punkteHeim + ":" + punkteGast
-				+ " Spielsystem: " + spielsystem + " " + mannschaftsart
-				+ "Spielbeginn:" + spielbegindatumtime + "Spielende:"
-				+ spielende;
+		return mannschaftsart+": "+heimverein + " " + heimvereinsnummer + " : " + gastverein + " "
+				+ gastvereinsnummer + " " + punkteHeim + ":" + punkteGast;
 	}
 
 }

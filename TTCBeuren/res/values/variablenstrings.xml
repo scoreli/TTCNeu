@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mannschaftsnummer_1">I</string>
+    <string name="mannschaftsnummer_2">II</string>
+    <string name="mannschaftsnummer_3">III</string>
+    <string name="mannschaftsnummer_4">IV</string>
+    <string name="mannschaftsnummer_5">V</string>
+    <string name="mannschaftsnummer_6">VI</string>
+    <string name="mannschaftsart_herren">Herren</string>
+     <string name="mannschaftsart_damen">Damen</string>
+      <string name="mannschaftsart_jugend">Jugend U18</string>
+</resources>

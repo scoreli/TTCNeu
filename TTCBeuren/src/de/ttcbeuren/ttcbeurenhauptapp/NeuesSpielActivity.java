@@ -193,6 +193,7 @@ public class NeuesSpielActivity extends Activity {
 		}
 		Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
 				Toast.LENGTH_LONG).show();
+		finish();
 	}
 
 	private void init() {
@@ -231,6 +232,10 @@ public class NeuesSpielActivity extends Activity {
 		date_spieldatum.setCalendarViewShown(false);
 		btnerstellen = (Button) findViewById(R.id.btn_erstellen);
 		spinnerreferenzen();
+		checkbeurenistheim.requestFocus();//Wird der Fokus auf das Element gelegt
+		/**
+		 * Ist noch nicht perfekt muss noch überarbeitet werden
+		 */
 	}
 
 	private void spinnerreferenzen() {
