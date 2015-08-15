@@ -1,4 +1,4 @@
-package de.ttcbeuren.ttcbeurenhauptapp.loginregister;
+package de.ttcbeuren.ttcbeurenhauptapp.internet;
 
 import android.app.Application;
 import android.text.TextUtils;

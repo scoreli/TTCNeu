@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.SessionManager;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
@@ -37,6 +38,7 @@ public class NeuesSpielActivity extends Activity {
 	DatabasehandlerSpiele dbspiele;
 	DatabasehandlerUUID dbuuid;
 	SessionManager session;
+	InternetService internetService;
 	/**
 	 * Noch durch Datenbank oder XML Datei ersetzen.
 	 */
@@ -65,7 +67,7 @@ public class NeuesSpielActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 			finish();
 		}
-
+		internetService = new InternetService(this);
 		setContentView(R.layout.activity_neues_spiel);
 		init();
 		dbspiele = new DatabasehandlerSpiele(this);
@@ -190,25 +192,36 @@ public class NeuesSpielActivity extends Activity {
 			// tpSpielende.getCurrentMinute(), 0);
 			String spielendeString = "" + tpSpielende.getCurrentHour() + ":"
 					+ tpSpielende.getCurrentMinute() + ":" + 30;
-
-			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
-					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
-					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
-					status, spieldatumstring, spielendeString, 1, dbuuid
-							.getBenutzer().get_id());
-
-			dbspiele.addSpiel(neuesSpiel);
+			/*
+			 * neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
+			 * Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
+			 * Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
+			 * status, spieldatumstring, spielendeString, 1, dbuuid
+			 * .getBenutzer().get_id());
+			 * 
+			 * dbspiele.addSpiel(neuesSpiel);
+			 */
+			internetService.speichereSpiel(Spielsystem, ""+dbuuid.getBenutzer()
+					.get_id(), Mannschaftsart, Heimverein, Heimvereinnummer,
+					Gastverein, Gastvereinnummer, PunkteHeim, PunkteGast,
+					spieldatumstring, spielendeString, status, ""+1);
 
 		} else {
+			/*
 			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
 					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
 					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
 					status, spieldatumstring, 0, dbuuid.getBenutzer().get_id());
-			dbspiele.addSpiel(neuesSpiel);
+			dbspiele.addSpiel(neuesSpiel);*/
+			internetService.speichereSpiel(Spielsystem, ""+dbuuid.getBenutzer()
+					.get_id(), Mannschaftsart, Heimverein, Heimvereinnummer,
+					Gastverein, Gastvereinnummer, PunkteHeim, PunkteGast,
+					spieldatumstring, "", status, ""+0);
+			
 		}
-		Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
-				Toast.LENGTH_LONG).show();
-		finish();
+		//Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
+			//	Toast.LENGTH_LONG).show();
+	//	finish();
 	}
 
 	private void init() {

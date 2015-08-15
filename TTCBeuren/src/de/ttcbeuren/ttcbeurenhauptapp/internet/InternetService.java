@@ -20,8 +20,8 @@ import com.android.volley.toolbox.StringRequest;
 import de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.NavigationDrawerFragment;
-import de.ttcbeuren.ttcbeurenhauptapp.loginregister.AppController;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
+import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
 /**
  * Diese Activity regelt die Kommunikation mit dem Internet und schickt und holt
@@ -33,16 +33,17 @@ import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 public class InternetService extends Activity {
 	private static final String TAGregister = InternetService.class
 			.getSimpleName();
-	//public SpieleDesUsersActivity desUsers;
+	// public SpieleDesUsersActivity desUsers;
 	DatabasehandlerSpiele db;
 	private static final String TAG_Veranstaltungen = "veranstaltung";
 	// Für die Veranstaltungen holen
 	private static final String TAGholen = NavigationDrawerFragment.class
 			.getSimpleName();
 	private static final String TAGimSpiel = ImSpielActivity.class
-		.getSimpleName();
-	//private static final String TAG_VeranstaltungenUserLogcat = SpieleDesUsersActivity.class
-		//	.getSimpleName();
+			.getSimpleName();
+	// private static final String TAG_VeranstaltungenUserLogcat =
+	// SpieleDesUsersActivity.class
+	// .getSimpleName();
 	private static final String TAG_VeranstaltungenDesUsers = "veranstaltungdesusers";
 	private ProgressDialog pDialog;
 	Activity hans;
@@ -65,7 +66,6 @@ public class InternetService extends Activity {
 		// pDialog.setCancelable(false);
 	}
 
-
 	/**
 	 * Diese Methode dient zur Speicherung einer Veranstaltungen online. Dazu
 	 * werden die einzelnen Attribute übergeben. Dieses wird mit der Android
@@ -79,13 +79,14 @@ public class InternetService extends Activity {
 	 * Speicherung online auch erfolgreich war. Nach diesem Prinzip funktioniert
 	 * jede Methode so die mit dem Internet etwas zu tun hat.
 	 * */
-	public void registerVeranstaltung(final String sportart,
-			final String user_id, final String heimmannschaft,
-			final String gastmannschaft, final String punkteHeim,
+	public void speichereSpiel(final String spielsystem, final String user_id,
+			final String mannschaftsart, final String heimverein,
+			final String heimvereinsnummer, final String gastverein,
+			final String gastvereinsnummer, final String punkteHeim,
 			final String punkteGast, final String spielbeginn,
-			final String status) {
+			final String spielende, final String status, final String istbeendet) {
 		// Tag used to cancel the request
-		String tag_string_req = "req_registerveranstaltung";
+		String tag_string_req = "req_speichereSpiel";
 
 		// pDialog.setMessage("Erstellen ...");
 		// showDialog();
@@ -106,29 +107,39 @@ public class InternetService extends Activity {
 								// Now store the user in sqlite
 								// String uid = jObj.getString("uid");
 
-								JSONObject user = jObj
-										.getJSONObject("veranstaltung");
-								String idj = user.getString("veranstaltung_id");
-								String sportartj = user.getString("sportart");
-								String heimmannschaftj = user
-										.getString("heimmannschaft");
-								String gastmannschaftj = user
-										.getString("gastmannschaft");
+								JSONObject user = jObj.getJSONObject("spiel");
+								String veranstaltung_idj = user
+										.getString("veranstaltung_id");
+								String benutzer_idj = user
+										.getString("benutzer_id");
+								String spielsystemj = user
+										.getString("spielsystem");
+								String mannschaftsartj = user
+										.getString("mannschaftsart");
+								String heimvereinj = user
+										.getString("heimverein");
+								String heimvereinsnummerj = user
+										.getString("heimvereinsnummer");
+								String gastvereinj = user
+										.getString("gastverein");
+								String gastvereinsnummerj = user
+										.getString("gastvereinsnummer");
 								String punkteHeimj = user
 										.getString("punkteHeim");
 								String punkteGastj = user
 										.getString("punkteGast");
 								String spielbeginnj = user
 										.getString("spielbeginn");
+								String spielendej = user.getString("spielende");
 								String statusj = user.getString("status");
-/*
-								db.addVeranstaltung(new Veranstaltung(Long
-										.parseLong(idj), sportartj,
-										heimmannschaftj, gastmannschaftj,
-										Integer.parseInt(punkteHeimj), Integer
-												.parseInt(punkteGastj),
-										spielbeginnj, statusj));
-*/
+								String istbeendetj = user
+										.getString("istbeendet");
+								db.addSpiel(new Spiel(Integer.parseInt(veranstaltung_idj),
+										Integer.parseInt(punkteHeimj),Integer.parseInt( punkteGastj), spielsystemj,
+										mannschaftsartj, heimvereinj,
+										heimvereinsnummerj, gastvereinj,
+										gastvereinsnummerj,statusj,spielbeginnj,spielendej,Integer.parseInt(istbeendetj),Integer.parseInt(benutzer_idj)));
+
 								/*
 								 * // Launch login activity Intent intent = new
 								 * Intent( RegisterVeranstaltung.this,
@@ -164,7 +175,7 @@ public class InternetService extends Activity {
 								"Registration Error: " + error.getMessage());
 
 						Toast.makeText(hans.getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
+								error.getMessage()+"hier", Toast.LENGTH_LONG).show();
 						// hideDialog();
 
 					}
@@ -174,16 +185,21 @@ public class InternetService extends Activity {
 			protected Map<String, String> getParams() {
 				// Posting params to register url
 				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "veranstaltung");// Zuerst Tag dann
-													// Daten
-				params.put("sportart", sportart);
-				params.put("user", user_id);
-				params.put("heimmannschaft", heimmannschaft);
-				params.put("gastmannschaft", gastmannschaft);
+				params.put("tag", "spiel");// Zuerst Tag dann
+											// Daten
+				params.put("user_id", user_id);
+				params.put("spielsystem", spielsystem);
+				params.put("mannschaftsart", mannschaftsart);
+				params.put("heimverein", heimverein);
+				params.put("heimvereinsnummer", heimvereinsnummer);
+				params.put("gastverein", gastverein);
+				params.put("gastvereinsnummer", gastvereinsnummer);
 				params.put("punkteHeim", punkteHeim);
 				params.put("punkteGast", punkteGast);
 				params.put("spielbeginn", spielbeginn);
+				params.put("spielende", spielende);
 				params.put("status", status);
+				params.put("istbeendet", istbeendet);
 
 				return params;
 			}
@@ -226,7 +242,7 @@ public class InternetService extends Activity {
 							if (!error) {
 								// User successfully stored in MySQL
 								// Now store the user in sqlite
-							//	db.deleteVeranstaltungen();
+								// db.deleteVeranstaltungen();
 
 								JSONArray uebergabe = jObj
 										.getJSONArray(TAG_Veranstaltungen);
@@ -249,13 +265,15 @@ public class InternetService extends Activity {
 											.getString("sportart");
 									String spielbeginnj = veranstaltung
 											.getString("spielbeginn");
-								/*	db.addVeranstaltung(new Veranstaltung(Long
-											.parseLong(idj), sportartj,
-											heimmannschaftj, gastmannschaftj,
-											Integer.parseInt(punkteHeimj),
-											Integer.parseInt(punkteGastj),
-											spielbeginnj, statusj));
-*/
+									/*
+									 * db.addVeranstaltung(new
+									 * Veranstaltung(Long .parseLong(idj),
+									 * sportartj, heimmannschaftj,
+									 * gastmannschaftj,
+									 * Integer.parseInt(punkteHeimj),
+									 * Integer.parseInt(punkteGastj),
+									 * spielbeginnj, statusj));
+									 */
 								}
 								Toast.makeText(hans.getApplicationContext(),
 										"Aktualisiert", Toast.LENGTH_SHORT)
@@ -574,9 +592,9 @@ public class InternetService extends Activity {
 
 					@Override
 					public void onResponse(String response) {
-						//Log.d(TAG_VeranstaltungenUserLogcat,
-							//	"Veranstaltung Response: "
-								//		+ response.toString());
+						// Log.d(TAG_VeranstaltungenUserLogcat,
+						// "Veranstaltung Response: "
+						// + response.toString());
 						// hideDialog();
 						try {
 
@@ -589,7 +607,7 @@ public class InternetService extends Activity {
 							if (!error) {
 								// User successfully stored in MySQL
 								// Now store the user in sqlite
-						//		db.deleteVeranstaltungen();
+								// db.deleteVeranstaltungen();
 
 								JSONArray uebergabe = jObj
 										.getJSONArray(TAG_VeranstaltungenDesUsers);
@@ -612,14 +630,16 @@ public class InternetService extends Activity {
 											.getString("sportart");
 									String spielbeginnj = veranstaltung
 											.getString("spielbeginn");
-							/*		db.addVeranstaltung(new Veranstaltung(Long
-											.parseLong(idj), sportartj,
-											heimmannschaftj, gastmannschaftj,
-											Integer.parseInt(punkteHeimj),
-											Integer.parseInt(punkteGastj),
-											spielbeginnj, statusj));
-*/
-								//	desUsers.Veranstaltungzeigen();
+									/*
+									 * db.addVeranstaltung(new
+									 * Veranstaltung(Long .parseLong(idj),
+									 * sportartj, heimmannschaftj,
+									 * gastmannschaftj,
+									 * Integer.parseInt(punkteHeimj),
+									 * Integer.parseInt(punkteGastj),
+									 * spielbeginnj, statusj));
+									 */
+									// desUsers.Veranstaltungzeigen();
 								}
 
 								Toast.makeText(hans.getApplicationContext(),
@@ -646,8 +666,8 @@ public class InternetService extends Activity {
 
 					@Override
 					public void onErrorResponse(VolleyError error) {
-					//	Log.e(TAG_VeranstaltungenUserLogcat,
-						//		"Registration Error: " + error.getMessage());
+						// Log.e(TAG_VeranstaltungenUserLogcat,
+						// "Registration Error: " + error.getMessage());
 
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage(), Toast.LENGTH_LONG).show();

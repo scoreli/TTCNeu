@@ -33,6 +33,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.R.id;
 import de.ttcbeuren.ttcbeurenhauptapp.R.layout;
 import de.ttcbeuren.ttcbeurenhauptapp.R.string;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
+import de.ttcbeuren.ttcbeurenhauptapp.internet.AppController;
 
 public class RegisterActivity extends Activity {
 

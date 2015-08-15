@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- android name muss sonst schmeist appcontroller eine exeption -->
     <application
-        android:name=".loginregister.AppController"
+        android:name="de.ttcbeuren.ttcbeurenhauptapp.internet.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"

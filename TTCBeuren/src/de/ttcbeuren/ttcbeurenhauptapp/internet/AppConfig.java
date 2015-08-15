@@ -13,6 +13,6 @@ public class AppConfig {
 	public static String URL_REGISTER = "http://scoreli.square7.ch/Loginttc_api/";
 
 	// Server user Veranstaltungerstell url
-	public static String URL_Spiele = 	"http://scoreli.square7.ch/android_veranstaltung_api/Index.php";
+	public static String URL_Spiele = 	"http://scoreli.square7.ch/Spiel_ttc_api/Index.php";
 
 }
