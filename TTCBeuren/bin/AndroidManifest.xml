@@ -54,6 +54,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
         </activity>
+        <activity
+            android:name=".detailspiel.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".MainActivityStartseite" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
+        </activity>
+        <activity
+            android:name=".ImSpielActivity"
+            android:label="@string/title_activity_im_spiel"
+            android:parentActivityName=".MainActivityStartseite" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
+        </activity>
     </application>
 
 </manifest>

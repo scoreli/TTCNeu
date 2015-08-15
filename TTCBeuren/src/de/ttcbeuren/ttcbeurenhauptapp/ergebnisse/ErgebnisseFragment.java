@@ -1,9 +1,13 @@
 package de.ttcbeuren.ttcbeurenhauptapp.ergebnisse;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +19,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.detailspiel.DetailActivity;
+import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
+import de.ttcbeuren.ttcbeurenhauptapp.loginregister.SessionManager;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
@@ -26,6 +34,10 @@ public class ErgebnisseFragment extends Fragment implements
 	ListView listview;
 	Spinner auswahlspinner;
 	DatabasehandlerSpiele dbspiele;
+	DatabasehandlerUUID dbuuid;
+	SessionManager session;
+	public static final String KEY = "Spieluebergabe";
+
 	// private MyArrayAdapter adapterlive,adapterbeendet;
 	private ListViewadapter mAdapter;
 	public String[] Mannschaften = { "Alle Spiele", "1. Herren", "2. Herren",
@@ -53,6 +65,8 @@ public class ErgebnisseFragment extends Fragment implements
 		// setHasOptionsMenu(true);
 		mAdapter = new ListViewadapter(getActivity());
 		dbspiele = new DatabasehandlerSpiele(getActivity());
+		dbuuid = new DatabasehandlerUUID(getActivity());
+		session = new SessionManager(getActivity());
 		View root = inflater.inflate(R.layout.fragment_ergebnisse, container,
 				false);
 		auswahlspinner = (Spinner) root.findViewById(R.id.spin_Mannschaften);
@@ -70,11 +84,34 @@ public class ErgebnisseFragment extends Fragment implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				/**
-				 * Die 1 ist wichtig damit nicht die Überschriften genommen werden
+				 * Die 1 ist wichtig damit nicht die Überschriften genommen
+				 * werden
 				 */
-				if(mAdapter.getItemViewType(position)!=1){
-Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();}
+				if (mAdapter.getItemViewType(position) != 1) {
+					
+					Spiel uebergabespiel = (Spiel) listview
+							.getItemAtPosition(position);
+					/**
+					 * Wird benötigt da sonst die dbuuid aufgerufen wird und
+					 * wenn dort nichts drin ist dann schmeißt es eine exe
+					 * 
+					 * Vll noch besser lösen
+					 */
+					Intent i =null;
+					if (session.isLoggedIn()) {
+						if (uebergabespiel.getBenutzer_id() == dbuuid
+								.getBenutzer().get_id()) {
+							i = new Intent(getActivity(), ImSpielActivity.class);
+						}else {
+							i = new Intent(getActivity(), DetailActivity.class);
+						}
+					} else {
+						i = new Intent(getActivity(), DetailActivity.class);
+					}
 
+					i.putExtra(KEY, uebergabespiel.getSpiel_id());
+					startActivity(i);
+				}
 
 			}
 		});
@@ -183,13 +220,29 @@ Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();}
 		mAdapter.deletelist();
 		mAdapter.addSectionHeaderItem("Live :");
 		for (int i = 0; i < spielelive.size(); i++) {
-			mAdapter.addItem(spielelive.get(i).toString());
+			mAdapter.addItem(spielelive.get(i));
 		}
 		mAdapter.addSectionHeaderItem("Beendet :");
 		for (int i = 0; i < spielebeendet.size(); i++) {
-			mAdapter.addItem(spielebeendet.get(i).toString());
+			mAdapter.addItem(spielebeendet.get(i));
 		}
 		listview.setAdapter(mAdapter);
+	}
+
+	/**
+	 * Diese Methode serialisiert ein beliebiges Objekt,damit es über Bluetooth
+	 * oder zwischen Activitys übergeben werden kann. In unserem Fall ist es ein
+	 * Veranstaltungsobjekt.
+	 * 
+	 * @param obj
+	 * @return
+	 * @throws IOException
+	 */
+	public static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o = new ObjectOutputStream(b);
+		o.writeObject(obj);
+		return b.toByteArray();
 	}
 
 	@Override

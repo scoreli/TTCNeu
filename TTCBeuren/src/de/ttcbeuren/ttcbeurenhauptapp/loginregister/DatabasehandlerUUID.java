@@ -32,7 +32,6 @@ public class DatabasehandlerUUID extends SQLiteOpenHelper {
 	private static final String MITGLIEDER_UUID = "UUID";
 	private static final String BENUTZER_ADMIN = "Erweitert";// ADMIN
 
-
 	public DatabasehandlerUUID(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -45,7 +44,7 @@ public class DatabasehandlerUUID extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_MITGLIEDER + "("
 				+ MITGLIEDER_ID + " INTEGER PRIMARY KEY," + MITGLIEDER_UUID
-				+ " TEXT, " + BENUTZER_ADMIN + " INTEGER"+ ")";
+				+ " TEXT, " + BENUTZER_ADMIN + " INTEGER" + ")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
@@ -87,11 +86,14 @@ public class DatabasehandlerUUID extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_MITGLIEDER;
 		SQLiteDatabase db = this.getWritableDatabase();
+		Benutzer benutzer = null;
+
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		cursor.moveToFirst();
-		Benutzer benutzer = new Benutzer();
+		benutzer = new Benutzer();
 		benutzer.set_id(Integer.parseInt(cursor.getString(0)));
 		benutzer.setUuid(cursor.getString(1));
+
 		db.close(); // Closing database connection
 		return benutzer;
 

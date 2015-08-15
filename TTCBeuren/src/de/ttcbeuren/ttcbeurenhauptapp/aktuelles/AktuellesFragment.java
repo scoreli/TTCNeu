@@ -29,7 +29,7 @@ public class AktuellesFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// setHasOptionsMenu(true);
-
+		
 		
 		View root = inflater.inflate(R.layout.fragment_aktuelles, container,
 				false);

@@ -1,7 +1,13 @@
 package de.ttcbeuren.ttcbeurenhauptapp.spiele;
 
-public class Spiel {
-	private int spiel_id, punkteHeim, punkteGast;
+import java.io.Serializable;
+
+public class Spiel implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int spiel_id, punkteHeim, punkteGast, benutzer_id;
 	private String spielsystem, mannschaftsart, heimverein, heimvereinsnummer,
 			gastverein, gastvereinsnummer, status, spielbegindatumtime,
 			spielende;
@@ -15,7 +21,8 @@ public class Spiel {
 			String spielsystem, String mannschaftsart, String heimverein,
 			String heimvereinsnummer, String gastverein,
 			String gastvereinsnummer, String status,
-			String spielbegindatumtime, String spielende, int istspielbeendet) {
+			String spielbegindatumtime, String spielende, int istspielbeendet,
+			int benutzer_id) {
 		super();
 		this.spiel_id = spiel_id;
 		this.punkteHeim = punkteHeim;
@@ -30,13 +37,14 @@ public class Spiel {
 		this.spielbegindatumtime = spielbegindatumtime;
 		this.spielende = spielende;
 		this.istspielbeendet = istspielbeendet;
+		this.benutzer_id = benutzer_id;
 	}
 
 	public Spiel(int spiel_id, int punkteHeim, int punkteGast,
 			String spielsystem, String mannschaftsart, String heimverein,
 			String heimvereinsnummer, String gastverein,
 			String gastvereinsnummer, String status,
-			String spielbegindatumtime, int istspielbeendet) {
+			String spielbegindatumtime, int istspielbeendet, int benutzer_id) {
 		super();
 		this.spiel_id = spiel_id;
 		this.punkteHeim = punkteHeim;
@@ -50,12 +58,15 @@ public class Spiel {
 		this.status = status;
 		this.spielbegindatumtime = spielbegindatumtime;
 		this.istspielbeendet = istspielbeendet;
+		this.benutzer_id = benutzer_id;
+
 	}
 
 	public Spiel(int punkteHeim, int punkteGast, String spielsystem,
 			String mannschaftsart, String heimverein, String heimvereinsnummer,
 			String gastverein, String gastvereinsnummer, String status,
-			String spielbegindatumtime, String spielende, int istspielbeendet) {
+			String spielbegindatumtime, String spielende, int istspielbeendet,
+			int benutzer_id) {
 		super();
 		this.punkteHeim = punkteHeim;
 		this.punkteGast = punkteGast;
@@ -69,12 +80,14 @@ public class Spiel {
 		this.spielbegindatumtime = spielbegindatumtime;
 		this.spielende = spielende;
 		this.istspielbeendet = istspielbeendet;
+		this.benutzer_id = benutzer_id;
+
 	}
 
 	public Spiel(int punkteHeim, int punkteGast, String spielsystem,
 			String mannschaftsart, String heimverein, String heimvereinsnummer,
 			String gastverein, String gastvereinsnummer, String status,
-			String spielbegindatumtime, int istspielbeendet) {
+			String spielbegindatumtime, int istspielbeendet, int benutzer_id) {
 		super();
 		this.punkteHeim = punkteHeim;
 		this.punkteGast = punkteGast;
@@ -87,6 +100,8 @@ public class Spiel {
 		this.status = status;
 		this.spielbegindatumtime = spielbegindatumtime;
 		this.istspielbeendet = istspielbeendet;
+		this.benutzer_id = benutzer_id;
+
 	}
 
 	public int getSpiel_id() {
@@ -197,10 +212,22 @@ public class Spiel {
 		this.spielende = spielende;
 	}
 
-	@Override
-	public String toString() {
-		return mannschaftsart+": "+heimverein + " " + heimvereinsnummer + " : " + gastverein + " "
-				+ gastvereinsnummer + " " + punkteHeim + ":" + punkteGast;
+	public int getBenutzer_id() {
+		return benutzer_id;
 	}
 
+	public void setBenutzer_id(int benutzer_id) {
+		this.benutzer_id = benutzer_id;
+	}
+
+	@Override
+	public String toString() {
+		return mannschaftsart + ": " + heimverein + " " + heimvereinsnummer
+				+ " : " + gastverein + " " + gastvereinsnummer + " "
+				+ punkteHeim + ":" + punkteGast;
+	}
+
+	public String ueberschrift(String ueberschrift) {
+		return ueberschrift;
+	}
 }

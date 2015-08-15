@@ -32,6 +32,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
 
 /**
  * A login screen that offers login via email/password.

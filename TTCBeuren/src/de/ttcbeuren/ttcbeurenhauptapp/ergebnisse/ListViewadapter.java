@@ -4,23 +4,26 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
 public class ListViewadapter extends BaseAdapter {
-/**
- * http://javatechig.com/android/listview-with-section-header-in-android
- */
+	/**
+	 * http://javatechig.com/android/listview-with-section-header-in-android
+	 */
 	private static final int TYPE_ITEM = 0;
 	private static final int TYPE_SEPARATOR = 1;
-
-	private ArrayList<String> mData = new ArrayList<String>();
+	/**
+	 * Nun wird ein ObjektArraylist erstellt. Da man so einmal Spiele und
+	 * Strings gleichzeitig einfügen kann. Sonst bekommt man nämlich die Spiele
+	 * nicht seperiert.
+	 */
+	private ArrayList<Object> mData = new ArrayList<Object>();
 	private TreeSet<Integer> sectionHeader = new TreeSet<Integer>();
 
 	private LayoutInflater mInflater;
@@ -28,9 +31,10 @@ public class ListViewadapter extends BaseAdapter {
 	public ListViewadapter(Context context) {
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 	}
 
-	public void addItem(final String item) {
+	public void addItem(final Spiel item) {
 		mData.add(item);
 		notifyDataSetChanged();
 	}
@@ -40,11 +44,13 @@ public class ListViewadapter extends BaseAdapter {
 		sectionHeader.add(mData.size() - 1);
 		notifyDataSetChanged();
 	}
-public void deletelist(){
-	mData.clear();
-	sectionHeader.clear();
-	notifyDataSetChanged();
-}
+
+	public void deletelist() {
+		mData.clear();
+		sectionHeader.clear();
+		notifyDataSetChanged();
+	}
+
 	@Override
 	public int getItemViewType(int position) {
 		return sectionHeader.contains(position) ? TYPE_SEPARATOR : TYPE_ITEM;
@@ -61,7 +67,7 @@ public void deletelist(){
 	}
 
 	@Override
-	public String getItem(int position) {
+	public Object getItem(int position) {
 		return mData.get(position);
 	}
 
@@ -78,20 +84,25 @@ public void deletelist(){
 			holder = new ViewHolder();
 			switch (rowType) {
 			case TYPE_ITEM:
-				convertView = mInflater.inflate(R.layout.rowlayout_listviewadapter, null);
-				holder.textView = (TextView) convertView.findViewById(R.id.textViewsdfdf);
+				convertView = mInflater.inflate(
+						R.layout.rowlayout_listviewadapter, null);
+				holder.textView = (TextView) convertView
+						.findViewById(R.id.textViewsdfdf);
 				break;
 			case TYPE_SEPARATOR:
-				convertView = mInflater.inflate(R.layout.sectionlayout_listviewadapter, null);
-				holder.textView = (TextView) convertView.findViewById(R.id.textSeparator);
+				convertView = mInflater.inflate(
+						R.layout.sectionlayout_listviewadapter, null);
+				holder.textView = (TextView) convertView
+						.findViewById(R.id.textSeparator);
 				break;
 			}
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.textView.setText(mData.get(position));
-		
+
+		holder.textView.setText(mData.get(position).toString());
+
 		return convertView;
 	}
 

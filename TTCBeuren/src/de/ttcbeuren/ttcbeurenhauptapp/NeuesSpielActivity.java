@@ -19,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
+import de.ttcbeuren.ttcbeurenhauptapp.loginregister.SessionManager;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
@@ -33,6 +35,8 @@ public class NeuesSpielActivity extends Activity {
 	private TextView etxtspielende;
 	private EditText txt_status;
 	DatabasehandlerSpiele dbspiele;
+	DatabasehandlerUUID dbuuid;
+	SessionManager session;
 	/**
 	 * Noch durch Datenbank oder XML Datei ersetzen.
 	 */
@@ -54,10 +58,18 @@ public class NeuesSpielActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		session = new SessionManager(this);
+		if (!session.isLoggedIn()) {
+			Toast.makeText(getApplicationContext(),
+					"Sie müssen eingeloggt sein um Spiele zu erstellen",
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
+
 		setContentView(R.layout.activity_neues_spiel);
 		init();
 		dbspiele = new DatabasehandlerSpiele(this);
-
+		dbuuid = new DatabasehandlerUUID(this);
 		/**
 		 * Bitte noch durch eine Automatik ersetzen.
 		 */
@@ -178,17 +190,20 @@ public class NeuesSpielActivity extends Activity {
 			// tpSpielende.getCurrentMinute(), 0);
 			String spielendeString = "" + tpSpielende.getCurrentHour() + ":"
 					+ tpSpielende.getCurrentMinute() + ":" + 30;
+
 			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
 					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
 					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
-					status, spieldatumstring, spielendeString, 1);
+					status, spieldatumstring, spielendeString, 1, dbuuid
+							.getBenutzer().get_id());
+
 			dbspiele.addSpiel(neuesSpiel);
 
 		} else {
 			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
 					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
 					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
-					status, spieldatumstring, 0);
+					status, spieldatumstring, 0, dbuuid.getBenutzer().get_id());
 			dbspiele.addSpiel(neuesSpiel);
 		}
 		Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
@@ -232,7 +247,8 @@ public class NeuesSpielActivity extends Activity {
 		date_spieldatum.setCalendarViewShown(false);
 		btnerstellen = (Button) findViewById(R.id.btn_erstellen);
 		spinnerreferenzen();
-		checkbeurenistheim.requestFocus();//Wird der Fokus auf das Element gelegt
+		checkbeurenistheim.requestFocus();// Wird der Fokus auf das Element
+											// gelegt
 		/**
 		 * Ist noch nicht perfekt muss noch überarbeitet werden
 		 */

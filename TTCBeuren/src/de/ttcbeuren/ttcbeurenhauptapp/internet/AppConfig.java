@@ -1,4 +1,4 @@
-package de.ttcbeuren.ttcbeurenhauptapp.loginregister;
+package de.ttcbeuren.ttcbeurenhauptapp.internet;
 /**In dieser Klasse werden die Links zu den einzelnen PHP-Skripten konfiguriert.
  * 
  * @author philipp
@@ -13,6 +13,6 @@ public class AppConfig {
 	public static String URL_REGISTER = "http://scoreli.square7.ch/Loginttc_api/";
 
 	// Server user Veranstaltungerstell url
-	//public static String URL_VERANSTALTUNG = 	"http://scoreli.square7.ch/android_veranstaltung_api/Index.php";
+	public static String URL_Spiele = 	"http://scoreli.square7.ch/android_veranstaltung_api/Index.php";
 
 }

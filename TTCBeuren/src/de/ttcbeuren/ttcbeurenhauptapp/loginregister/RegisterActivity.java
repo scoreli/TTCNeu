@@ -32,6 +32,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.R;
 import de.ttcbeuren.ttcbeurenhauptapp.R.id;
 import de.ttcbeuren.ttcbeurenhauptapp.R.layout;
 import de.ttcbeuren.ttcbeurenhauptapp.R.string;
+import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
 
 public class RegisterActivity extends Activity {
 
@@ -257,7 +258,7 @@ public class RegisterActivity extends Activity {
 			/**
 			 * In die Datenbank schreiben
 			 */
-			registerUser(vorname, nachname, email, password,regstriercode);
+			registerUser( nachname,vorname, email, password,regstriercode);
 
 		}
 	}
