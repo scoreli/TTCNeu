@@ -16,7 +16,11 @@ public class Spiel implements Serializable {
 
 	public Spiel() {
 	}
+	public Spiel(int spiel_id) {
+		this.spiel_id = spiel_id;
 
+	}
+	
 	public Spiel(int spiel_id, int punkteHeim, int punkteGast,
 			String spielsystem, String mannschaftsart, String heimverein,
 			String heimvereinsnummer, String gastverein,

@@ -95,7 +95,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		// values.put(SPIELE_ID, spiel.getSpiel_id());
+		values.put(SPIELE_ID, spiel.getSpiel_id());// Muss auf jedenfall drin sein sonst übernimmt es nicht die ids..
 		values.put(SPIELE_punkteHeim, "" + spiel.getPunkteHeim()); // Ist INT
 		values.put(SPIELE_punkteGast, "" + spiel.getPunkteGast()); // Ist INT
 		values.put(SPIELE_spielsystem, spiel.getSpielsystem());

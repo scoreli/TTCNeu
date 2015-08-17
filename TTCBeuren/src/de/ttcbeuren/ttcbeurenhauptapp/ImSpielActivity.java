@@ -13,7 +13,10 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
+import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
+import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
@@ -29,6 +32,8 @@ public class ImSpielActivity extends Activity {
 	// private CheckBox checkboxbeenden;
 	private Switch switch_scoreboard;
 	DatabasehandlerSpiele dbspiele;
+	DatabasehandlerUUID dbuuid;
+	private InternetService internetservice;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,13 @@ public class ImSpielActivity extends Activity {
 		setContentView(R.layout.activity_im_spiel);
 		init();
 		dbspiele = new DatabasehandlerSpiele(this);
-
+		dbuuid = new DatabasehandlerUUID(this);
+		internetservice = new InternetService(this);
+		//
+		int uebergabespiel_id = getIntent().getExtras().getInt(
+				ErgebnisseFragment.KEY);
+		Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
+		plusminusHeim(0, uebergabespiel);
 		btnaktualisieren.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -165,8 +176,12 @@ public class ImSpielActivity extends Activity {
 	}
 
 	private void loeschen() {
-		// TODO Auto-generated method stub
 
+		internetservice.Spielloeschen(
+				"" + getIntent().getExtras().getInt(ErgebnisseFragment.KEY), ""
+						+ dbuuid.getBenutzer().get_id());
+		dbspiele.deleteSpiel(new Spiel(getIntent().getExtras().getInt(ErgebnisseFragment.KEY)));
+finish();
 	}
 
 	private void aktualisieren() {
