@@ -347,58 +347,6 @@ public class InternetService extends Activity {
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
 
-	/*
-	 * public void Veranstaltungbeenden(final String veranstaltungs_id, final
-	 * String user_id) { // Tag used to cancel the request String tag_string_req
-	 * = "req_beendeVeranstaltung"; /* //
-	 * pDialog.setMessage("Beenden der Veranstaltung ..."); // showDialog();
-	 * 
-	 * StringRequest strReq = new StringRequest(Method.POST,
-	 * AppConfig.URL_VERANSTALTUNG, new Response.Listener<String>() {
-	 * 
-	 * @Override public void onResponse(String response) { Log.d(TAGimSpiel,
-	 * "Veranstaltung Response: " + response.toString()); // hideDialog();
-	 * 
-	 * try {
-	 * 
-	 * /* Toast.makeText(getApplicationContext(), response.toString(),
-	 * Toast.LENGTH_SHORT) .show();
-	 */
-	/*
-	 * JSONObject jObj = new JSONObject(response); boolean error =
-	 * jObj.getBoolean("error"); if (!error) {
-	 * 
-	 * Toast.makeText(hans.getApplicationContext(), "Beendet",
-	 * Toast.LENGTH_SHORT).show(); } else {
-	 * Toast.makeText(hans.getApplicationContext(), "Beenden fehlgeschlagen",
-	 * Toast.LENGTH_SHORT).show(); } } catch (JSONException e) { // JSON error
-	 * e.printStackTrace(); }
-	 * 
-	 * }
-	 * 
-	 * }, new Response.ErrorListener() {
-	 * 
-	 * @Override public void onErrorResponse(VolleyError error) {
-	 * Log.e(TAGimSpiel, "Beenden Error: " + error.getMessage());
-	 * 
-	 * Toast.makeText(hans.getApplicationContext(), error.getMessage(),
-	 * Toast.LENGTH_LONG).show(); // hideDialog();
-	 * 
-	 * } }) {
-	 * 
-	 * @Override protected Map<String, String> getParams() { // Posting params
-	 * to register url Map<String, String> params = new HashMap<String,
-	 * String>(); params.put("tag", "beendeveranstaltung");
-	 * params.put("veranstaltungs_id", veranstaltungs_id); params.put("user",
-	 * user_id); return params; }
-	 * 
-	 * };
-	 * 
-	 * // Adding request to request queue
-	 * AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-	 * 
-	 * }
-	 */
 	/**
 	 * Bei dieser Methode wird eine Veranstaltung gelöscht. Dabei wird die
 	 * veranstaltungs_id und die user_id (uuid) benötigt. Es wird dabei wieder
@@ -490,7 +438,7 @@ public class InternetService extends Activity {
 	 * @param status
 	 * @param veranstaltungs_id
 	 */
-	public void updateVeranstaltung(final String punkteHeim,
+	public void updateSpiel(final String punkteHeim,
 			final String punkteGast, final String status,
 			final String veranstaltungs_id, final String user_id,
 			final String istbeendet, final String spielende) {
@@ -513,38 +461,43 @@ public class InternetService extends Activity {
 							JSONObject jObj = new JSONObject(response);
 							boolean error = jObj.getBoolean("error");
 							if (!error) {
-								// User successfully stored in MySQL
-								// Now store the user in sqlite
-								// String uid = jObj.getString("uid");
-								/*
-								 * Toast.makeText(getApplicationContext(),
-								 * response, Toast.LENGTH_LONG).show();
-								 * JSONObject user = jObj
-								 * .getJSONObject("veranstaltung"); String idj =
-								 * user.getString("veranstaltung_id"); String
-								 * sportartj = user.getString("sportart");
-								 * String heimmannschaftj = user
-								 * .getString("heimmannschaft"); String
-								 * gastmannschaftj = user
-								 * .getString("gastmannschaft"); String
-								 * punkteHeimj = user .getString("punkteHeim");
-								 * String punkteGastj = user
-								 * .getString("punkteGast"); String spielbeginnj
-								 * = user .getString("spielbeginn"); String
-								 * statusj = user.getString("status");
-								 * 
-								 * 
-								 * 
-								 * int ka = db.updateVeranstaltung(new
-								 * Veranstaltung(Long .parseLong(idj),
-								 * sportartj, heimmannschaftj, gastmannschaftj,
-								 * Integer.parseInt(punkteHeimj), Integer
-								 * .parseInt(punkteGastj),
-								 * 
-								 * spielbeginnj, statusj));
-								 */
-								// finish();// Hat beendet da man was aufgerufen
-								// hat obwohl es beendet worden ist.
+								JSONObject user = jObj.getJSONObject("spiel");
+								String veranstaltung_idj = user
+										.getString("veranstaltung_id");
+								String benutzer_idj = user
+										.getString("benutzer_id");
+								String spielsystemj = user
+										.getString("spielsystem");
+								String mannschaftsartj = user
+										.getString("mannschaftsart");
+								String heimvereinj = user
+										.getString("heimverein");
+								String heimvereinsnummerj = user
+										.getString("heimvereinsnummer");
+								String gastvereinj = user
+										.getString("gastverein");
+								String gastvereinsnummerj = user
+										.getString("gastvereinsnummer");
+								String punkteHeimj = user
+										.getString("punkteHeim");
+								String punkteGastj = user
+										.getString("punkteGast");
+								String spielbeginnj = user
+										.getString("spielbeginn");
+								String spielendej = user.getString("spielende");
+								String statusj = user.getString("status");
+								String istbeendetj = user
+										.getString("istbeendet");
+								db.updateSpiel(new Spiel(Integer
+										.parseInt(veranstaltung_idj), Integer
+										.parseInt(punkteHeimj), Integer
+										.parseInt(punkteGastj), spielsystemj,
+										mannschaftsartj, heimvereinj,
+										heimvereinsnummerj, gastvereinj,
+										gastvereinsnummerj, statusj,
+										spielbeginnj, spielendej, Integer
+												.parseInt(istbeendetj), Integer
+												.parseInt(benutzer_idj)));
 								Toast.makeText(hans.getApplicationContext(),
 										"Aktualisiert", Toast.LENGTH_SHORT)
 										.show();
@@ -585,7 +538,7 @@ public class InternetService extends Activity {
 				Map<String, String> params = new HashMap<String, String>();
 				params.put("tag", "updateSpiel");// Zuerst Tag dann
 				// Daten
-				params.put("user", user_id);
+				params.put("benutzer_id", user_id);
 				params.put("punkteHeim", punkteHeim);
 				params.put("punkteGast", punkteGast);
 				params.put("veranstaltungs_id", veranstaltungs_id);

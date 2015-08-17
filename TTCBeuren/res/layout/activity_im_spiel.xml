@@ -1,128 +1,133 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity" >
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/txvSpielstandAktualiereSpiel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_Spielstand"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <EditText
-            android:id="@+id/txfHeimmannschaftAktualisiere"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="@string/text_heim_kurz"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/txfGastmannschaftAktualisiere"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/txfHeimmannschaftAktualisiere"
-            android:ems="10"
-            android:hint="@string/text_gast_kurz"
-            android:inputType="number" >
-
-            <requestFocus />
-        </EditText>
-
-        <Button
-            android:id="@+id/btnminus1heim"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/txfHeimmannschaftAktualisiere"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/txfHeimmannschaftAktualisiere"
-            android:text="-" />
-
-        <Button
-            android:id="@+id/btnminus1gast"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/txfGastmannschaftAktualisiere"
-            android:layout_alignTop="@+id/txfGastmannschaftAktualisiere"
-            android:layout_toRightOf="@+id/txfGastmannschaftAktualisiere"
-            android:text="-" />
-    </RelativeLayout>
-
-    <Switch
-        android:id="@+id/switch_scoreboard"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/text_Scoreboardan" />
-
-    <EditText
-        android:id="@+id/txfAktualisiereStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/text_Status" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="68dp" >
-
-        <Button
-            android:id="@+id/btnplus1heim"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/text_heim_plus1" />
-
-        <Button
-            android:id="@+id/btnplus1gast"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/text_gast_plus1" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity" >
 
         <TextView
-            android:id="@+id/statusscoreboard"
+            android:id="@+id/txvSpielstandAktualiereSpiel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/btnplus1heim"
-            android:layout_alignBottom="@+id/btnplus1heim"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+            android:text="@string/text_Spielstand"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/btnaktualisieren"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_refresh" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/btnloeschen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_loeschen" />
+            <EditText
+                android:id="@+id/txfHeimmannschaftAktualisiere"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/text_heim_kurz"
+                android:inputType="number" />
 
-    <Button
-        android:id="@+id/btn_zurueck"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_zurueck" />
+            <EditText
+                android:id="@+id/txfGastmannschaftAktualisiere"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txfHeimmannschaftAktualisiere"
+                android:ems="10"
+                android:hint="@string/text_gast_kurz"
+                android:inputType="number" >
 
-</LinearLayout>
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/btnminus1heim"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txfHeimmannschaftAktualisiere"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/txfHeimmannschaftAktualisiere"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/btnminus1gast"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txfGastmannschaftAktualisiere"
+                android:layout_alignTop="@+id/txfGastmannschaftAktualisiere"
+                android:layout_toRightOf="@+id/txfGastmannschaftAktualisiere"
+                android:text="-" />
+        </RelativeLayout>
+
+        <Switch
+            android:id="@+id/switch_scoreboard"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/text_Scoreboardan" />
+
+        <EditText
+            android:id="@+id/txfAktualisiereStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/text_Status" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="68dp" >
+
+            <Button
+                android:id="@+id/btnplus1heim"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/text_heim_plus1" />
+
+            <Button
+                android:id="@+id/btnplus1gast"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/text_gast_plus1" />
+
+            <TextView
+                android:id="@+id/statusscoreboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnplus1heim"
+                android:layout_alignBottom="@+id/btnplus1heim"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnaktualisieren"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_refresh" />
+
+        <Button
+            android:id="@+id/btnloeschen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_loeschen" />
+
+        <Button
+            android:id="@+id/btn_zurueck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_zurueck" />
+    </LinearLayout>
+
+</ScrollView>

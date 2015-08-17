@@ -39,23 +39,10 @@ public class NeuesSpielActivity extends Activity {
 	DatabasehandlerUUID dbuuid;
 	SessionManager session;
 	InternetService internetService;
+
 	/**
 	 * Noch durch Datenbank oder XML Datei ersetzen.
 	 */
-	public String[] Mannschaftsarten = { "Herren", "Damen", "Jugend U18" };
-	public String[] Spielsysteme = { "6 Gewinnpunkte", "8 Gewinnpunkte",
-			"9 Gewinnpunkte" };
-	public String[] BeurenMannschaftsnummer = { "I", "II", "III", "IV", "V",
-			"VI" };
-	public String[] GegnerMannschaftsnummer = { "I", "II", "III", "IV", "V",
-			"VI", "VII", "VIII", "IX", "X" };
-	public String[] Vereine = { "TSV Aach-Linz", "SV Allensbach ",
-			"TTC Beuren a.d. Aach", "RV Bittelbrunn",
-			"TSV Dettingen-Wallhausen", "TTC Engen-Aach",
-			"SPVGG. F.A.L. Frickingen", "TV Gaienhofen", "TTS Gottmadingen",
-			"TUS Immenstaad", "TTC Stockach-Zizenhausen", "TTV Anselfingen",
-			"TV Jestetten", "TTC GW Konstanz", "SV Litzelstetten",
-			"SV Bohlingen 1949 e.V.", "TSV Mimmenhausen" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -201,27 +188,30 @@ public class NeuesSpielActivity extends Activity {
 			 * 
 			 * dbspiele.addSpiel(neuesSpiel);
 			 */
-			internetService.speichereSpiel(Spielsystem, ""+dbuuid.getBenutzer()
-					.get_id(), Mannschaftsart, Heimverein, Heimvereinnummer,
-					Gastverein, Gastvereinnummer, PunkteHeim, PunkteGast,
-					spieldatumstring, spielendeString, status, ""+1);
+			internetService.speichereSpiel(Spielsystem, ""
+					+ dbuuid.getBenutzer().get_id(), Mannschaftsart,
+					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
+					PunkteHeim, PunkteGast, spieldatumstring, spielendeString,
+					status, "" + 1);
 
 		} else {
 			/*
-			neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
-					Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
+			 * neuesSpiel = new Spiel(Integer.parseInt(PunkteHeim),
+			 * Integer.parseInt(PunkteGast), Spielsystem, Mannschaftsart,
+			 * Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
+			 * status, spieldatumstring, 0, dbuuid.getBenutzer().get_id());
+			 * dbspiele.addSpiel(neuesSpiel);
+			 */
+			internetService.speichereSpiel(Spielsystem, ""
+					+ dbuuid.getBenutzer().get_id(), Mannschaftsart,
 					Heimverein, Heimvereinnummer, Gastverein, Gastvereinnummer,
-					status, spieldatumstring, 0, dbuuid.getBenutzer().get_id());
-			dbspiele.addSpiel(neuesSpiel);*/
-			internetService.speichereSpiel(Spielsystem, ""+dbuuid.getBenutzer()
-					.get_id(), Mannschaftsart, Heimverein, Heimvereinnummer,
-					Gastverein, Gastvereinnummer, PunkteHeim, PunkteGast,
-					spieldatumstring, "", status, ""+0);
-			
+					PunkteHeim, PunkteGast, spieldatumstring, "", status,
+					"" + 0);
+
 		}
-		//Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
-			//	Toast.LENGTH_LONG).show();
-	//	finish();
+		// Toast.makeText(getApplicationContext(), neuesSpiel.toString(),
+		// Toast.LENGTH_LONG).show();
+		// finish();
 	}
 
 	private void init() {
@@ -270,26 +260,29 @@ public class NeuesSpielActivity extends Activity {
 	private void spinnerreferenzen() {
 		ArrayAdapter<String> Mannschaftsartenadapter = new ArrayAdapter<String>(
 				NeuesSpielActivity.this,
-				android.R.layout.simple_spinner_dropdown_item, Mannschaftsarten);
+				android.R.layout.simple_spinner_dropdown_item, getResources()
+						.getStringArray(R.array.Mannschaftsarten));
 		spnMannschaftsart.setAdapter(Mannschaftsartenadapter);
 
 		ArrayAdapter<String> Spielsystemadapter = new ArrayAdapter<String>(
 				NeuesSpielActivity.this,
-				android.R.layout.simple_spinner_dropdown_item, Spielsysteme);
+				android.R.layout.simple_spinner_dropdown_item, getResources()
+						.getStringArray(R.array.Spielsysteme));
 		spnSpielsystem.setAdapter(Spielsystemadapter);
 		ArrayAdapter<String> Beurenmannschaftsnummeradapter = new ArrayAdapter<String>(
 				NeuesSpielActivity.this,
-				android.R.layout.simple_spinner_dropdown_item,
-				BeurenMannschaftsnummer);
+				android.R.layout.simple_spinner_dropdown_item, getResources()
+						.getStringArray(R.array.BeurenMannschaftsnummer));
 		spnBeurenMannschaft.setAdapter(Beurenmannschaftsnummeradapter);
 		ArrayAdapter<String> Gegnermannschaftsnummeradapter = new ArrayAdapter<String>(
 				NeuesSpielActivity.this,
-				android.R.layout.simple_spinner_dropdown_item,
-				GegnerMannschaftsnummer);
+				android.R.layout.simple_spinner_dropdown_item, getResources()
+						.getStringArray(R.array.GegnerMannschaftsnummer));
 		spnGegnermannschaftsnummer.setAdapter(Gegnermannschaftsnummeradapter);
 		ArrayAdapter<String> Vereinadapter = new ArrayAdapter<String>(
 				NeuesSpielActivity.this,
-				android.R.layout.simple_spinner_dropdown_item, Vereine);
+				android.R.layout.simple_spinner_dropdown_item, getResources()
+						.getStringArray(R.array.Vereine_gegnervonBeuren));
 		spnGegnerMannschaft.setAdapter(Vereinadapter);
 	}
 

@@ -3,6 +3,7 @@ package de.ttcbeuren.ttcbeurenhauptapp;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +14,6 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
@@ -180,13 +180,35 @@ public class ImSpielActivity extends Activity {
 		internetservice.Spielloeschen(
 				"" + getIntent().getExtras().getInt(ErgebnisseFragment.KEY), ""
 						+ dbuuid.getBenutzer().get_id());
-		dbspiele.deleteSpiel(new Spiel(getIntent().getExtras().getInt(ErgebnisseFragment.KEY)));
-finish();
+		dbspiele.deleteSpiel(new Spiel(getIntent().getExtras().getInt(
+				ErgebnisseFragment.KEY)));
+		finish();
 	}
 
 	private void aktualisieren() {
-		// TODO Auto-generated method stub
+		/*
+		 * Hier wird die Zahl(id) der Veranstaltung geholt
+		 */
 
+		Spiel updatespiel = dbspiele.getSpiel(getIntent().getExtras().getInt(
+				ErgebnisseFragment.KEY));
+		String spielstandheim = txfSpielstandHeim.getText().toString();
+		String spielstandgast = txfSpielstandGast.getText().toString();
+		String spielstatus = txfStatus.getText().toString();
+
+		if (TextUtils.isEmpty(spielstandheim) == false) {
+			updatespiel.setPunkteHeim(Integer.parseInt(spielstandheim));
+		}
+		if (TextUtils.isEmpty(spielstandgast) == false) {
+			updatespiel.setPunkteHeim(Integer.parseInt(spielstandgast));
+		}
+		if (TextUtils.isEmpty(spielstatus) == false) {
+			updatespiel.setStatus(spielstatus);
+		}
+		internetservice.updateSpiel(""+updatespiel.getPunkteHeim(),
+				""+updatespiel.getPunkteGast(), updatespiel.getStatus(),
+				""+updatespiel.getSpiel_id(),""+ updatespiel.getBenutzer_id(),
+				""+updatespiel.getIstspielbeendet(), updatespiel.getSpielende());
 	}
 
 	/**
