@@ -227,7 +227,13 @@ public class Spiel implements Serializable {
 
 	@Override
 	public String toString() {
-		return mannschaftsart + ": " + heimverein + " " + heimvereinsnummer
+		String nummer = null;
+		if(heimverein.equals("TTC Beuren a.d. Aach")){
+			nummer=heimvereinsnummer;
+		}else {
+			nummer=gastvereinsnummer;
+		}
+		return mannschaftsart + " "+nummer+ ": " + heimverein + " " + heimvereinsnummer
 				+ " : " + gastverein + " " + gastvereinsnummer + " "
 				+ punkteHeim + ":" + punkteGast;
 	}

@@ -74,6 +74,14 @@
         <item>Herren</item>
         <item>Damen</item>
         <item>Jugend U18</item>
+        
+    </string-array>
+     <string-array name="Mannschaftsartenduenn">
+        <item>Alle Spiele</item>
+        <item>Herren</item>
+        <item>Damen</item>
+        <item>Jugend U18</item>
+        
     </string-array>
     <string-array name="Spielsysteme">
         <item>6 Gewinnpunkte</item>
@@ -102,17 +110,17 @@
     </string-array>
     <string-array name="MannschaftenAuswahl">
         <item>Alle Spiele</item>
-        <item>1. Herren</item>
-        <item>2. Herren</item>
-        <item>3. Herren</item>
-        <item>4. Herren</item>
-        <item>1. Damen</item>
-        <item>1. Jugend</item>
-        <item>2. Jugend</item>
-        <item>3. Jugend</item>
-        <item>4. Jugend</item>
-        <item>5. Jugend</item>
-        <item>6. Jugend</item>
+        <item>1.Herren</item>
+        <item>2.Herren</item>
+        <item>3.Herren</item>
+        <item>4.Herren</item>
+        <item>1.Damen</item>
+        <item>1.Jugend</item>
+        <item>2.Jugend</item>
+        <item>3.Jugend</item>
+        <item>4.Jugend</item>
+        <item>5.Jugend</item>
+        <item>6.Jugend</item>
     </string-array>
 
 </resources>

@@ -8,7 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,6 +23,8 @@ import com.android.volley.toolbox.StringRequest;
 import de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.NavigationDrawerFragment;
+import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
@@ -44,6 +49,7 @@ public class InternetService extends Activity {
 	// private static final String TAG_VeranstaltungenUserLogcat =
 	// SpieleDesUsersActivity.class
 	// .getSimpleName();
+
 	private static final String TAG_VeranstaltungenDesUsers = "veranstaltungdesusers";
 	private ProgressDialog pDialog;
 	Activity hans;
@@ -52,6 +58,7 @@ public class InternetService extends Activity {
 	 * Musste hier eingefügt werden wegen dem zwang zu final
 	 */
 	boolean uebergabeerfolgreich;
+	String meldung = "Aktualisiert";
 
 	/**
 	 * Hierbei wird die Activity übergeben und dann dem Attribut der Klasse
@@ -247,8 +254,8 @@ public class InternetService extends Activity {
 							 * response.toString(), Toast.LENGTH_SHORT) .show();
 							 */
 							JSONObject jObj = new JSONObject(response);
-							// boolean error = jObj.getBoolean("error");
-							boolean error = false;
+							boolean error = jObj.getBoolean("error");
+							// error = false;
 							if (!error) {
 								// User successfully stored in MySQL
 								// Now store the user in sqlite
@@ -300,9 +307,7 @@ public class InternetService extends Activity {
 											Integer.parseInt(benutzer_idj)));
 
 								}
-								Toast.makeText(hans.getApplicationContext(),
-										"Aktualisiert", Toast.LENGTH_SHORT)
-										.show();
+
 							} else {
 
 								// Error occurred in registration. Get the error
@@ -315,9 +320,31 @@ public class InternetService extends Activity {
 
 							}
 						} catch (JSONException e) {
-							// JSON error
+							meldung = "Keine Spiele vorhanden";
 							e.printStackTrace();
 						}
+						/**
+						 * Hier wird das Fragment neu aufgerufen um so die
+						 * Anzeige zu aktualisieren.
+						 */
+						ErgebnisseFragment myFragment = (ErgebnisseFragment) getFragmentManager()
+								.findFragmentByTag("Ergebnisse_Fragment");
+						if (myFragment != null && myFragment.isVisible()) {
+							FragmentManager fragmentManager = hans
+									.getFragmentManager();
+
+							fragmentManager
+
+									.beginTransaction()
+									.replace(
+											R.id.container,
+											new ErgebnisseFragment()
+													.newInstance()).commit();
+						}
+						Toast.makeText(hans.getApplicationContext(), meldung,
+
+						Toast.LENGTH_SHORT).show();
+
 					}
 
 				}, new Response.ErrorListener() {
@@ -438,10 +465,10 @@ public class InternetService extends Activity {
 	 * @param status
 	 * @param veranstaltungs_id
 	 */
-	public void updateSpiel(final String punkteHeim,
-			final String punkteGast, final String status,
-			final String veranstaltungs_id, final String user_id,
-			final String istbeendet, final String spielende) {
+	public void updateSpiel(final String punkteHeim, final String punkteGast,
+			final String status, final String veranstaltungs_id,
+			final String user_id, final String istbeendet,
+			final String spielende) {
 		// Tag used to cancel the request
 		String tag_string_req = "req_updateveranstaltung";
 

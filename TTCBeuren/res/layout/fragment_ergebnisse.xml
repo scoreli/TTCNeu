@@ -3,7 +3,8 @@
         android:id="@+id/linear_fragment_ergebnisse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        >
 
         <Spinner
             android:id="@+id/spin_Mannschaften"

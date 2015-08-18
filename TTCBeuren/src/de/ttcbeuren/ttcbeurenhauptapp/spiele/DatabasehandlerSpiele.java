@@ -64,15 +64,15 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_Spiele + "("
-				+ SPIELE_ID + " INTEGER PRIMARY KEY," + SPIELE_punkteHeim + " INTEGER, "
-				+ SPIELE_punkteGast + " INTEGER, " + SPIELE_spielsystem
-				+ " TEXT, " + SPIELE_mannschaftsart + " TEXT, "
-				+ SPIELE_heimverein + " TEXT, " + SPIELE_heimvereinsnummer
-				+ " TEXT, " + SPIELE_gastverein + " TEXT, "
-				+ SPIELE_gastvereinsnummer + " TEXT, " + SPIELE_status
-				+ " TEXT, " + SPIELE_spielbegin + " TEXT, " + SPIELE_spielende
-				+ " TEXT, " + SPIELE_istspielbeendet + " INTEGER, " +  SPIELE_benutzer_id
-				+ " INTEGER"+ ")";
+				+ SPIELE_ID + " INTEGER PRIMARY KEY," + SPIELE_punkteHeim
+				+ " INTEGER, " + SPIELE_punkteGast + " INTEGER, "
+				+ SPIELE_spielsystem + " TEXT, " + SPIELE_mannschaftsart
+				+ " TEXT, " + SPIELE_heimverein + " TEXT, "
+				+ SPIELE_heimvereinsnummer + " TEXT, " + SPIELE_gastverein
+				+ " TEXT, " + SPIELE_gastvereinsnummer + " TEXT, "
+				+ SPIELE_status + " TEXT, " + SPIELE_spielbegin + " TEXT, "
+				+ SPIELE_spielende + " TEXT, " + SPIELE_istspielbeendet
+				+ " INTEGER, " + SPIELE_benutzer_id + " INTEGER" + ")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
@@ -95,7 +95,9 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(SPIELE_ID, spiel.getSpiel_id());// Muss auf jedenfall drin sein sonst übernimmt es nicht die ids..
+		values.put(SPIELE_ID, spiel.getSpiel_id());// Muss auf jedenfall drin
+													// sein sonst übernimmt es
+													// nicht die ids..
 		values.put(SPIELE_punkteHeim, "" + spiel.getPunkteHeim()); // Ist INT
 		values.put(SPIELE_punkteGast, "" + spiel.getPunkteGast()); // Ist INT
 		values.put(SPIELE_spielsystem, spiel.getSpielsystem());
@@ -107,8 +109,9 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(SPIELE_status, spiel.getStatus());
 		values.put(SPIELE_spielbegin, spiel.getSpielbegindatumtime());
 		values.put(SPIELE_spielende, spiel.getSpielende());
-		values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist Int
-		values.put(SPIELE_benutzer_id, ""+spiel.getBenutzer_id());																	// INT
+		values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist
+																			// Int
+		values.put(SPIELE_benutzer_id, "" + spiel.getBenutzer_id()); // INT
 		Log.d("Date", "Register Response: ");
 		// Insert in Datenbank
 		db.insert(TABLE_Spiele, null, values);
@@ -130,8 +133,9 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				SPIELE_mannschaftsart, SPIELE_heimverein,
 				SPIELE_heimvereinsnummer, SPIELE_gastverein,
 				SPIELE_gastvereinsnummer, SPIELE_status, SPIELE_spielbegin,
-				SPIELE_spielende, SPIELE_istspielbeendet,SPIELE_benutzer_id }, SPIELE_ID + "=?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+				SPIELE_spielende, SPIELE_istspielbeendet, SPIELE_benutzer_id },
+				SPIELE_ID + "=?", new String[] { String.valueOf(id) }, null,
+				null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 		}
@@ -141,8 +145,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 				cursor.getString(4), cursor.getString(5), cursor.getString(6),
 				cursor.getString(7), cursor.getString(8), cursor.getString(9),
 				cursor.getString(10), cursor.getString(11),
-				Integer.parseInt(cursor.getString(12)),
-				Integer.parseInt(cursor.getString(13)));
+				Integer.parseInt(cursor.getString(12)), Integer.parseInt(cursor
+						.getString(13)));
 
 		db.close(); // Closing database connection
 		return uebergabeSpiel;
@@ -175,8 +179,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 						cursor.getString(7), cursor.getString(8),
 						cursor.getString(9), cursor.getString(10),
 						cursor.getString(11), Integer.parseInt(cursor
-								.getString(12)),
-								Integer.parseInt(cursor.getString(13)));
+								.getString(12)), Integer.parseInt(cursor
+								.getString(13)));
 				// Adding contact to list
 				spielliste.add(uebergabeSpiel);
 			} while (cursor.moveToNext());
@@ -213,8 +217,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 						cursor.getString(7), cursor.getString(8),
 						cursor.getString(9), cursor.getString(10),
 						cursor.getString(11), Integer.parseInt(cursor
-								.getString(12)),
-								Integer.parseInt(cursor.getString(13)));
+								.getString(12)), Integer.parseInt(cursor
+								.getString(13)));
 				// Adding contact to list
 				spielliste.add(uebergabeSpiel);
 			} while (cursor.moveToNext());
@@ -251,8 +255,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 						cursor.getString(7), cursor.getString(8),
 						cursor.getString(9), cursor.getString(10),
 						cursor.getString(11), Integer.parseInt(cursor
-								.getString(12)),
-								Integer.parseInt(cursor.getString(13)));
+								.getString(12)), Integer.parseInt(cursor
+								.getString(13)));
 				// Adding contact to list
 				spielliste.add(uebergabeSpiel);
 			} while (cursor.moveToNext());
@@ -269,20 +273,33 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	 * @return
 	 */
 
-	public List<Spiel> getVariableSpiele(String mannschaftsart, String nummer,
+	public List<Spiel> getVariableSpiele(String mannschaftsart, /*
+																 * String
+																 * nummer,
+																 */
 			int istbeendet) {
 		List<Spiel> spielliste = new ArrayList<Spiel>();
 		// Select All Query
+		/**
+		 * Leider funktioniert die Sql abfrage nicht richtig irgenwie.Deswegen
+		 * nur verdünnt bitte ändern.
+		 */
+		int nummer = 0;// Das dann löschen
 		String selectQuery = "SELECT  * FROM " + TABLE_Spiele + " WHERE ("
-				+ SPIELE_heimverein + " LIKE 'TTC Beuren a.d. Aach'" + " AND "
-				+ SPIELE_heimvereinsnummer + " LIKE '" + nummer + "'"
-				+ ") OR (" + SPIELE_gastverein + " LIKE 'TTC Beuren a.d. Aach'"
-				+ " AND " + SPIELE_gastvereinsnummer + " LIKE '" + nummer + "'"
-				+ ") AND " + SPIELE_mannschaftsart + " LIKE '" + mannschaftsart
-				+ "'" + " AND " + SPIELE_istspielbeendet + " = " + istbeendet;
+				+ SPIELE_heimverein + " like 'TTC Beuren a.d. Aach'" + " AND "
+				+ SPIELE_heimvereinsnummer + " like '" + nummer + "'"
+				+ ") OR (" + SPIELE_gastverein + " like 'TTC Beuren a.d. Aach'"
+				+ " AND " + SPIELE_gastvereinsnummer + " like '" + nummer + "'"
+				+ ") AND " + SPIELE_mannschaftsart + " like '" + mannschaftsart
+				+ "' AND " + SPIELE_istspielbeendet + " like '" + istbeendet
+				+ "'";
+
+		String selectQueryduenn = "SELECT * FROM " + TABLE_Spiele
+				+ " WHERE  mannschaftsart = '" + mannschaftsart + "'" + " AND "
+				+ SPIELE_istspielbeendet + " = '" + istbeendet + "'";
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor cursor = db.rawQuery(selectQuery, null);
+		Cursor cursor = db.rawQuery(selectQueryduenn, null);
 
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
@@ -295,8 +312,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 						cursor.getString(7), cursor.getString(8),
 						cursor.getString(9), cursor.getString(10),
 						cursor.getString(11), Integer.parseInt(cursor
-								.getString(12)),
-								Integer.parseInt(cursor.getString(13)));
+								.getString(12)), Integer.parseInt(cursor
+								.getString(13)));
 				// Adding contact to list
 				spielliste.add(uebergabeSpiel);
 			} while (cursor.moveToNext());
@@ -329,7 +346,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		values.put(SPIELE_spielbegin, spiel.getSpielbegindatumtime());
 		values.put(SPIELE_spielende, spiel.getSpielende());
 		values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist
-		values.put(SPIELE_benutzer_id, ""+spiel.getBenutzer_id());																		// INT
+		values.put(SPIELE_benutzer_id, "" + spiel.getBenutzer_id()); // INT
 		Log.d("Date", "Register Response: ");
 		// Insert in Datenbank
 		db.update(TABLE_Spiele, values, SPIELE_ID + " =?",

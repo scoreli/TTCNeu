@@ -64,7 +64,7 @@ public class MainActivityStartseite extends Activity implements
 			fragmentManager
 					.beginTransaction()
 					.replace(R.id.container,
-							new ErgebnisseFragment().newInstance())
+							new ErgebnisseFragment().newInstance(),"Ergebnisse_Fragment")
 				.commit();
 			mTitle = getString(R.string.title_ergebnisse);
 
