@@ -7,8 +7,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +124,21 @@ public class ErgebnisseFragment extends Fragment implements
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		String NameDerMannschaft = (String) parent.getItemAtPosition(position);
+		updateListe(NameDerMannschaft);
+		/*
+		 * SharedPreferences sPrefs = getActivity().getSharedPreferences(
+		 * getString(R.string.preference_aktualisieren), Context.MODE_APPEND);
+		 */
+		SharedPreferences sharedPref = getActivity().getPreferences(
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putString(getString(R.string.preference_aktualisieren),
+				NameDerMannschaft);
+		editor.commit();
+
+	}
+
+	public void updateListe(String NameDerMannschaft) {
 		switch (NameDerMannschaft) {
 		case "Alle Spiele":
 			spielelive = dbspiele.getAllLiveSpiele();
@@ -217,15 +235,24 @@ public class ErgebnisseFragment extends Fragment implements
 
 		}
 		mAdapter.deletelist();
+		/**
+		 * Damit werden eigene Spiele anderst gefärbt.
+		 */
+		if (session.isLoggedIn()) {
+			mAdapter.setBenutzer_id(dbuuid.getBenutzer().get_id());
+		}
+
 		mAdapter.addSectionHeaderItem("Live :");
 		for (int i = 0; i < spielelive.size(); i++) {
 			mAdapter.addItem(spielelive.get(i));
+
 		}
 		mAdapter.addSectionHeaderItem("Beendet :");
 		for (int i = 0; i < spielebeendet.size(); i++) {
 			mAdapter.addItem(spielebeendet.get(i));
 		}
 		listview.setAdapter(mAdapter);
+
 	}
 
 	/**

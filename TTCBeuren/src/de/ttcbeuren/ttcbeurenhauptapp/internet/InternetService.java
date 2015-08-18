@@ -501,6 +501,7 @@ public class InternetService extends Activity {
 								Toast.makeText(hans.getApplicationContext(),
 										"Aktualisiert", Toast.LENGTH_SHORT)
 										.show();
+								hans.finish();
 							} else {
 
 								// Error occurred in registration. Get the error

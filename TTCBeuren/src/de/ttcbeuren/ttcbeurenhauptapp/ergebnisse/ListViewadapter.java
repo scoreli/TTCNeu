@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ public class ListViewadapter extends BaseAdapter {
 	/**
 	 * http://javatechig.com/android/listview-with-section-header-in-android
 	 */
+	private int benutzer_id = 0;
 	private static final int TYPE_ITEM = 0;
 	private static final int TYPE_SEPARATOR = 1;
 	/**
@@ -34,6 +37,10 @@ public class ListViewadapter extends BaseAdapter {
 
 	}
 
+	public void setBenutzer_id(final int benutzer_id) {
+		this.benutzer_id = benutzer_id;
+	}
+
 	public void addItem(final Spiel item) {
 		mData.add(item);
 		notifyDataSetChanged();
@@ -48,6 +55,7 @@ public class ListViewadapter extends BaseAdapter {
 	public void deletelist() {
 		mData.clear();
 		sectionHeader.clear();
+		benutzer_id = -5;
 		notifyDataSetChanged();
 	}
 
@@ -79,8 +87,8 @@ public class ListViewadapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
 		int rowType = getItemViewType(position);
-
-		if (convertView == null) {
+		
+						if (convertView == null) {
 			holder = new ViewHolder();
 			switch (rowType) {
 			case TYPE_ITEM:
@@ -88,6 +96,18 @@ public class ListViewadapter extends BaseAdapter {
 						R.layout.rowlayout_listviewadapter, null);
 				holder.textView = (TextView) convertView
 						.findViewById(R.id.textViewsdfdf);
+				/**
+				 * Ist der Benutzer der Benutzer der die Veranstaltung erstellt
+				 * hat, wird dieser Eintrag anderst gefärbt.
+				 */
+				if (benutzer_id != -5) {
+					Spiel spiels = (Spiel) mData.get(position);
+					if (spiels.getBenutzer_id() == benutzer_id) {
+						holder.textView
+								.setBackgroundResource(R.color.ListGruen);
+					}
+				}
+
 				break;
 			case TYPE_SEPARATOR:
 				convertView = mInflater.inflate(
