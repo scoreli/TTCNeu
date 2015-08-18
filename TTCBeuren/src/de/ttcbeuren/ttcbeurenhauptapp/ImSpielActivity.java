@@ -10,10 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
@@ -25,8 +29,10 @@ public class ImSpielActivity extends Activity {
 	 * Werte für die initalisierung von im Spiel
 	 * 
 	 */
+	private CheckBox checkspielistentschieden;
+	private TimePicker tpSpielende;
 	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
-	private TextView statusScoreboard;
+	private TextView statusScoreboard, etxtspielende;
 	private Button btnaktualisieren, btnloeschen, btnheimplusein,
 			btngastpluseins, btnheimminuseins, btngastminuseins, btnzurueck;
 	// private CheckBox checkboxbeenden;
@@ -48,6 +54,23 @@ public class ImSpielActivity extends Activity {
 				ErgebnisseFragment.KEY);
 		Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
 		plusminusHeim(0, uebergabespiel);
+		checkspielistentschieden
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							etxtspielende.setVisibility(View.VISIBLE);
+							tpSpielende.setVisibility(View.VISIBLE);
+
+						} else {
+							etxtspielende.setVisibility(View.GONE);
+							tpSpielende.setVisibility(View.GONE);
+						}
+
+					}
+				});
 		btnaktualisieren.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -205,10 +228,18 @@ public class ImSpielActivity extends Activity {
 		if (TextUtils.isEmpty(spielstatus) == false) {
 			updatespiel.setStatus(spielstatus);
 		}
-		internetservice.updateSpiel(""+updatespiel.getPunkteHeim(),
-				""+updatespiel.getPunkteGast(), updatespiel.getStatus(),
-				""+updatespiel.getSpiel_id(),""+ updatespiel.getBenutzer_id(),
-				""+updatespiel.getIstspielbeendet(), updatespiel.getSpielende());
+		if (checkspielistentschieden.isChecked()) {
+			String spielendeString = "" + tpSpielende.getCurrentHour() + ":"
+					+ tpSpielende.getCurrentMinute() + ":" + 30;
+			updatespiel.setSpielende(spielendeString);
+			updatespiel.setIstspielbeendet(1);
+
+		}
+		internetservice.updateSpiel("" + updatespiel.getPunkteHeim(), ""
+				+ updatespiel.getPunkteGast(), updatespiel.getStatus(), ""
+				+ updatespiel.getSpiel_id(), "" + updatespiel.getBenutzer_id(),
+				"" + updatespiel.getIstspielbeendet(),
+				updatespiel.getSpielende());
 	}
 
 	/**
@@ -297,6 +328,11 @@ public class ImSpielActivity extends Activity {
 		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
 		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
 		btnzurueck = (Button) findViewById(R.id.btn_zurueck);
-
+		checkspielistentschieden = (CheckBox) findViewById(R.id.check_Spielistentschieden);
+		etxtspielende = (TextView) findViewById(R.id.textView_Spielentschieden);
+		etxtspielende.setVisibility(View.GONE);
+		tpSpielende = (TimePicker) findViewById(R.id.time_Spielende);
+		tpSpielende.setIs24HourView(true);
+		tpSpielende.setVisibility(View.GONE);
 	}
 }

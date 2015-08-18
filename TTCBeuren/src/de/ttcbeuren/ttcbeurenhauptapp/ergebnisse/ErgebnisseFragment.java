@@ -40,9 +40,6 @@ public class ErgebnisseFragment extends Fragment implements
 
 	// private MyArrayAdapter adapterlive,adapterbeendet;
 	private ListViewadapter mAdapter;
-	public String[] Mannschaften = { "Alle Spiele", "1. Herren", "2. Herren",
-			"3. Herren", "4. Herren.", "1. Damen", "1. Jugend", "2. Jugend",
-			"3. Jugend", "4. Jugend", "5. Jugend", "6. Jugend" };
 
 	// WebView browser = (WebView) root.findViewById(R.id.webviewakuelles);
 	// browser.loadUrl("http://www.ttc-beuren.de");
@@ -75,7 +72,7 @@ public class ErgebnisseFragment extends Fragment implements
 
 		ArrayAdapter<String> Auswahlspinneradapter = new ArrayAdapter<String>(
 				getActivity(), android.R.layout.simple_spinner_dropdown_item,
-				Mannschaften);
+				getResources().getStringArray(R.array.MannschaftenAuswahl));
 		auswahlspinner.setAdapter(Auswahlspinneradapter);
 		auswahlspinner.setOnItemSelectedListener(this);
 
@@ -89,7 +86,7 @@ public class ErgebnisseFragment extends Fragment implements
 				 * werden
 				 */
 				if (mAdapter.getItemViewType(position) != 1) {
-					
+
 					Spiel uebergabespiel = (Spiel) listview
 							.getItemAtPosition(position);
 					/**
@@ -98,12 +95,13 @@ public class ErgebnisseFragment extends Fragment implements
 					 * 
 					 * Vll noch besser lösen
 					 */
-					Intent i =null;
+					Intent i = null;
 					if (session.isLoggedIn()) {
 						if (uebergabespiel.getBenutzer_id() == dbuuid
-								.getBenutzer().get_id()) {
+								.getBenutzer().get_id()
+								&& uebergabespiel.getIstspielbeendet() == 0) {
 							i = new Intent(getActivity(), ImSpielActivity.class);
-						}else {
+						} else {
 							i = new Intent(getActivity(), DetailActivity.class);
 						}
 					} else {

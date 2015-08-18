@@ -23,7 +23,7 @@
     <string name="ptext_nachwuchsausgleich">Nachwuchsausgleich</string>
     <string name="text_gegner4TTR">Gegner 4 TTR</string>
     <string name="text_gegner5TTR">Gegner 5 TTR</string>
-    <string name="text_account">Anmelden</string>
+    <string name="text_account">Account</string>
     <string name="text_logout">Logout</string>
     <string name="text_Accountloeschen">Account löschen</string>
     <string name="text_passwordaendern">Passwort ändern</string>
