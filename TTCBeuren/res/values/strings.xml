@@ -54,5 +54,6 @@
     <string name="text_beendet">Beendet:</string>
     <string name="title_activity_detail">Details des Spiels</string>
     <string name="title_activity_im_spiel">Im Spiel</string>
+    <string name="title_activity_activitypopup">Popup</string>
 
 </resources>
