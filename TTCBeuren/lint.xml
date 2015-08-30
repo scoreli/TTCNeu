@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ResourceAsColor">
+        <ignore path="src/de/ttcbeuren/ttcbeurenhauptapp/ergebnisse/ListViewadapter.java" />
+    </issue>
+</lint>
