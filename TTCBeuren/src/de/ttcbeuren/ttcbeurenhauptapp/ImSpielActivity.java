@@ -75,12 +75,11 @@ public class ImSpielActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
 				aktualisieren();
 
-			}
+			
 
-		});
+			}});
 		btnloeschen.setOnClickListener(new OnClickListener() {
 			/**
 			 * http://android-er.blogspot.kr/2012/03/example-of-using-
@@ -92,6 +91,9 @@ public class ImSpielActivity extends Activity {
 						.getSystemService(LAYOUT_INFLATER_SERVICE);
 				View popupView = layoutInflater.inflate(
 						R.layout.bestaetigenpopup, null);
+				TextView textmeldung = (TextView) popupView
+						.findViewById(R.id.textview_popup);
+				textmeldung.setText("Sind sie sicher ?");
 				final PopupWindow popupWindow = new PopupWindow(popupView,
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -335,4 +337,6 @@ public class ImSpielActivity extends Activity {
 		tpSpielende.setIs24HourView(true);
 		tpSpielende.setVisibility(View.GONE);
 	}
+
+	
 }

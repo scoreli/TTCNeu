@@ -72,7 +72,9 @@
         </activity>
         <activity
             android:name=".Activitypopup"
-            android:label="@string/title_activity_activitypopup" >
+            android:label="@string/title_activity_activitypopup" 
+         android:theme="@style/AppTheme.CustomTheme"
+           >
         </activity>
     </application>
 

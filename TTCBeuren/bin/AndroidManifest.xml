@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- android name muss sonst schmeist appcontroller eine exeption -->
     <application
-        android:name="de.ttcbeuren.ttcbeurenhauptapp.internet.AppController"
+        android:name=".internet.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -69,6 +69,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
+        </activity>
+        <activity
+            android:name=".Activitypopup"
+            android:label="@string/title_activity_activitypopup" 
+         android:theme="@style/AppTheme.CustomTheme"
+           >
         </activity>
     </application>
 

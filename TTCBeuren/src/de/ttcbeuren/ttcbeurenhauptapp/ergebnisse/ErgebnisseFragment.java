@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -64,6 +65,7 @@ public class ErgebnisseFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		// setHasOptionsMenu(true);
 
+		
 		mAdapter = new ListViewadapter(getActivity());
 		dbspiele = new DatabasehandlerSpiele(getActivity());
 		dbuuid = new DatabasehandlerUUID(getActivity());
@@ -132,7 +134,8 @@ public class ErgebnisseFragment extends Fragment implements
 
 		SharedPreferences sharedPref = getActivity().getPreferences(
 				Context.MODE_PRIVATE);
-		updateListe(sharedPref.getString(getString(R.string.preference_aktualisieren),""));
+		updateListe(sharedPref.getString(
+				getString(R.string.preference_aktualisieren), ""));
 	}
 
 	@Override

@@ -41,13 +41,14 @@ public class TTRFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		// Wichtig hier muss die Section angegeben werden ???
 		super.onAttach(activity);
-		((MainActivityStartseite) activity).onSectionAttached(1);
+		((MainActivityStartseite) activity).onSectionAttached(2);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
+		
 		View root = inflater.inflate(R.layout.fragment_ttrrechner, container,
 				false);
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
@@ -63,11 +64,12 @@ public class TTRFragment extends Fragment {
 		check_b3 = (CheckBox) root.findViewById(R.id.box_siegb3);
 		check_b4 = (CheckBox) root.findViewById(R.id.box_siegb4);
 		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
+		
 		// TODO Auto-generated method stub
 		/**
 		 * Es sollte behoben werden das der richtige Titel angezeigt wird.
 		 */
-		// restoreActionBar();
+		// restoreActionBar()
 		btnberechnen.setOnClickListener(new OnClickListener() {
 
 			@Override

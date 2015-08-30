@@ -83,15 +83,14 @@ public class MainActivityStartseite extends Activity implements
 		switch (number) {
 		case 1:
 			mTitle = getString(R.string.title_aktuelles);
-			restoreActionBar();
+		
 			break;
 		case 2:
 			mTitle = getString(R.string.title_ergebnisse);
-			restoreActionBar();
 			break;
 		case 3:
 			mTitle = getString(R.string.title_ttrrechner);
-			restoreActionBar();
+			
 			break;
 		}
 	}
@@ -141,7 +140,8 @@ public class MainActivityStartseite extends Activity implements
 					NeuesSpielActivity.class));
 			return true;
 		}
-		if (id == R.id.menu_erstellen_newsfeed) {
+		if (id == R.id.menu_erstellen_newsfeed) {startActivity(new Intent(MainActivityStartseite.this,
+				Activitypopup.class));
 
 			return true;
 		}
