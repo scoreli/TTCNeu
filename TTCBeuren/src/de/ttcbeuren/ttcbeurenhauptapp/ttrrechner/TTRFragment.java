@@ -64,7 +64,7 @@ public class TTRFragment extends Fragment {
 		check_b3 = (CheckBox) root.findViewById(R.id.box_siegb3);
 		check_b4 = (CheckBox) root.findViewById(R.id.box_siegb4);
 		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
-		
+	
 		// TODO Auto-generated method stub
 		/**
 		 * Es sollte behoben werden das der richtige Titel angezeigt wird.

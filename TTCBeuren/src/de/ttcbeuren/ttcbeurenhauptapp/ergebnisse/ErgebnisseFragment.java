@@ -65,7 +65,6 @@ public class ErgebnisseFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		// setHasOptionsMenu(true);
 
-		
 		mAdapter = new ListViewadapter(getActivity());
 		dbspiele = new DatabasehandlerSpiele(getActivity());
 		dbuuid = new DatabasehandlerUUID(getActivity());

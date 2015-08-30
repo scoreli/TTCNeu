@@ -111,6 +111,7 @@ public class InternetService extends Activity {
 								"Register Response: " + response.toString());
 						// hideDialog();
 						try {
+
 							JSONObject jObj = new JSONObject(response);
 							boolean error = jObj.getBoolean("error");
 							if (!error) {
@@ -320,16 +321,21 @@ public class InternetService extends Activity {
 
 							}
 						} catch (JSONException e) {
-							meldung = "Keine Spiele vorhanden";
+							meldung = "Keine Daten vorhanden";
 							e.printStackTrace();
 						}
 						/**
 						 * Hier wird das Fragment neu aufgerufen um so die
-						 * Anzeige zu aktualisieren.
+						 * Anzeige zu aktualisieren. Wichtig ist hierbei das man
+						 * von der Activity den Fragmentmanager aufruft sonst
+						 * findet er kein fragment
 						 */
-						ErgebnisseFragment myFragment = (ErgebnisseFragment) getFragmentManager()
-								.findFragmentByTag("Ergebnisse_Fragment");
+						ErgebnisseFragment myFragment = (ErgebnisseFragment) hans
+								.getFragmentManager().findFragmentByTag(
+										"Ergebnisse_Fragment");
+
 						if (myFragment != null && myFragment.isVisible()) {
+
 							FragmentManager fragmentManager = hans
 									.getFragmentManager();
 

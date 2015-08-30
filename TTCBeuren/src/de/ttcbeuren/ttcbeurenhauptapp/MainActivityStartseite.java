@@ -1,7 +1,6 @@
 package de.ttcbeuren.ttcbeurenhauptapp;
 
 import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import de.ttcbeuren.ttcbeurenhauptapp.aktuelles.AktuellesFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity;
@@ -47,8 +45,7 @@ public class MainActivityStartseite extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-
-	}
+		}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
