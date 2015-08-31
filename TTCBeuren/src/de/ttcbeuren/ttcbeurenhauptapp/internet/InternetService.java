@@ -8,10 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +34,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
  *
  */
 public class InternetService extends Activity {
+
 	private static final String TAGregister = InternetService.class
 			.getSimpleName();
 	// public SpieleDesUsersActivity desUsers;
@@ -73,8 +72,8 @@ public class InternetService extends Activity {
 
 		// Progress dialog
 		// Geht nicht
-		// pDialog = new ProgressDialog(servus.getApplicationContext());
-		// pDialog.setCancelable(false);
+		pDialog = new ProgressDialog(servus);
+		pDialog.setCancelable(false);
 	}
 
 	/**
@@ -99,8 +98,8 @@ public class InternetService extends Activity {
 		// Tag used to cancel the request
 		String tag_string_req = "req_speichereSpiel";
 
-		// pDialog.setMessage("Erstellen ...");
-		// showDialog();
+		pDialog.setMessage("Erstellen ...");
+		 showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_Spiele, new Response.Listener<String>() {
@@ -109,7 +108,7 @@ public class InternetService extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAGregister,
 								"Register Response: " + response.toString());
-						// hideDialog();
+						 hideDialog();
 						try {
 
 							JSONObject jObj = new JSONObject(response);
@@ -194,7 +193,7 @@ public class InternetService extends Activity {
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage() + "hier", Toast.LENGTH_LONG)
 								.show();
-						// hideDialog();
+						 hideDialog();
 
 					}
 				}) {
@@ -238,8 +237,8 @@ public class InternetService extends Activity {
 		// Tag used to cancel the request
 		String tag_string_req = "req_holen";
 
-		// pDialog.setMessage("Holen ...");
-		// showDialog();
+		 pDialog.setMessage("Aktualisieren ...");
+		 showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_Spiele, new Response.Listener<String>() {
@@ -248,7 +247,7 @@ public class InternetService extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAGholen,
 								"Veranstaltung Holen: " + response.toString());
-						// hideDialog();
+						 hideDialog();
 						try {
 							/*
 							 * Toast.makeText(getApplicationContext(),
@@ -361,7 +360,7 @@ public class InternetService extends Activity {
 
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage(), Toast.LENGTH_LONG).show();
-						// hideDialog();
+						 hideDialog();
 
 					}
 				}) {
@@ -394,8 +393,8 @@ public class InternetService extends Activity {
 		// Tag used to cancel the request
 		String tag_string_req = "req_loescheSpiel";
 
-		// pDialog.setMessage("Löschen ...");
-		// showDialog();
+		 pDialog.setMessage("Löschen ...");
+		 showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_Spiele, new Response.Listener<String>() {
@@ -405,7 +404,7 @@ public class InternetService extends Activity {
 						Log.d(TAGimSpiel,
 								"Veranstaltung Response: "
 										+ response.toString());
-						// hideDialog();
+						 hideDialog();
 
 						try {
 
@@ -439,7 +438,7 @@ public class InternetService extends Activity {
 
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage(), Toast.LENGTH_LONG).show();
-						// hideDialog();
+						 hideDialog();
 
 					}
 				}) {
@@ -478,8 +477,8 @@ public class InternetService extends Activity {
 		// Tag used to cancel the request
 		String tag_string_req = "req_updateveranstaltung";
 
-		// pDialog.setMessage("Aktualisieren ...");
-		// showDialog();
+		 pDialog.setMessage("Updaten ...");
+		 showDialog();
 
 		StringRequest strReq = new StringRequest(Method.POST,
 				AppConfig.URL_Spiele, new Response.Listener<String>() {
@@ -488,7 +487,7 @@ public class InternetService extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAGimSpiel,
 								"Register Response: " + response.toString());
-						// hideDialog();
+						 hideDialog();
 
 						try {
 							JSONObject jObj = new JSONObject(response);
@@ -561,7 +560,7 @@ public class InternetService extends Activity {
 
 						Toast.makeText(hans.getApplicationContext(),
 								error.getMessage(), Toast.LENGTH_LONG).show();
-						// hideDialog();
+						 hideDialog();
 
 					}
 				}) {

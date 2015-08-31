@@ -19,9 +19,9 @@
     <string name="menu_aenderungskonstante">Änderungskonstante</string>
     <string name="text_sieg">Win</string>
     <string name="title_activity_aenderungskonstante">Änderungskonstante</string>
-    <string name="ptext_unter21">Du bist jünger als 21 Jahre</string>
-    <string name="ptext_unter16">Du bist jünger als 16 Jahre</string>
-    <string name="ptext_unter1jahrkein ">1 Jahr kein und seit letzter Wertung &lt; 15 Spiele</string>
+    <string name="ptext_unter21">Sie sind jünger als 21</string>
+    <string name="ptext_unter16">Sie sind jünger als 16</string>
+    <string name="ptext_unter1jahrkein ">1 Jahr kein Spiel</string>
     <string name="ptext_wenigerals30">Bewertete Spiele &lt; 30 </string>
     <string name="ptext_nachwuchsausgleich">Nachwuchsausgleich</string>
     <string name="text_account">Anmelden</string>

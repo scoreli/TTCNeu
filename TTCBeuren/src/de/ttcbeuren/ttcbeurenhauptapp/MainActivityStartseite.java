@@ -45,28 +45,29 @@ public class MainActivityStartseite extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		}
+	}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
+		/*
 		if (position == 0) {
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction ft = fragmentManager.beginTransaction();
 			ft.replace(R.id.container, new AktuellesFragment().newInstance())
 					.commit();
 			mTitle = getString(R.string.title_aktuelles);
-		}
-		if (position == 1) {
+		}*/
+		if (position == 0) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager
 					.beginTransaction()
 					.replace(R.id.container,
-							new ErgebnisseFragment().newInstance(),"Ergebnisse_Fragment")
-				.commit();
+							new ErgebnisseFragment().newInstance(),
+							"Ergebnisse_Fragment").commit();
 			mTitle = getString(R.string.title_ergebnisse);
 
 		}
-		if (position == 2) {
+		if (position == 1) {
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction ft = fragmentManager.beginTransaction();
 			ft.replace(R.id.container, new TTRFragment().newInstance())
@@ -78,16 +79,18 @@ public class MainActivityStartseite extends Activity implements
 
 	public void onSectionAttached(int number) {
 		switch (number) {
+		/*
+		 * case 1: mTitle = getString(R.string.title_aktuelles);
+		 * 
+		 * break;
+		 */
+
 		case 1:
-			mTitle = getString(R.string.title_aktuelles);
-		
-			break;
-		case 2:
 			mTitle = getString(R.string.title_ergebnisse);
 			break;
-		case 3:
+		case 2:
 			mTitle = getString(R.string.title_ttrrechner);
-			
+
 			break;
 		}
 	}
@@ -137,8 +140,9 @@ public class MainActivityStartseite extends Activity implements
 					NeuesSpielActivity.class));
 			return true;
 		}
-		if (id == R.id.menu_erstellen_newsfeed) {startActivity(new Intent(MainActivityStartseite.this,
-				Activitypopup.class));
+		if (id == R.id.menu_erstellen_newsfeed) {
+			startActivity(new Intent(MainActivityStartseite.this,
+					Activitypopup.class));
 
 			return true;
 		}
