@@ -2,6 +2,7 @@ package de.ttcbeuren.ttcbeurenhauptapp;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,13 +19,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
-public class ImSpielActivity extends Activity {
+public class ImSpielActivity extends Activity implements AlertFragment.AlertDialogListener {
 	/**
 	 * Werte für die initalisierung von im Spiel
 	 * 
@@ -75,53 +77,31 @@ public class ImSpielActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				aktualisieren();
-
+				
+				if(checkspielistentschieden.isChecked()){DialogFragment bestaetigenFragment = new AlertFragment();
+				 
+			    bestaetigenFragment.show(getFragmentManager(), "bestaetigenaktualisieren");		}
+				else {
+					aktualisieren();	
+				}
+				 
+		
 			
 
 			}});
 		btnloeschen.setOnClickListener(new OnClickListener() {
-			/**
-			 * http://android-er.blogspot.kr/2012/03/example-of-using-
-			 * popupwindow.html
-			 */
+
 			@Override
 			public void onClick(View v) {
-				LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
-						.getSystemService(LAYOUT_INFLATER_SERVICE);
-				View popupView = layoutInflater.inflate(
-						R.layout.bestaetigenpopup, null);
-				TextView textmeldung = (TextView) popupView
-						.findViewById(R.id.textview_popup);
-				textmeldung.setText("Sind sie sicher ?");
-				final PopupWindow popupWindow = new PopupWindow(popupView,
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-
-				Button btnDismiss = (Button) popupView
-						.findViewById(R.id.dismiss);
-				btnDismiss.setOnClickListener(new Button.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						popupWindow.dismiss();
-					}
-				});
-				Button btnaccept = (Button) popupView
-						.findViewById(R.id.btn_accept);
-				btnaccept.setOnClickListener(new Button.OnClickListener() {
-					public void onClick(View v) {
-
-						loeschen();
-
-						popupWindow.dismiss();
-					}
-
-				});
-				popupWindow.showAsDropDown(btnloeschen, 50, -30);
-
+				 DialogFragment bestaetigenFragment = new AlertFragment();
+				    bestaetigenFragment.show(getFragmentManager(), "bestaetigenloeschen");				
+			
+			
+			
 			}
+			
 		});
+		
 		btnheimplusein.setOnClickListener(new OnClickListener() {
 			/**
 			 * Wird der Button Heim plus eins gedrückt, wird nochmal die
@@ -199,7 +179,25 @@ public class ImSpielActivity extends Activity {
 		});
 
 	}
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		switch(dialog.getTag()){
+		case "bestaetigenloeschen":
+			loeschen();
+			break;
+		
+		case "bestaetigenaktualisieren":
+			aktualisieren();
+			break;
+		
+		}
+	}
 
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
+	}
 	private void loeschen() {
 
 		internetservice.Spielloeschen(
@@ -337,6 +335,8 @@ public class ImSpielActivity extends Activity {
 		tpSpielende.setIs24HourView(true);
 		tpSpielende.setVisibility(View.GONE);
 	}
+
+	
 
 	
 }

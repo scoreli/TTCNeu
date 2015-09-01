@@ -1,6 +1,7 @@
 package de.ttcbeuren.ttcbeurenhauptapp;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,8 @@ import de.ttcbeuren.ttcbeurenhauptapp.loginregister.SessionManager;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
-public class NeuesSpielActivity extends Activity {
+public class NeuesSpielActivity extends Activity implements
+		AlertFragment.AlertDialogListener {
 	private CheckBox checkbeurenistheim, checkspielistentschieden;
 	private Spinner spnSpielsystem, spnMannschaftsart, spnBeurenMannschaft,
 			spnGegnerMannschaft, spnGegnermannschaftsnummer;
@@ -100,7 +102,14 @@ public class NeuesSpielActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Spielerstellen();
+				if (checkspielistentschieden.isChecked()) {
+					DialogFragment bestaetigenFragment = new AlertFragment();
+					bestaetigenFragment.show(getFragmentManager(),
+							"bestaetigenerstellen");
+				} else {
+					Spielerstellen();
+
+				}
 
 			}
 
@@ -287,6 +296,23 @@ public class NeuesSpielActivity extends Activity {
 	}
 
 	private void viewsfreferenz() {
+
+	}
+
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		switch (dialog.getTag()) {
+		case "bestaetigenerstellen":
+			Spielerstellen();
+			break;
+
+		}
+
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
 
 	}
 }

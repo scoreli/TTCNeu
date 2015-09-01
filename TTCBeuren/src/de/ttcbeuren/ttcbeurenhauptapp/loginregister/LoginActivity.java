@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,7 +145,7 @@ public class LoginActivity extends Activity {
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 				Button btnDismiss = (Button) popupView
-						.findViewById(R.id.dismiss);
+						.findViewById(R.id.btn_dismiss);
 				btnDismiss.setOnClickListener(new Button.OnClickListener() {
 
 					@Override
@@ -165,7 +166,8 @@ public class LoginActivity extends Activity {
 						popupWindow.dismiss();
 					}
 				});
-				popupWindow.showAsDropDown(btnaccountdelete, 50, -30);
+				//popupWindow.showAsDropDown(btnaccountdelete, 50, -30);
+				popupWindow.showAtLocation(btnaccountdelete, Gravity.CENTER, 50, 30);
 			}
 		});
 

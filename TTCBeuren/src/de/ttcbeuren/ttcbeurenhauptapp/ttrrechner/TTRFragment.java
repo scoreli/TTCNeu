@@ -48,7 +48,7 @@ public class TTRFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
-		
+
 		View root = inflater.inflate(R.layout.fragment_ttrrechner, container,
 				false);
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
@@ -64,7 +64,7 @@ public class TTRFragment extends Fragment {
 		check_b3 = (CheckBox) root.findViewById(R.id.box_siegb3);
 		check_b4 = (CheckBox) root.findViewById(R.id.box_siegb4);
 		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
-	
+
 		// TODO Auto-generated method stub
 		/**
 		 * Es sollte behoben werden das der richtige Titel angezeigt wird.
@@ -93,8 +93,8 @@ public class TTRFragment extends Fragment {
 		String sttrb0 = ttrb0.getText().toString();
 		String sttrb1 = ttrb1.getText().toString();
 		String sttrb2 = ttrb2.getText().toString();
-		String sttrb3 = ttrb2.getText().toString();
-		String sttrb4 = ttrb2.getText().toString();
+		String sttrb3 = ttrb3.getText().toString();
+		String sttrb4 = ttrb4.getText().toString();
 		/**
 		 * Hier wird abgeprüft ob die Felder leer sind. Außerdem ob das ttra
 		 * feld nicht leer ist.
@@ -105,6 +105,7 @@ public class TTRFragment extends Fragment {
 		}
 		if (!TextUtils.isEmpty(sttrb0) && ttrab) {
 			ittrb0 = Integer.parseInt(sttrb0);
+
 			gw0 = gewinnwahrscheinlichkeit(ittra, ittrb0);
 			// Wird geprüft ob gewonnen oder nicht
 			if (check_b0.isChecked()) {
@@ -117,6 +118,7 @@ public class TTRFragment extends Fragment {
 		}
 		if (!TextUtils.isEmpty(sttrb1) && ttrab) {
 			ittrb1 = Integer.parseInt(sttrb1);
+
 			gw1 = gewinnwahrscheinlichkeit(ittra, ittrb1);
 			int zwischen = gesamt;
 			// Wird geprüft ob gewonnen oder nicht
@@ -125,10 +127,12 @@ public class TTRFragment extends Fragment {
 			} else {
 				gesamt = verlustpunkte(gw1);
 			}
+
 			gesamt = gesamt + zwischen;
 		}
 		if (!TextUtils.isEmpty(sttrb2) && ttrab) {
 			ittrb2 = Integer.parseInt(sttrb2);
+
 			gw2 = gewinnwahrscheinlichkeit(ittra, ittrb2);
 			int zwischen = gesamt;
 			// Wird geprüft ob gewonnen oder nicht
@@ -138,32 +142,37 @@ public class TTRFragment extends Fragment {
 			} else {
 				gesamt = verlustpunkte(gw2);
 			}
+
 			gesamt = gesamt + zwischen;
 		}
 		if (!TextUtils.isEmpty(sttrb3) && ttrab) {
 			ittrb3 = Integer.parseInt(sttrb3);
+
 			gw3 = gewinnwahrscheinlichkeit(ittra, ittrb3);
 			int zwischen = gesamt;
 			// Wird geprüft ob gewonnen oder nicht
-			if (check_b2.isChecked()) {
+			if (check_b3.isChecked()) {
 				gesamt = gewinnpunkte(gw3);
 
 			} else {
 				gesamt = verlustpunkte(gw3);
 			}
+
 			gesamt = gesamt + zwischen;
 		}
 		if (!TextUtils.isEmpty(sttrb4) && ttrab) {
 			ittrb4 = Integer.parseInt(sttrb4);
+
 			gw4 = gewinnwahrscheinlichkeit(ittra, ittrb4);
 			int zwischen = gesamt;
 			// Wird geprüft ob gewonnen oder nicht
-			if (check_b2.isChecked()) {
+			if (check_b4.isChecked()) {
 				gesamt = gewinnpunkte(gw4);
 
 			} else {
 				gesamt = verlustpunkte(gw4);
 			}
+
 			gesamt = gesamt + zwischen;
 		}
 		Toast.makeText(

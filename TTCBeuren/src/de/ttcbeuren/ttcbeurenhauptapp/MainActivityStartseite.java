@@ -2,9 +2,12 @@ package de.ttcbeuren.ttcbeurenhauptapp;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import de.ttcbeuren.ttcbeurenhauptapp.aktuelles.AktuellesFragment;
+import android.widget.Toast;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.ttrrechner.TTRFragment;
@@ -45,6 +48,10 @@ public class MainActivityStartseite extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		
+		
+		
+		
 	}
 
 	@Override
@@ -90,11 +97,12 @@ public class MainActivityStartseite extends Activity implements
 			break;
 		case 2:
 			mTitle = getString(R.string.title_ttrrechner);
-
+			   
+			
 			break;
 		}
 	}
-
+	
 	public void restoreActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -133,6 +141,7 @@ public class MainActivityStartseite extends Activity implements
 		if (id == R.id.menu_account) {
 			startActivity(new Intent(MainActivityStartseite.this,
 					LoginActivity.class));
+			
 			return true;
 		}
 		if (id == R.id.menu_spiel_erstellen) {
@@ -191,5 +200,7 @@ public class MainActivityStartseite extends Activity implements
 							.getInt(ARG_SECTION_NUMBER));
 		}
 	}
+
+	
 
 }

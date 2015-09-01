@@ -298,7 +298,5 @@ public class ErgebnisseFragment extends Fragment implements
 
 	}
 
-	public void sysdo() {
-		System.out.println("dl");
-	}
+	
 }
