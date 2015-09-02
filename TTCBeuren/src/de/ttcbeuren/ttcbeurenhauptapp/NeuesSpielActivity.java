@@ -27,7 +27,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
 public class NeuesSpielActivity extends Activity implements
-		AlertFragment.AlertDialogListener {
+		AlertFragmentsConfirm.AlertDialogListener {
 	private CheckBox checkbeurenistheim, checkspielistentschieden;
 	private Spinner spnSpielsystem, spnMannschaftsart, spnBeurenMannschaft,
 			spnGegnerMannschaft, spnGegnermannschaftsnummer;
@@ -103,7 +103,7 @@ public class NeuesSpielActivity extends Activity implements
 			@Override
 			public void onClick(View v) {
 				if (checkspielistentschieden.isChecked()) {
-					DialogFragment bestaetigenFragment = new AlertFragment();
+					DialogFragment bestaetigenFragment = new AlertFragmentsConfirm();
 					bestaetigenFragment.show(getFragmentManager(),
 							"bestaetigenerstellen");
 				} else {

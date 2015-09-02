@@ -1,11 +1,9 @@
 package de.ttcbeuren.ttcbeurenhauptapp;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,20 +11,18 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
-public class ImSpielActivity extends Activity implements AlertFragment.AlertDialogListener {
+public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.AlertDialogListener {
 	/**
 	 * Werte für die initalisierung von im Spiel
 	 * 
@@ -78,7 +74,7 @@ public class ImSpielActivity extends Activity implements AlertFragment.AlertDial
 			@Override
 			public void onClick(View v) {
 				
-				if(checkspielistentschieden.isChecked()){DialogFragment bestaetigenFragment = new AlertFragment();
+				if(checkspielistentschieden.isChecked()){DialogFragment bestaetigenFragment = new AlertFragmentsConfirm();
 				 
 			    bestaetigenFragment.show(getFragmentManager(), "bestaetigenaktualisieren");		}
 				else {
@@ -93,7 +89,7 @@ public class ImSpielActivity extends Activity implements AlertFragment.AlertDial
 
 			@Override
 			public void onClick(View v) {
-				 DialogFragment bestaetigenFragment = new AlertFragment();
+				 DialogFragment bestaetigenFragment = new AlertFragmentsConfirm();
 				    bestaetigenFragment.show(getFragmentManager(), "bestaetigenloeschen");				
 			
 			

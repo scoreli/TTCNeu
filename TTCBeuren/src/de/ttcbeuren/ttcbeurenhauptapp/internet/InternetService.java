@@ -8,8 +8,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,8 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import de.ttcbeuren.ttcbeurenhauptapp.ConnectionDetector;
 import de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity;
-import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.NavigationDrawerFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
@@ -52,7 +57,8 @@ public class InternetService extends Activity {
 	private static final String TAG_VeranstaltungenDesUsers = "veranstaltungdesusers";
 	private ProgressDialog pDialog;
 	Activity hans;
-	private MainActivityStartseite mainactivity;
+	private ConnectionDetector myConnection;
+	// private MainActivityStartseite mainactivity;
 	/**
 	 * Musste hier eingefügt werden wegen dem zwang zu final
 	 */
@@ -69,7 +75,7 @@ public class InternetService extends Activity {
 	public InternetService(Activity servus) {
 		db = new DatabasehandlerSpiele(servus.getApplicationContext());
 		hans = servus;
-
+		myConnection = new ConnectionDetector(servus.getApplicationContext());
 		// Progress dialog
 		// Geht nicht
 		pDialog = new ProgressDialog(servus);
@@ -95,205 +101,58 @@ public class InternetService extends Activity {
 			final String gastvereinsnummer, final String punkteHeim,
 			final String punkteGast, final String spielbeginn,
 			final String spielende, final String status, final String istbeendet) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_speichereSpiel";
+		if (myConnection.isConnectingToInternet()) {
+			// Tag used to cancel the request
+			String tag_string_req = "req_speichereSpiel";
 
-		pDialog.setMessage("Erstellen ...");
-		 showDialog();
+			pDialog.setMessage("Erstellen ...");
+			showDialog();
 
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_Spiele, new Response.Listener<String>() {
+			StringRequest strReq = new StringRequest(Method.POST,
+					AppConfig.URL_Spiele, new Response.Listener<String>() {
 
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAGregister,
-								"Register Response: " + response.toString());
-						 hideDialog();
-						try {
+						@Override
+						public void onResponse(String response) {
+							Log.d(TAGregister,
+									"Register Response: " + response.toString());
+							hideDialog();
+							try {
 
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							if (!error) {
-								// User successfully stored in MySQL
-								// Now store the user in sqlite
-								// String uid = jObj.getString("uid");
+								JSONObject jObj = new JSONObject(response);
+								boolean error = jObj.getBoolean("error");
+								if (!error) {
+									// User successfully stored in MySQL
+									// Now store the user in sqlite
+									// String uid = jObj.getString("uid");
 
-								JSONObject user = jObj.getJSONObject("spiel");
-								String veranstaltung_idj = user
-										.getString("veranstaltung_id");
-								String benutzer_idj = user
-										.getString("benutzer_id");
-								String spielsystemj = user
-										.getString("spielsystem");
-								String mannschaftsartj = user
-										.getString("mannschaftsart");
-								String heimvereinj = user
-										.getString("heimverein");
-								String heimvereinsnummerj = user
-										.getString("heimvereinsnummer");
-								String gastvereinj = user
-										.getString("gastverein");
-								String gastvereinsnummerj = user
-										.getString("gastvereinsnummer");
-								String punkteHeimj = user
-										.getString("punkteHeim");
-								String punkteGastj = user
-										.getString("punkteGast");
-								String spielbeginnj = user
-										.getString("spielbeginn");
-								String spielendej = user.getString("spielende");
-								String statusj = user.getString("status");
-								String istbeendetj = user
-										.getString("istbeendet");
-								db.addSpiel(new Spiel(Integer
-										.parseInt(veranstaltung_idj), Integer
-										.parseInt(punkteHeimj), Integer
-										.parseInt(punkteGastj), spielsystemj,
-										mannschaftsartj, heimvereinj,
-										heimvereinsnummerj, gastvereinj,
-										gastvereinsnummerj, statusj,
-										spielbeginnj, spielendej, Integer
-												.parseInt(istbeendetj), Integer
-												.parseInt(benutzer_idj)));
-
-								/*
-								 * // Launch login activity Intent intent = new
-								 * Intent( RegisterVeranstaltung.this,
-								 * LoginActivity.class); startActivity(intent);
-								 * finish();
-								 */
-								hans.finish();// Hat beendet da man was
-												// aufgerufen
-												// hat obwohl es beendet worden
-												// ist.
-							} else {
-
-								// Error occurred in registration. Get the error
-								// message
-								String errorMsg = jObj.getString("error_msg");
-
-								Toast.makeText(hans.getApplicationContext(),
-										errorMsg, Toast.LENGTH_LONG).show();
-
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-							Toast.makeText(hans.getApplicationContext(),
-									e.toString(), Toast.LENGTH_LONG).show();
-						}
-					}
-
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGregister,
-								"Registration Error: " + error.getMessage());
-
-						Toast.makeText(hans.getApplicationContext(),
-								error.getMessage() + "hier", Toast.LENGTH_LONG)
-								.show();
-						 hideDialog();
-
-					}
-				}) {
-
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "speicherSpiel");// Zuerst Tag dann
-				// Daten
-				params.put("user_id", user_id);
-				params.put("spielsystem", spielsystem);
-				params.put("mannschaftsart", mannschaftsart);
-				params.put("heimverein", heimverein);
-				params.put("heimvereinsnummer", heimvereinsnummer);
-				params.put("gastverein", gastverein);
-				params.put("gastvereinsnummer", gastvereinsnummer);
-				params.put("punkteHeim", punkteHeim);
-				params.put("punkteGast", punkteGast);
-				params.put("spielbeginn", spielbeginn);
-				params.put("spielende", spielende);
-				params.put("status", status);
-				params.put("istbeendet", istbeendet);
-
-				return params;
-			}
-
-		};
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-	}
-
-	/**
-	 * Die Funktion holt alle Veranstaltungen und speichert diese in die
-	 * My_Sqllite Datenbank ab. Dies wird nach der gleichen vorhergehensweise
-	 * realisiert wie in registerVeranstaltung(). Da die gleiche Bibliothek
-	 * benutzt wird.
-	 * */
-	public void Spielholen() {
-		// Tag used to cancel the request
-		String tag_string_req = "req_holen";
-
-		 pDialog.setMessage("Aktualisieren ...");
-		 showDialog();
-
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_Spiele, new Response.Listener<String>() {
-
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAGholen,
-								"Veranstaltung Holen: " + response.toString());
-						 hideDialog();
-						try {
-							/*
-							 * Toast.makeText(getApplicationContext(),
-							 * response.toString(), Toast.LENGTH_SHORT) .show();
-							 */
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							// error = false;
-							if (!error) {
-								// User successfully stored in MySQL
-								// Now store the user in sqlite
-								db.deleteSpiele();
-
-								JSONArray uebergabe = jObj
-										.getJSONArray(TAG_Spiel);
-								for (int i = 0; i < uebergabe.length(); i++) {
-									JSONObject veranstaltung = uebergabe
-											.getJSONObject(i);
-
-									String veranstaltung_idj = veranstaltung
+									JSONObject user = jObj
+											.getJSONObject("spiel");
+									String veranstaltung_idj = user
 											.getString("veranstaltung_id");
-									String benutzer_idj = veranstaltung
+									String benutzer_idj = user
 											.getString("benutzer_id");
-									String spielsystemj = veranstaltung
+									String spielsystemj = user
 											.getString("spielsystem");
-									String mannschaftsartj = veranstaltung
+									String mannschaftsartj = user
 											.getString("mannschaftsart");
-									String heimvereinj = veranstaltung
+									String heimvereinj = user
 											.getString("heimverein");
-									String heimvereinsnummerj = veranstaltung
+									String heimvereinsnummerj = user
 											.getString("heimvereinsnummer");
-									String gastvereinj = veranstaltung
+									String gastvereinj = user
 											.getString("gastverein");
-									String gastvereinsnummerj = veranstaltung
+									String gastvereinsnummerj = user
 											.getString("gastvereinsnummer");
-									String punkteHeimj = veranstaltung
+									String punkteHeimj = user
 											.getString("punkteHeim");
-									String punkteGastj = veranstaltung
+									String punkteGastj = user
 											.getString("punkteGast");
-									String spielbeginnj = veranstaltung
+									String spielbeginnj = user
 											.getString("spielbeginn");
-									String spielendej = veranstaltung
+									String spielendej = user
 											.getString("spielende");
-									String statusj = veranstaltung
-											.getString("status");
-									String istbeendetj = veranstaltung
+									String statusj = user.getString("status");
+									String istbeendetj = user
 											.getString("istbeendet");
 									db.addSpiel(new Spiel(Integer
 											.parseInt(veranstaltung_idj),
@@ -306,77 +165,254 @@ public class InternetService extends Activity {
 											Integer.parseInt(istbeendetj),
 											Integer.parseInt(benutzer_idj)));
 
+									/*
+									 * // Launch login activity Intent intent =
+									 * new Intent( RegisterVeranstaltung.this,
+									 * LoginActivity.class);
+									 * startActivity(intent); finish();
+									 */
+									hans.finish();// Hat beendet da man was
+													// aufgerufen
+													// hat obwohl es beendet
+													// worden
+													// ist.
+								} else {
+
+									// Error occurred in registration. Get the
+									// error
+									// message
+									String errorMsg = jObj
+											.getString("error_msg");
+
+									Toast.makeText(
+											hans.getApplicationContext(),
+											errorMsg, Toast.LENGTH_LONG).show();
+
 								}
-
-							} else {
-
-								// Error occurred in registration. Get the error
-								// message
-								// String errorMsg =
-								// jObj.getString("error_msg");
-
-								// Toast.makeText(getApplicationContext(),
-								// errorMsg, Toast.LENGTH_LONG).show();
-
+							} catch (JSONException e) {
+								e.printStackTrace();
+								Toast.makeText(hans.getApplicationContext(),
+										e.toString(), Toast.LENGTH_LONG).show();
 							}
-						} catch (JSONException e) {
-							meldung = "Keine Daten vorhanden";
-							e.printStackTrace();
 						}
-						/**
-						 * Hier wird das Fragment neu aufgerufen um so die
-						 * Anzeige zu aktualisieren. Wichtig ist hierbei das man
-						 * von der Activity den Fragmentmanager aufruft sonst
-						 * findet er kein fragment
-						 */
-						ErgebnisseFragment myFragment = (ErgebnisseFragment) hans
-								.getFragmentManager().findFragmentByTag(
-										"Ergebnisse_Fragment");
 
-						if (myFragment != null && myFragment.isVisible()) {
+					}, new Response.ErrorListener() {
 
-							FragmentManager fragmentManager = hans
-									.getFragmentManager();
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.e(TAGregister,
+									"Registration Error: " + error.getMessage());
 
-							fragmentManager
+							Toast.makeText(hans.getApplicationContext(),
+									error.getMessage() + "hier",
+									Toast.LENGTH_LONG).show();
+							hideDialog();
 
-									.beginTransaction()
-									.replace(
-											R.id.container,
-											new ErgebnisseFragment()
-													.newInstance()).commit();
 						}
-						Toast.makeText(hans.getApplicationContext(), meldung,
+					}) {
 
-						Toast.LENGTH_SHORT).show();
+				@Override
+				protected Map<String, String> getParams() {
+					// Posting params to register url
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("tag", "speicherSpiel");// Zuerst Tag dann
+					// Daten
+					params.put("user_id", user_id);
+					params.put("spielsystem", spielsystem);
+					params.put("mannschaftsart", mannschaftsart);
+					params.put("heimverein", heimverein);
+					params.put("heimvereinsnummer", heimvereinsnummer);
+					params.put("gastverein", gastverein);
+					params.put("gastvereinsnummer", gastvereinsnummer);
+					params.put("punkteHeim", punkteHeim);
+					params.put("punkteGast", punkteGast);
+					params.put("spielbeginn", spielbeginn);
+					params.put("spielende", spielende);
+					params.put("status", status);
+					params.put("istbeendet", istbeendet);
 
-					}
+					return params;
+				}
 
-				}, new Response.ErrorListener() {
+			};
 
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGholen, "Holenfehler: " + error.getMessage());
+			// Adding request to request queue
+			AppController.getInstance().addToRequestQueue(strReq,
+					tag_string_req);
+		} else {
 
-						Toast.makeText(hans.getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						 hideDialog();
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+		}
+	}
 
-					}
-				}) {
+	/**
+	 * Die Funktion holt alle Veranstaltungen und speichert diese in die
+	 * My_Sqllite Datenbank ab. Dies wird nach der gleichen vorhergehensweise
+	 * realisiert wie in registerVeranstaltung(). Da die gleiche Bibliothek
+	 * benutzt wird.
+	 * */
+	public void Spielholen() {
+		if (myConnection.isConnectingToInternet()) {
+			// Tag used to cancel the request
+			String tag_string_req = "req_holen";
 
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "holespiele");
-				return params;
-			}
+			pDialog.setMessage("Aktualisieren ...");
+			showDialog();
 
-		};
+			StringRequest strReq = new StringRequest(Method.POST,
+					AppConfig.URL_Spiele, new Response.Listener<String>() {
 
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+						@Override
+						public void onResponse(String response) {
+							Log.d(TAGholen,
+									"Veranstaltung Holen: "
+											+ response.toString());
+							hideDialog();
+							try {
+								/*
+								 * Toast.makeText(getApplicationContext(),
+								 * response.toString(), Toast.LENGTH_SHORT)
+								 * .show();
+								 */
+								JSONObject jObj = new JSONObject(response);
+								boolean error = jObj.getBoolean("error");
+								// error = false;
+								if (!error) {
+									// User successfully stored in MySQL
+									// Now store the user in sqlite
+									db.deleteSpiele();
+
+									JSONArray uebergabe = jObj
+											.getJSONArray(TAG_Spiel);
+									for (int i = 0; i < uebergabe.length(); i++) {
+										JSONObject veranstaltung = uebergabe
+												.getJSONObject(i);
+
+										String veranstaltung_idj = veranstaltung
+												.getString("veranstaltung_id");
+										String benutzer_idj = veranstaltung
+												.getString("benutzer_id");
+										String spielsystemj = veranstaltung
+												.getString("spielsystem");
+										String mannschaftsartj = veranstaltung
+												.getString("mannschaftsart");
+										String heimvereinj = veranstaltung
+												.getString("heimverein");
+										String heimvereinsnummerj = veranstaltung
+												.getString("heimvereinsnummer");
+										String gastvereinj = veranstaltung
+												.getString("gastverein");
+										String gastvereinsnummerj = veranstaltung
+												.getString("gastvereinsnummer");
+										String punkteHeimj = veranstaltung
+												.getString("punkteHeim");
+										String punkteGastj = veranstaltung
+												.getString("punkteGast");
+										String spielbeginnj = veranstaltung
+												.getString("spielbeginn");
+										String spielendej = veranstaltung
+												.getString("spielende");
+										String statusj = veranstaltung
+												.getString("status");
+										String istbeendetj = veranstaltung
+												.getString("istbeendet");
+										db.addSpiel(new Spiel(Integer
+												.parseInt(veranstaltung_idj),
+												Integer.parseInt(punkteHeimj),
+												Integer.parseInt(punkteGastj),
+												spielsystemj, mannschaftsartj,
+												heimvereinj,
+												heimvereinsnummerj,
+												gastvereinj,
+												gastvereinsnummerj, statusj,
+												spielbeginnj, spielendej,
+												Integer.parseInt(istbeendetj),
+												Integer.parseInt(benutzer_idj)));
+
+									}
+
+								} else {
+
+									// Error occurred in registration. Get the
+									// error
+									// message
+									// String errorMsg =
+									// jObj.getString("error_msg");
+
+									// Toast.makeText(getApplicationContext(),
+									// errorMsg, Toast.LENGTH_LONG).show();
+
+								}
+							} catch (JSONException e) {
+								meldung = "Keine Daten vorhanden";
+								e.printStackTrace();
+							}
+							/**
+							 * Hier wird das Fragment neu aufgerufen um so die
+							 * Anzeige zu aktualisieren. Wichtig ist hierbei das
+							 * man von der Activity den Fragmentmanager aufruft
+							 * sonst findet er kein fragment
+							 */
+							ErgebnisseFragment myFragment = (ErgebnisseFragment) hans
+									.getFragmentManager().findFragmentByTag(
+											"Ergebnisse_Fragment");
+
+							if (myFragment != null && myFragment.isVisible()) {
+
+								FragmentManager fragmentManager = hans
+										.getFragmentManager();
+
+								fragmentManager
+
+										.beginTransaction()
+										.replace(
+												R.id.container,
+												new ErgebnisseFragment()
+														.newInstance())
+										.commit();
+							}
+							Toast.makeText(hans.getApplicationContext(),
+									meldung,
+
+									Toast.LENGTH_SHORT).show();
+
+						}
+
+					}, new Response.ErrorListener() {
+
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.e(TAGholen,
+									"Holenfehler: " + error.getMessage());
+
+							Toast.makeText(hans.getApplicationContext(),
+									error.getMessage(), Toast.LENGTH_LONG)
+									.show();
+							hideDialog();
+
+						}
+					}) {
+
+				@Override
+				protected Map<String, String> getParams() {
+					// Posting params to register url
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("tag", "holespiele");
+					return params;
+				}
+
+			};
+
+			// Adding request to request queue
+			AppController.getInstance().addToRequestQueue(strReq,
+					tag_string_req);
+		} else {
+
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+
+		}
 	}
 
 	/**
@@ -389,75 +425,83 @@ public class InternetService extends Activity {
 	 */
 	public void Spielloeschen(final String veranstaltungs_id,
 			final String benutzer_id) {
+		if (myConnection.isConnectingToInternet()) {
+			// Tag used to cancel the request
+			String tag_string_req = "req_loescheSpiel";
 
-		// Tag used to cancel the request
-		String tag_string_req = "req_loescheSpiel";
+			pDialog.setMessage("Löschen ...");
+			showDialog();
 
-		 pDialog.setMessage("Löschen ...");
-		 showDialog();
+			StringRequest strReq = new StringRequest(Method.POST,
+					AppConfig.URL_Spiele, new Response.Listener<String>() {
 
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_Spiele, new Response.Listener<String>() {
+						@Override
+						public void onResponse(String response) {
+							Log.d(TAGimSpiel, "Veranstaltung Response: "
+									+ response.toString());
+							hideDialog();
 
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAGimSpiel,
-								"Veranstaltung Response: "
-										+ response.toString());
-						 hideDialog();
+							try {
 
-						try {
+								JSONObject jObj = new JSONObject(response);
+								boolean error = jObj.getBoolean("error");
 
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
+								if (!error) {
+									// uebergabeerfolgreich = true;
+									Toast.makeText(
+											hans.getApplicationContext(),
+											"Gelöscht", Toast.LENGTH_SHORT)
+											.show();
+								} else {
+									// uebergabeerfolgreich = false;
 
-							if (!error) {
-								// uebergabeerfolgreich = true;
-								Toast.makeText(hans.getApplicationContext(),
-										"Gelöscht", Toast.LENGTH_SHORT).show();
-							} else {
-								// uebergabeerfolgreich = false;
+									Toast.makeText(
+											hans.getApplicationContext(),
+											"Löschen fehlgeschlagen",
+											Toast.LENGTH_SHORT).show();
+								}
 
-								Toast.makeText(hans.getApplicationContext(),
-										"Löschen fehlgeschlagen",
-										Toast.LENGTH_SHORT).show();
+							} catch (JSONException e) { // JSON error
+								e.printStackTrace();
 							}
 
-						} catch (JSONException e) { // JSON error
-							e.printStackTrace();
 						}
 
-					}
+					}, new Response.ErrorListener() {
 
-				}, new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.e(TAGimSpiel,
+									"Registration Error: " + error.getMessage());
 
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGimSpiel,
-								"Registration Error: " + error.getMessage());
+							Toast.makeText(hans.getApplicationContext(),
+									error.getMessage(), Toast.LENGTH_LONG)
+									.show();
+							hideDialog();
 
-						Toast.makeText(hans.getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						 hideDialog();
+						}
+					}) {
 
-					}
-				}) {
+				@Override
+				protected Map<String, String> getParams() {
+					// Posting params to register url
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("tag", "loeschespiel");
+					params.put("veranstaltungs_id", veranstaltungs_id);
+					params.put("benutzer_id", benutzer_id);
+					return params;
+				}
 
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "loeschespiel");
-				params.put("veranstaltungs_id", veranstaltungs_id);
-				params.put("benutzer_id", benutzer_id);
-				return params;
-			}
+			};
 
-		};
-
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-		// return uebergabeerfolgreich;
+			// Adding request to request queue
+			AppController.getInstance().addToRequestQueue(strReq,
+					tag_string_req);
+			// return uebergabeerfolgreich;
+		} else {
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+		}
 	}
 
 	/**
@@ -474,117 +518,130 @@ public class InternetService extends Activity {
 			final String status, final String veranstaltungs_id,
 			final String user_id, final String istbeendet,
 			final String spielende) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_updateveranstaltung";
+		if (myConnection.isConnectingToInternet()) {
+			// Tag used to cancel the request
+			String tag_string_req = "req_updateveranstaltung";
 
-		 pDialog.setMessage("Updaten ...");
-		 showDialog();
+			pDialog.setMessage("Updaten ...");
+			showDialog();
 
-		StringRequest strReq = new StringRequest(Method.POST,
-				AppConfig.URL_Spiele, new Response.Listener<String>() {
+			StringRequest strReq = new StringRequest(Method.POST,
+					AppConfig.URL_Spiele, new Response.Listener<String>() {
 
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAGimSpiel,
-								"Register Response: " + response.toString());
-						 hideDialog();
+						@Override
+						public void onResponse(String response) {
+							Log.d(TAGimSpiel,
+									"Register Response: " + response.toString());
+							hideDialog();
 
-						try {
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							if (!error) {
-								JSONObject user = jObj.getJSONObject("spiel");
-								String veranstaltung_idj = user
-										.getString("veranstaltung_id");
-								String benutzer_idj = user
-										.getString("benutzer_id");
-								String spielsystemj = user
-										.getString("spielsystem");
-								String mannschaftsartj = user
-										.getString("mannschaftsart");
-								String heimvereinj = user
-										.getString("heimverein");
-								String heimvereinsnummerj = user
-										.getString("heimvereinsnummer");
-								String gastvereinj = user
-										.getString("gastverein");
-								String gastvereinsnummerj = user
-										.getString("gastvereinsnummer");
-								String punkteHeimj = user
-										.getString("punkteHeim");
-								String punkteGastj = user
-										.getString("punkteGast");
-								String spielbeginnj = user
-										.getString("spielbeginn");
-								String spielendej = user.getString("spielende");
-								String statusj = user.getString("status");
-								String istbeendetj = user
-										.getString("istbeendet");
-								db.updateSpiel(new Spiel(Integer
-										.parseInt(veranstaltung_idj), Integer
-										.parseInt(punkteHeimj), Integer
-										.parseInt(punkteGastj), spielsystemj,
-										mannschaftsartj, heimvereinj,
-										heimvereinsnummerj, gastvereinj,
-										gastvereinsnummerj, statusj,
-										spielbeginnj, spielendej, Integer
-												.parseInt(istbeendetj), Integer
-												.parseInt(benutzer_idj)));
+							try {
+								JSONObject jObj = new JSONObject(response);
+								boolean error = jObj.getBoolean("error");
+								if (!error) {
+									JSONObject user = jObj
+											.getJSONObject("spiel");
+									String veranstaltung_idj = user
+											.getString("veranstaltung_id");
+									String benutzer_idj = user
+											.getString("benutzer_id");
+									String spielsystemj = user
+											.getString("spielsystem");
+									String mannschaftsartj = user
+											.getString("mannschaftsart");
+									String heimvereinj = user
+											.getString("heimverein");
+									String heimvereinsnummerj = user
+											.getString("heimvereinsnummer");
+									String gastvereinj = user
+											.getString("gastverein");
+									String gastvereinsnummerj = user
+											.getString("gastvereinsnummer");
+									String punkteHeimj = user
+											.getString("punkteHeim");
+									String punkteGastj = user
+											.getString("punkteGast");
+									String spielbeginnj = user
+											.getString("spielbeginn");
+									String spielendej = user
+											.getString("spielende");
+									String statusj = user.getString("status");
+									String istbeendetj = user
+											.getString("istbeendet");
+									db.updateSpiel(new Spiel(Integer
+											.parseInt(veranstaltung_idj),
+											Integer.parseInt(punkteHeimj),
+											Integer.parseInt(punkteGastj),
+											spielsystemj, mannschaftsartj,
+											heimvereinj, heimvereinsnummerj,
+											gastvereinj, gastvereinsnummerj,
+											statusj, spielbeginnj, spielendej,
+											Integer.parseInt(istbeendetj),
+											Integer.parseInt(benutzer_idj)));
+									Toast.makeText(
+											hans.getApplicationContext(),
+											"Aktualisiert", Toast.LENGTH_SHORT)
+											.show();
+									hans.finish();
+								} else {
+
+									// Error occurred in registration. Get the
+									// error
+									// message
+									String errorMsg = jObj
+											.getString("error_msg");
+
+									Toast.makeText(
+											hans.getApplicationContext(),
+											errorMsg, Toast.LENGTH_LONG).show();
+
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
 								Toast.makeText(hans.getApplicationContext(),
-										"Aktualisiert", Toast.LENGTH_SHORT)
-										.show();
-								hans.finish();
-							} else {
-
-								// Error occurred in registration. Get the error
-								// message
-								String errorMsg = jObj.getString("error_msg");
-
-								Toast.makeText(hans.getApplicationContext(),
-										errorMsg, Toast.LENGTH_LONG).show();
-
+										e.toString(), Toast.LENGTH_LONG).show();
 							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-							Toast.makeText(hans.getApplicationContext(),
-									e.toString(), Toast.LENGTH_LONG).show();
 						}
-					}
 
-				}, new Response.ErrorListener() {
+					}, new Response.ErrorListener() {
 
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAGimSpiel,
-								"Registration Error: " + error.getMessage());
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.e(TAGimSpiel,
+									"Registration Error: " + error.getMessage());
 
-						Toast.makeText(hans.getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						 hideDialog();
+							Toast.makeText(hans.getApplicationContext(),
+									error.getMessage(), Toast.LENGTH_LONG)
+									.show();
+							hideDialog();
 
-					}
-				}) {
+						}
+					}) {
 
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting params to register url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "updateSpiel");// Zuerst Tag dann
-				// Daten
-				params.put("benutzer_id", user_id);
-				params.put("punkteHeim", punkteHeim);
-				params.put("punkteGast", punkteGast);
-				params.put("veranstaltungs_id", veranstaltungs_id);
-				params.put("status", status);
-				params.put("istbeendet", istbeendet);
-				params.put("spielende", spielende);
-				return params;
-			}
+				@Override
+				protected Map<String, String> getParams() {
+					// Posting params to register url
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("tag", "updateSpiel");// Zuerst Tag dann
+					// Daten
+					params.put("benutzer_id", user_id);
+					params.put("punkteHeim", punkteHeim);
+					params.put("punkteGast", punkteGast);
+					params.put("veranstaltungs_id", veranstaltungs_id);
+					params.put("status", status);
+					params.put("istbeendet", istbeendet);
+					params.put("spielende", spielende);
+					return params;
+				}
 
-		};
+			};
 
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+			// Adding request to request queue
+			AppController.getInstance().addToRequestQueue(strReq,
+					tag_string_req);
+		} else {
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+		}
 	}
 
 	private void showDialog() {
@@ -595,5 +652,25 @@ public class InternetService extends Activity {
 	private void hideDialog() {
 		if (pDialog.isShowing())
 			pDialog.dismiss();
+	}
+
+	public class AlertFragmentNotify extends DialogFragment {
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage(
+					"Funktion benötigt eine bestehende Internetverbinung")
+					.setTitle("Warnung !")
+					.setIcon(R.drawable.ic_launcher)
+
+					.setNeutralButton("Ok",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+
+								}
+							});
+			return builder.create();
+		}
 	}
 }

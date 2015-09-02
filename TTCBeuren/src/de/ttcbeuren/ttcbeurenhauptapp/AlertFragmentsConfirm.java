@@ -7,30 +7,33 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-public class AlertFragment extends DialogFragment  {
+public class AlertFragmentsConfirm extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage(
 				"Sind sie sich sicher ? Der Vorgang kann nicht mehr Rückgängig gemacht werden")
-				.setTitle("Bestätigen").setIcon(R.drawable.ic_launcher)
+				.setTitle("Bestätigen")
+				.setIcon(R.drawable.ic_launcher)
 				.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						  mListener.onDialogPositiveClick(AlertFragment.this);
+						mListener
+								.onDialogPositiveClick(AlertFragmentsConfirm.this);
 
 					}
 				})
 				.setNegativeButton("Nein",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								  mListener.onDialogNegativeClick(AlertFragment.this);
+								mListener
+										.onDialogNegativeClick(AlertFragmentsConfirm.this);
 							}
 						});
 		// Create the AlertDialog object and return it
 		return builder.create();
 	}
-
+	
 	/*
 	 * The activity that creates an instance of this dialog fragment must
 	 * implement this interface in order to receive event callbacks. Each method
@@ -62,4 +65,6 @@ public class AlertFragment extends DialogFragment  {
 		}
 	}
 
+	
 }
+

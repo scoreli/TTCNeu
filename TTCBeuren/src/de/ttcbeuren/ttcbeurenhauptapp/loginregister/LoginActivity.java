@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
 import com.android.volley.toolbox.StringRequest;
 
+import de.ttcbeuren.ttcbeurenhauptapp.ConnectionDetector;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
@@ -59,6 +62,7 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private Button btnLogout, mEmailSignInButton, btnaccountdelete,
 			btnaccpasswordchange, btnzuregister;
+	private ConnectionDetector myConnection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +77,9 @@ public class LoginActivity extends Activity {
 		// SqLite database handler
 		// dblogin = new SQLiteHandlerLogin(getApplicationContext());
 
-		 dbuuid = new DatabasehandlerUUID(getApplicationContext());
-
+		dbuuid = new DatabasehandlerUUID(getApplicationContext());
+		// Zum Checken der Internetverbindung
+		myConnection = new ConnectionDetector(getApplicationContext());
 		btnLogout.setVisibility(View.GONE);
 		btnaccountdelete.setVisibility(View.GONE);
 		btnaccpasswordchange.setVisibility(View.GONE);
@@ -166,8 +171,9 @@ public class LoginActivity extends Activity {
 						popupWindow.dismiss();
 					}
 				});
-				//popupWindow.showAsDropDown(btnaccountdelete, 50, -30);
-				popupWindow.showAtLocation(btnaccountdelete, Gravity.CENTER, 50, 30);
+				// popupWindow.showAsDropDown(btnaccountdelete, 50, -30);
+				popupWindow.showAtLocation(btnaccountdelete, Gravity.CENTER,
+						50, 30);
 			}
 		});
 
@@ -234,11 +240,13 @@ public class LoginActivity extends Activity {
 			focusView.requestFocus();
 		} else {
 			/**
-			 * Ruft den Loginprozess auf.
+			 * Ruft den Loginprozess auf und prüft die
+			 * Internetverbindung(passiert im Sendevorgang)
 			 */
-			checkLogin(email, password);
 
+			checkLogin(email, password);
 		}
+
 	}
 
 	private boolean isEmailValid(String email) {
@@ -264,88 +272,111 @@ public class LoginActivity extends Activity {
 	 * @param password
 	 */
 	private void checkLogin(final String email, final String password) {
-		// Tag used to cancel the request
-		String tag_string_req = "req_login";
+		if (myConnection.isConnectingToInternet()) {
+			// Tag used to cancel the request
+			String tag_string_req = "req_login";
 
-		pDialog.setMessage("Einloggen ...");
-		showDialog();
-		// Post geht hier irgendwie nicht
-		StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_LOGIN,
-				new Response.Listener<String>() {
+			pDialog.setMessage("Einloggen ...");
+			showDialog();
+			// Post geht hier irgendwie nicht
+			StringRequest strReq = new StringRequest(Method.POST,
+					AppConfig.URL_LOGIN, new Response.Listener<String>() {
 
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAG, "Login Response: " + response.toString());
-						hideDialog();
+						@Override
+						public void onResponse(String response) {
+							Log.d(TAG, "Login Response: " + response.toString());
+							hideDialog();
 
-						try {
-							JSONObject jObj = new JSONObject(response);
-							boolean error = jObj.getBoolean("error");
-							JSONObject user = jObj.getJSONObject("user");
+							try {
+								JSONObject jObj = new JSONObject(response);
+								boolean error = jObj.getBoolean("error");
+								JSONObject user = jObj.getJSONObject("user");
 
-							// Check for error node in json
-							if (!error) {
-								String uid = jObj.getString("uid");
-								String id = jObj.getString("id");
-								String admin = jObj.getString("admin");
+								// Check for error node in json
+								if (!error) {
+									String uid = jObj.getString("uid");
+									String id = jObj.getString("id");
+									String admin = jObj.getString("admin");
 
-								try {
-									dbuuid.addBenutzer(new Benutzer(Integer.parseInt(id),uid,Integer.parseInt(admin)));
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+									try {
+										dbuuid.addBenutzer(new Benutzer(Integer
+												.parseInt(id), uid, Integer
+												.parseInt(admin)));
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									// user successfully logged in
+									// Create login session
+									session.setLogin(true);
+
+									// Launch main activity
+									Intent intent = new Intent(
+											LoginActivity.this,
+											MainActivityStartseite.class);
+									startActivity(intent);
+									finish();
+								} else {
+									// Error in login. Get the error message
+									String errorMsg = jObj
+											.getString("error_msg");
+									Toast.makeText(getApplicationContext(),
+											errorMsg, Toast.LENGTH_LONG).show();
 								}
-								// user successfully logged in
-								// Create login session
-								session.setLogin(true);
-
-								// Launch main activity
-								Intent intent = new Intent(LoginActivity.this,
-										MainActivityStartseite.class);
-								startActivity(intent);
-								finish();
-							} else {
-								// Error in login. Get the error message
-								String errorMsg = jObj.getString("error_msg");
-								Toast.makeText(getApplicationContext(),
-										errorMsg, Toast.LENGTH_LONG).show();
+							} catch (JSONException e) {
+								// JSON error
+								e.printStackTrace();
 							}
-						} catch (JSONException e) {
-							// JSON error
-							e.printStackTrace();
+
 						}
+					}, new Response.ErrorListener() {
 
-					}
-				}, new Response.ErrorListener() {
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.e(TAG, "Login Error: " + error.getMessage());
+							Toast.makeText(getApplicationContext(),
+									error.getMessage(), Toast.LENGTH_LONG)
+									.show();
+							hideDialog();
+						}
+					}) {
 
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAG, "Login Error: " + error.getMessage());
-						Toast.makeText(getApplicationContext(),
-								error.getMessage(), Toast.LENGTH_LONG).show();
-						hideDialog();
-					}
-				}) {
+				@Override
+				protected Map<String, String> getParams() {
+					// Posting parameters to login url
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("tag", "login");
+					params.put("email", email);
+					params.put("password", password);
 
-			@Override
-			protected Map<String, String> getParams() {
-				// Posting parameters to login url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("tag", "login");
-				params.put("email", email);
-				params.put("password", password);
+					return params;
+				}
 
-				return params;
+			};
+
+			// Adding request to request queue
+			try {
+				AppController.getInstance().addToRequestQueue(strReq,
+						tag_string_req);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(), e.toString(),
+						Toast.LENGTH_SHORT).show();
 			}
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(
+					"Funktion benötigt eine bestehende Internetverbinung")
+					.setTitle("Warnung !")
+					.setIcon(R.drawable.ic_launcher)
 
-		};
+					.setNeutralButton("Ok",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
 
-		// Adding request to request queue
-		try {
-			AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-		Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+								}
+							});
 		}
 	}
 
@@ -361,7 +392,7 @@ public class LoginActivity extends Activity {
 
 	private void logoutUser() {
 		session.setLogin(false);
-		 dbuuid.deleteUsers(); // dblogin.deleteUsers();
+		dbuuid.deleteUsers(); // dblogin.deleteUsers();
 
 		// Launching the login activity
 		Intent intent = new Intent(LoginActivity.this,
