@@ -243,8 +243,7 @@ public class InternetService extends Activity {
 					tag_string_req);
 		} else {
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(),
-					"notify");
+			notifyFragment.show(hans.getFragmentManager(), "notify");
 
 		}
 	}
@@ -372,8 +371,8 @@ public class InternetService extends Activity {
 										.replace(
 												R.id.container,
 												new ErgebnisseFragment()
-														.newInstance())
-										.commit();
+														.newInstance(),
+												"Ergebnisse_Fragment").commit();
 							}
 							Toast.makeText(hans.getApplicationContext(),
 									meldung,
@@ -411,10 +410,9 @@ public class InternetService extends Activity {
 			AppController.getInstance().addToRequestQueue(strReq,
 					tag_string_req);
 		} else {
-		
+
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(),
-					"notify");
+			notifyFragment.show(hans.getFragmentManager(), "notify");
 		}
 	}
 
@@ -503,8 +501,7 @@ public class InternetService extends Activity {
 			// return uebergabeerfolgreich;
 		} else {
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(),
-					"notify");
+			notifyFragment.show(hans.getFragmentManager(), "notify");
 
 		}
 	}
@@ -645,8 +642,7 @@ public class InternetService extends Activity {
 					tag_string_req);
 		} else {
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(),
-					"notify");
+			notifyFragment.show(hans.getFragmentManager(), "notify");
 
 		}
 	}
@@ -660,8 +656,9 @@ public class InternetService extends Activity {
 		if (pDialog.isShowing())
 			pDialog.dismiss();
 	}
-	/**Gelöst durch extra Klasse
-	 * Musste ausgelagert werden im onclicklistener hat es die activity beendet
+	/**
+	 * Gelöst durch extra Klasse Musste ausgelagert werden im onclicklistener
+	 * hat es die activity beendet
 	 * 
 	 * Bitte noch ändern mit Fragment und onActivityResult usw. Schmeißt mit dem
 	 * eine Exepetion wenn man das Gerät dreht. DialogFragment notifyFragment =
@@ -669,5 +666,4 @@ public class InternetService extends Activity {
 	 * "notfiyfragment");
 	 */
 
-	
 }

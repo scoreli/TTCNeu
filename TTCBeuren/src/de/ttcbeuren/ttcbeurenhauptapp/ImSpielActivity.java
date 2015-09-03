@@ -239,7 +239,7 @@ public class ImSpielActivity extends Activity implements
 			updatespiel.setPunkteHeim(Integer.parseInt(spielstandheim));
 		}
 		if (TextUtils.isEmpty(spielstandgast) == false) {
-			updatespiel.setPunkteHeim(Integer.parseInt(spielstandgast));
+			updatespiel.setPunkteGast(Integer.parseInt(spielstandgast));
 		}
 		if (TextUtils.isEmpty(spielstatus) == false) {
 			updatespiel.setStatus(spielstatus);
