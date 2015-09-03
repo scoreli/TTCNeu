@@ -23,7 +23,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.ttrrechner.TTRFragment;
 
 public class MainActivityStartseite extends Activity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks{
+		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -51,15 +51,13 @@ public class MainActivityStartseite extends Activity implements
 
 	}
 
-	
-
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		/*
 		 * if (position == 0) { FragmentManager fragmentManager =
 		 * getFragmentManager(); FragmentTransaction ft =
 		 * fragmentManager.beginTransaction(); ft.replace(R.id.container, new
-		 * AktuellesFragment().newInstance()) .commit(); mTitle =
+		 * AktuellesFragment().newInstance(position + 1)) .commit(); mTitle =
 		 * getString(R.string.title_aktuelles); }
 		 */
 		if (position == 0) {
@@ -67,7 +65,7 @@ public class MainActivityStartseite extends Activity implements
 			fragmentManager
 					.beginTransaction()
 					.replace(R.id.container,
-							new ErgebnisseFragment().newInstance(),
+							new ErgebnisseFragment().newInstance(position + 1),
 							"Ergebnisse_Fragment").commit();
 			mTitle = getString(R.string.title_ergebnisse);
 
@@ -75,11 +73,12 @@ public class MainActivityStartseite extends Activity implements
 		if (position == 1) {
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction ft = fragmentManager.beginTransaction();
-			ft.replace(R.id.container, new TTRFragment().newInstance())
-					.commit();
+			ft.replace(R.id.container,
+					new TTRFragment().newInstance(position + 1)).commit();
 			mTitle = getString(R.string.title_ttrrechner);
+
 		}
-		restoreActionBar();
+
 	}
 
 	public void onSectionAttached(int number) {
@@ -89,12 +88,20 @@ public class MainActivityStartseite extends Activity implements
 		 * 
 		 * break;
 		 */
+		/**
+		 * Dort ist mTitle auskommentiert da es zuerst aufgerufen wird und
+		 * irgndwie nicht die Postition ändert stimmt irgendwas mit der
+		 * positionierung des fragments nicht. initaliesierung oder so Geht immer auf case1.
+		 * Noch Beheben !!
+		 */
 
 		case 1:
-			mTitle = getString(R.string.title_ergebnisse);
+			// mTitle = getString(R.string.title_ergebnisse);
+			//Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 			break;
 		case 2:
-			mTitle = getString(R.string.title_ttrrechner);
+			// mTitle = getString(R.string.title_ttrrechner);
+			//Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 
 			break;
 		}
@@ -119,7 +126,7 @@ public class MainActivityStartseite extends Activity implements
 			// Kann man punkte unsichtbar machen
 			// menu.findItem(R.id.menu_aenderungskonstante).setVisible(false);
 
-			// restoreActionBar();// sonst zeigt es immer aktuelles an ?
+			restoreActionBar();// sonst zeigt es immer aktuelles an ?
 			return true;
 		}
 		return super.onCreateOptionsMenu(menu);
@@ -197,7 +204,5 @@ public class MainActivityStartseite extends Activity implements
 							.getInt(ARG_SECTION_NUMBER));
 		}
 	}
-
-	
 
 }

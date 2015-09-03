@@ -41,14 +41,18 @@ public class ErgebnisseFragment extends Fragment implements
 	DatabasehandlerUUID dbuuid;
 	SessionManager session;
 	public static final String KEY = "Spieluebergabe";
+	private static final String ARG_SECTION_NUMBER = "section_number";
 
 	// private MyArrayAdapter adapterlive,adapterbeendet;
 	private ListViewadapter mAdapter;
 
 	// WebView browser = (WebView) root.findViewById(R.id.webviewakuelles);
 	// browser.loadUrl("http://www.ttc-beuren.de");
-	public ErgebnisseFragment newInstance() {
+	public ErgebnisseFragment newInstance(int sectionNumber) {
 		ErgebnisseFragment fragment = new ErgebnisseFragment();
+		Bundle args = new Bundle();
+		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		fragment.setArguments(args);
 		return fragment;
 
 	}

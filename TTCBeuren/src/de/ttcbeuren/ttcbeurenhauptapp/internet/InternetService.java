@@ -371,7 +371,7 @@ public class InternetService extends Activity {
 										.replace(
 												R.id.container,
 												new ErgebnisseFragment()
-														.newInstance(),
+														.newInstance(2),
 												"Ergebnisse_Fragment").commit();
 							}
 							Toast.makeText(hans.getApplicationContext(),

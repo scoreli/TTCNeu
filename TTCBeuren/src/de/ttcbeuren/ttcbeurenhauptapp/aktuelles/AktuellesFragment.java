@@ -1,6 +1,5 @@
 package de.ttcbeuren.ttcbeurenhauptapp.aktuelles;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -12,9 +11,13 @@ import de.ttcbeuren.ttcbeurenhauptapp.R;
 
 public class AktuellesFragment extends Fragment {
 	
+	private static final String ARG_SECTION_NUMBER = "section_number";
 
-	public AktuellesFragment newInstance() {
+	public AktuellesFragment newInstance(int sectionNumber) {
 		AktuellesFragment fragment = new AktuellesFragment();
+		Bundle args = new Bundle();
+		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		fragment.setArguments(args);
 		return fragment;
 
 	}

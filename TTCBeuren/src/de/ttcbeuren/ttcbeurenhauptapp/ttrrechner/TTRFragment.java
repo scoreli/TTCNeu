@@ -26,13 +26,17 @@ public class TTRFragment extends Fragment {
 	private EditText ttra, ttrb0, ttrb1, ttrb2, ttrb3, ttrb4;
 	private CheckBox check_b0, check_b1, check_b2, check_b3, check_b4;
 	private Button btnberechnen;
-	private static final String ARG_SECTION_NUMBER = "servus";
+	private static final String ARG_SECTION_NUMBER = "section_number";
 	MainActivityStartseite mainac;
 
 	// public int AENDERUNGSKONSTANTE = 16;
 
-	public TTRFragment newInstance() {
+	public TTRFragment newInstance(int sectionNumber) {
 		TTRFragment fragment = new TTRFragment();
+		Bundle args = new Bundle();
+		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		fragment.setArguments(args);
+		
 		return fragment;
 
 	}
@@ -41,7 +45,7 @@ public class TTRFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		// Wichtig hier muss die Section angegeben werden ???
 		super.onAttach(activity);
-		((MainActivityStartseite) activity).onSectionAttached(2);
+		((MainActivityStartseite) activity).onSectionAttached(1);
 	}
 /*
 	@Override
@@ -63,7 +67,7 @@ public class TTRFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
-
+restoreActionBar();
 		View root = inflater.inflate(R.layout.fragment_ttrrechner, container,
 				false);
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
@@ -256,7 +260,7 @@ public class TTRFragment extends Fragment {
 	}
 
 	public void restoreActionBar() {
-		ActionBar actionBar = this.getActivity().getActionBar();
+		ActionBar actionBar =getActivity().getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(R.string.title_ttrrechner);
