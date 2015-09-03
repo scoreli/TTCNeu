@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import com.android.volley.toolbox.StringRequest;
 import de.ttcbeuren.ttcbeurenhauptapp.ConnectionDetector;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentNotify;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppController;
 
@@ -89,8 +91,11 @@ public class LoginActivity extends Activity {
 		 */
 		if (session.isLoggedIn()) {
 			btnLogout.setVisibility(View.VISIBLE);
-			btnaccountdelete.setVisibility(View.VISIBLE);
-			btnaccpasswordchange.setVisibility(View.VISIBLE);
+			/**
+			 * Für Spätere Funktionen Freischalten
+			 */
+			//btnaccountdelete.setVisibility(View.VISIBLE);
+			//btnaccpasswordchange.setVisibility(View.VISIBLE);
 			mEmailView.setVisibility(View.GONE);
 			mPasswordView.setVisibility(View.GONE);
 			mEmailSignInButton.setVisibility(View.GONE);
@@ -364,19 +369,9 @@ public class LoginActivity extends Activity {
 						Toast.LENGTH_SHORT).show();
 			}
 		} else {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(
-					"Funktion benötigt eine bestehende Internetverbinung")
-					.setTitle("Warnung !")
-					.setIcon(R.drawable.ic_launcher)
-
-					.setNeutralButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-
-								}
-							});
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(getFragmentManager(),
+					"notify");
 		}
 	}
 

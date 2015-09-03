@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import com.android.volley.toolbox.StringRequest;
 import de.ttcbeuren.ttcbeurenhauptapp.ConnectionDetector;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentNotify;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppController;
 
@@ -396,19 +398,9 @@ public class RegisterActivity extends Activity {
 			AppController.getInstance().addToRequestQueue(strReq,
 					tag_string_req);
 		} else {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(
-					"Funktion benötigt eine bestehende Internetverbinung")
-					.setTitle("Warnung !")
-					.setIcon(R.drawable.ic_launcher)
-
-					.setNeutralButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-
-								}
-							});
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(getFragmentManager(),
+					"notify");
 		}
 	}
 

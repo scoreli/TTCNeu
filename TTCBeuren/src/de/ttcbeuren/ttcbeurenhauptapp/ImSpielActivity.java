@@ -1,7 +1,9 @@
 package de.ttcbeuren.ttcbeurenhauptapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,13 +18,16 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentNotify;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
-public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.AlertDialogListener {
+public class ImSpielActivity extends Activity implements
+		AlertFragmentConfirm.AlertDialogListener {
 	/**
 	 * Werte für die initalisierung von im Spiel
 	 * 
@@ -38,6 +43,7 @@ public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.A
 	DatabasehandlerSpiele dbspiele;
 	DatabasehandlerUUID dbuuid;
 	private InternetService internetservice;
+	private ConnectionDetector myConnection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.A
 		dbuuid = new DatabasehandlerUUID(this);
 		internetservice = new InternetService(this);
 		//
+		myConnection = new ConnectionDetector(getApplicationContext());
 		int uebergabespiel_id = getIntent().getExtras().getInt(
 				ErgebnisseFragment.KEY);
 		Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
@@ -73,31 +80,42 @@ public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.A
 
 			@Override
 			public void onClick(View v) {
-				
-				if(checkspielistentschieden.isChecked()){DialogFragment bestaetigenFragment = new AlertFragmentsConfirm();
-				 
-			    bestaetigenFragment.show(getFragmentManager(), "bestaetigenaktualisieren");		}
-				else {
-					aktualisieren();	
-				}
-				 
-		
-			
+				if (myConnection.isConnectingToInternet()) {
+					if (checkspielistentschieden.isChecked()) {
+						DialogFragment bestaetigenFragment = new AlertFragmentConfirm();
 
-			}});
+						bestaetigenFragment.show(getFragmentManager(),
+								"bestaetigenaktualisieren");
+					} else {
+						aktualisieren();
+					}
+
+				} else {
+					DialogFragment notifyFragment = new AlertFragmentNotify();
+					notifyFragment.show(getFragmentManager(), "notify");
+
+				}
+
+			}
+		});
 		btnloeschen.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				 DialogFragment bestaetigenFragment = new AlertFragmentsConfirm();
-				    bestaetigenFragment.show(getFragmentManager(), "bestaetigenloeschen");				
-			
-			
-			
+				if (myConnection.isConnectingToInternet()) {
+					DialogFragment bestaetigenFragment = new AlertFragmentConfirm();
+					bestaetigenFragment.show(getFragmentManager(),
+							"bestaetigenloeschen");
+				} else {
+					DialogFragment notifyFragment = new AlertFragmentNotify();
+					notifyFragment.show(getFragmentManager(), "notify");
+
+				}
+
 			}
-			
+
 		});
-		
+
 		btnheimplusein.setOnClickListener(new OnClickListener() {
 			/**
 			 * Wird der Button Heim plus eins gedrückt, wird nochmal die
@@ -175,25 +193,27 @@ public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.A
 		});
 
 	}
+
 	@Override
 	public void onDialogPositiveClick(DialogFragment dialog) {
-		switch(dialog.getTag()){
+		switch (dialog.getTag()) {
 		case "bestaetigenloeschen":
 			loeschen();
 			break;
-		
+
 		case "bestaetigenaktualisieren":
 			aktualisieren();
 			break;
-		
+
 		}
 	}
 
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	private void loeschen() {
 
 		internetservice.Spielloeschen(
@@ -331,8 +351,18 @@ public class ImSpielActivity extends Activity implements AlertFragmentsConfirm.A
 		tpSpielende.setIs24HourView(true);
 		tpSpielende.setVisibility(View.GONE);
 	}
-
-	
-
-	
+	/*
+	 * public class AlertFragmentNotify extends DialogFragment {
+	 * 
+	 * @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+	 * AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	 * builder.setMessage(
+	 * "Funktion benötigt eine bestehende Internetverbinung")
+	 * .setTitle("Warnung !") .setIcon(R.drawable.ic_launcher)
+	 * 
+	 * .setNeutralButton("Ok", new DialogInterface.OnClickListener() { public
+	 * void onClick(DialogInterface dialog, int id) {
+	 * 
+	 * } }); return builder.create(); } }
+	 */
 }

@@ -43,7 +43,22 @@ public class TTRFragment extends Fragment {
 		super.onAttach(activity);
 		((MainActivityStartseite) activity).onSectionAttached(2);
 	}
+/*
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("text", "" + ttra.getText());
+	}
 
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			ttra.setText(savedInstanceState.getString("text"));
+		}
+	}
+*/
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

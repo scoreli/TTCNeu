@@ -1,5 +1,7 @@
-package de.ttcbeuren.ttcbeurenhauptapp;
+package de.ttcbeuren.ttcbeurenhauptapp.alertdialogs;
 
+import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,7 +9,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-public class AlertFragmentsConfirm extends DialogFragment {
+public class AlertFragmentConfirm extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the Builder class for convenient dialog construction
@@ -19,7 +21,7 @@ public class AlertFragmentsConfirm extends DialogFragment {
 				.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						mListener
-								.onDialogPositiveClick(AlertFragmentsConfirm.this);
+								.onDialogPositiveClick(AlertFragmentConfirm.this);
 
 					}
 				})
@@ -27,7 +29,7 @@ public class AlertFragmentsConfirm extends DialogFragment {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								mListener
-										.onDialogNegativeClick(AlertFragmentsConfirm.this);
+										.onDialogNegativeClick(AlertFragmentConfirm.this);
 							}
 						});
 		// Create the AlertDialog object and return it

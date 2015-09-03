@@ -17,13 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.ttrrechner.TTRFragment;
 
 public class MainActivityStartseite extends Activity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks {
-
+		NavigationDrawerFragment.NavigationDrawerCallbacks{
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -48,22 +48,20 @@ public class MainActivityStartseite extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		
-		
-		
-		
+
 	}
+
+	
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		/*
-		if (position == 0) {
-			FragmentManager fragmentManager = getFragmentManager();
-			FragmentTransaction ft = fragmentManager.beginTransaction();
-			ft.replace(R.id.container, new AktuellesFragment().newInstance())
-					.commit();
-			mTitle = getString(R.string.title_aktuelles);
-		}*/
+		 * if (position == 0) { FragmentManager fragmentManager =
+		 * getFragmentManager(); FragmentTransaction ft =
+		 * fragmentManager.beginTransaction(); ft.replace(R.id.container, new
+		 * AktuellesFragment().newInstance()) .commit(); mTitle =
+		 * getString(R.string.title_aktuelles); }
+		 */
 		if (position == 0) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager
@@ -97,12 +95,11 @@ public class MainActivityStartseite extends Activity implements
 			break;
 		case 2:
 			mTitle = getString(R.string.title_ttrrechner);
-			   
-			
+
 			break;
 		}
 	}
-	
+
 	public void restoreActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -141,7 +138,7 @@ public class MainActivityStartseite extends Activity implements
 		if (id == R.id.menu_account) {
 			startActivity(new Intent(MainActivityStartseite.this,
 					LoginActivity.class));
-			
+
 			return true;
 		}
 		if (id == R.id.menu_spiel_erstellen) {

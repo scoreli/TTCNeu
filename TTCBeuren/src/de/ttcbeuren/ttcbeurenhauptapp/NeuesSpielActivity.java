@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.SessionManager;
@@ -27,7 +28,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
 
 public class NeuesSpielActivity extends Activity implements
-		AlertFragmentsConfirm.AlertDialogListener {
+		AlertFragmentConfirm.AlertDialogListener {
 	private CheckBox checkbeurenistheim, checkspielistentschieden;
 	private Spinner spnSpielsystem, spnMannschaftsart, spnBeurenMannschaft,
 			spnGegnerMannschaft, spnGegnermannschaftsnummer;
@@ -103,7 +104,7 @@ public class NeuesSpielActivity extends Activity implements
 			@Override
 			public void onClick(View v) {
 				if (checkspielistentschieden.isChecked()) {
-					DialogFragment bestaetigenFragment = new AlertFragmentsConfirm();
+					DialogFragment bestaetigenFragment = new AlertFragmentConfirm();
 					bestaetigenFragment.show(getFragmentManager(),
 							"bestaetigenerstellen");
 				} else {

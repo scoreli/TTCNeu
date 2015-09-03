@@ -27,6 +27,8 @@ import de.ttcbeuren.ttcbeurenhauptapp.ConnectionDetector;
 import de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.NavigationDrawerFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentNotify;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.Spiel;
@@ -240,9 +242,10 @@ public class InternetService extends Activity {
 			AppController.getInstance().addToRequestQueue(strReq,
 					tag_string_req);
 		} else {
-
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+			notifyFragment.show(hans.getFragmentManager(),
+					"notify");
+
 		}
 	}
 
@@ -408,10 +411,10 @@ public class InternetService extends Activity {
 			AppController.getInstance().addToRequestQueue(strReq,
 					tag_string_req);
 		} else {
-
+		
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
-
+			notifyFragment.show(hans.getFragmentManager(),
+					"notify");
 		}
 	}
 
@@ -500,7 +503,9 @@ public class InternetService extends Activity {
 			// return uebergabeerfolgreich;
 		} else {
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+			notifyFragment.show(hans.getFragmentManager(),
+					"notify");
+
 		}
 	}
 
@@ -640,7 +645,9 @@ public class InternetService extends Activity {
 					tag_string_req);
 		} else {
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(hans.getFragmentManager(), "notfiyfragment");
+			notifyFragment.show(hans.getFragmentManager(),
+					"notify");
+
 		}
 	}
 
@@ -653,24 +660,14 @@ public class InternetService extends Activity {
 		if (pDialog.isShowing())
 			pDialog.dismiss();
 	}
+	/**Gelöst durch extra Klasse
+	 * Musste ausgelagert werden im onclicklistener hat es die activity beendet
+	 * 
+	 * Bitte noch ändern mit Fragment und onActivityResult usw. Schmeißt mit dem
+	 * eine Exepetion wenn man das Gerät dreht. DialogFragment notifyFragment =
+	 * new AlertFragmentNotify(); notifyFragment.show(hans.getFragmentManager(),
+	 * "notfiyfragment");
+	 */
 
-	public class AlertFragmentNotify extends DialogFragment {
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage(
-					"Funktion benötigt eine bestehende Internetverbinung")
-					.setTitle("Warnung !")
-					.setIcon(R.drawable.ic_launcher)
-
-					.setNeutralButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-
-								}
-							});
-			return builder.create();
-		}
-	}
+	
 }

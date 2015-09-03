@@ -59,6 +59,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
 	private InternetService internetService;
+	private ConnectionDetector myConnection;
 
 	public NavigationDrawerFragment() {
 	}
@@ -82,6 +83,7 @@ public class NavigationDrawerFragment extends Fragment {
 
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
+		myConnection = new ConnectionDetector(getActivity());
 	}
 
 	@Override
@@ -109,8 +111,8 @@ public class NavigationDrawerFragment extends Fragment {
 				.getThemedContext(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, new String[] {
-						/*getString(R.string.title_aktuelles),*/
-						getString(R.string.title_ergebnisse),
+				/* getString(R.string.title_aktuelles), */
+				getString(R.string.title_ergebnisse),
 						getString(R.string.title_ttrrechner), }));
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
@@ -273,6 +275,7 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 
 		if (item.getItemId() == R.id.action_example) {
+
 			internetService.Spielholen();
 			return true;
 		}
@@ -306,4 +309,5 @@ public class NavigationDrawerFragment extends Fragment {
 		 */
 		void onNavigationDrawerItemSelected(int position);
 	}
+
 }

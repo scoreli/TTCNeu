@@ -22,6 +22,7 @@ public class AenderungskonstanteActivity extends PreferenceActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		addPreferencesFromResource(R.xml.preferences_aenderungskonstante);
 
 	}
