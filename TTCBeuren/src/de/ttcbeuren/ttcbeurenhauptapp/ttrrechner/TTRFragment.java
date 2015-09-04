@@ -45,7 +45,7 @@ public class TTRFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		// Wichtig hier muss die Section angegeben werden ???
 		super.onAttach(activity);
-		((MainActivityStartseite) activity).onSectionAttached(1);
+		((MainActivityStartseite) activity).onSectionAttached(2);
 	}
 /*
 	@Override

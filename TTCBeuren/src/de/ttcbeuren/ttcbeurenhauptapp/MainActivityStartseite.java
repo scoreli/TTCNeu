@@ -88,19 +88,14 @@ public class MainActivityStartseite extends Activity implements
 		 * 
 		 * break;
 		 */
-		/**
-		 * Dort ist mTitle auskommentiert da es zuerst aufgerufen wird und
-		 * irgndwie nicht die Postition ändert stimmt irgendwas mit der
-		 * positionierung des fragments nicht. initaliesierung oder so Geht immer auf case1.
-		 * Noch Beheben !!
-		 */
+		
 
 		case 1:
-			// mTitle = getString(R.string.title_ergebnisse);
+			mTitle = getString(R.string.title_ergebnisse);
 			//Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 			break;
 		case 2:
-			// mTitle = getString(R.string.title_ttrrechner);
+			 mTitle = getString(R.string.title_ttrrechner);
 			//Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 
 			break;

@@ -7,9 +7,9 @@
     <string name="prompt_password">Passwort</string>
     <string name="action_sign_in">Einloggen</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_email">Dies ist keine Richtige Emailadresse</string>
+    <string name="error_invalid_password">Das Passwort ist zu kurz</string>
+    <string name="error_incorrect_password">Das Passwort ist falsch</string>
     <string name="error_field_required">Das Feld wird benötigt</string>
 
 </resources>

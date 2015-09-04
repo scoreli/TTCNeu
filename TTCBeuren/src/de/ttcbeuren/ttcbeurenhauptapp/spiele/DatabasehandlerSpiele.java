@@ -201,7 +201,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		List<Spiel> spielliste = new ArrayList<Spiel>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Spiele + " WHERE "
-				+ SPIELE_istspielbeendet + " = 0 ";
+				+ SPIELE_istspielbeendet + " = 0 ORDER BY "+ SPIELE_spielbegin +" DESC";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -239,7 +239,7 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		List<Spiel> spielliste = new ArrayList<Spiel>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Spiele + " WHERE "
-				+ SPIELE_istspielbeendet + " = 1 ";
+				+ SPIELE_istspielbeendet + " = 1 ORDER BY "+ SPIELE_spielbegin +" DESC";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
