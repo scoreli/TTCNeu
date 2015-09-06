@@ -23,8 +23,12 @@ import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
 
 public class TTRFragment extends Fragment {
-	private EditText ttra, ttrb0, ttrb1, ttrb2, ttrb3, ttrb4;
-	private CheckBox check_b0, check_b1, check_b2, check_b3, check_b4;
+	private EditText ttra, ttrb0, ttrb1, ttrb2, ttrb3, ttrb4, ttrb5, ttrb6,
+			ttrb7, ttrb8, ttrb9;
+
+	private CheckBox check_b0, check_b1, check_b2, check_b3, check_b4,
+			check_b5, check_b6, check_b7, check_b8, check_b9;
+
 	private Button btnberechnen;
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	MainActivityStartseite mainac;
@@ -36,7 +40,7 @@ public class TTRFragment extends Fragment {
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
-		
+
 		return fragment;
 
 	}
@@ -47,27 +51,21 @@ public class TTRFragment extends Fragment {
 		super.onAttach(activity);
 		((MainActivityStartseite) activity).onSectionAttached(2);
 	}
-/*
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString("text", "" + ttra.getText());
-	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onActivityCreated(savedInstanceState);
-		if (savedInstanceState != null) {
-			ttra.setText(savedInstanceState.getString("text"));
-		}
-	}
-*/
+	/*
+	 * @Override public void onSaveInstanceState(Bundle outState) {
+	 * super.onSaveInstanceState(outState); outState.putString("text", "" +
+	 * ttra.getText()); }
+	 * 
+	 * @Override public void onActivityCreated(Bundle savedInstanceState) { //
+	 * TODO Auto-generated method stub
+	 * super.onActivityCreated(savedInstanceState); if (savedInstanceState !=
+	 * null) { ttra.setText(savedInstanceState.getString("text")); } }
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
-restoreActionBar();
 		View root = inflater.inflate(R.layout.fragment_ttrrechner, container,
 				false);
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
@@ -77,13 +75,102 @@ restoreActionBar();
 		ttrb2 = (EditText) root.findViewById(R.id.etxt_ttrb2);
 		ttrb3 = (EditText) root.findViewById(R.id.etxt_ttrb3);
 		ttrb4 = (EditText) root.findViewById(R.id.etxt_ttrb4);
+		ttrb5 = (EditText) root.findViewById(R.id.etxt_ttrb5);
+		ttrb6 = (EditText) root.findViewById(R.id.etxt_ttrb6);
+		ttrb7 = (EditText) root.findViewById(R.id.etxt_ttrb7);
+		ttrb8 = (EditText) root.findViewById(R.id.etxt_ttrb8);
+		ttrb9 = (EditText) root.findViewById(R.id.etxt_ttrb9);
 		check_b0 = (CheckBox) root.findViewById(R.id.box_siegb0);
 		check_b1 = (CheckBox) root.findViewById(R.id.box_siegb1);
 		check_b2 = (CheckBox) root.findViewById(R.id.box_siegb2);
 		check_b3 = (CheckBox) root.findViewById(R.id.box_siegb3);
 		check_b4 = (CheckBox) root.findViewById(R.id.box_siegb4);
-		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
+		check_b5 = (CheckBox) root.findViewById(R.id.box_siegb5);
+		check_b6 = (CheckBox) root.findViewById(R.id.box_siegb6);
+		check_b7 = (CheckBox) root.findViewById(R.id.box_siegb7);
+		check_b8 = (CheckBox) root.findViewById(R.id.box_siegb8);
+		check_b9 = (CheckBox) root.findViewById(R.id.box_siegb9);
+		final EditText[] edittextboxen = { ttrb0, ttrb1, ttrb2, ttrb3, ttrb4,
+				ttrb5, ttrb6, ttrb7, ttrb8, ttrb9 };
+		final CheckBox[] checkboxen = { check_b0, check_b1, check_b2, check_b3,
+				check_b4, check_b5, check_b6, check_b7, check_b8, check_b9 };
+		SharedPreferences prefs = this.getActivity().getSharedPreferences(
+				"Zwischenwerte", Context.MODE_PRIVATE);
+		int uebergabeanzahl = prefs.getInt("AnzahlderGegner", 3);
 
+		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
+		/**
+		 * Hier werden die nicht benutzten oder nicht gewollten gegner
+		 * ausgeblendet mit Checkboxen. Es sollte aber noch besser geschrieben
+		 * werden(Schöner)
+		 */
+
+		switch (uebergabeanzahl) {
+		case 1:
+			for (int i = 1; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 2:
+			for (int i = 2; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 3:
+			for (int i = 3; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 4:
+			for (int i = 4; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 5:
+			for (int i = 5; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 6:
+			for (int i = 6; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 7:
+			for (int i = 7; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 8:
+			for (int i = 8; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+		case 9:
+			for (int i = 9; i < edittextboxen.length; i++) {
+				edittextboxen[i].setVisibility(View.GONE);
+				checkboxen[i].setVisibility(View.GONE);
+
+			}
+			break;
+
+		}
 		// TODO Auto-generated method stub
 		/**
 		 * Es sollte behoben werden das der richtige Titel angezeigt wird.
@@ -93,7 +180,7 @@ restoreActionBar();
 
 			@Override
 			public void onClick(View v) {
-				ttrberechnen();
+				ttrberechnen(edittextboxen, checkboxen);
 			}
 		});
 		return root;
@@ -102,97 +189,42 @@ restoreActionBar();
 	/**
 	 * http://www.tt-tsvgomaringen.de/news/view.php?sid=689
 	 */
-	private void ttrberechnen() {
+	private void ttrberechnen(EditText[] edittextboxen, CheckBox[] checkboxen) {
 		int gesamt = 0;
-		double gw0 = 0, gw1 = 0, gw2 = 0, gw3 = 0, gw4 = 0;
+
 		boolean ttrab = false;
-		int ittra = 0, ittrb0 = 0, ittrb1 = 0, ittrb2 = 0, ittrb3 = 0, ittrb4 = 0;
+		int ittra = 0;
 		// Text aus den Felder in Strings umwandeln
-		String sttra = ttra.getText().toString();
-		String sttrb0 = ttrb0.getText().toString();
-		String sttrb1 = ttrb1.getText().toString();
-		String sttrb2 = ttrb2.getText().toString();
-		String sttrb3 = ttrb3.getText().toString();
-		String sttrb4 = ttrb4.getText().toString();
+		String[] getTTR = new String[11];
+		for (int i = 0; i < edittextboxen.length; i++) {
+			getTTR[i] = edittextboxen[i].getText().toString();
+		}
+
 		/**
 		 * Hier wird abgeprüft ob die Felder leer sind. Außerdem ob das ttra
 		 * feld nicht leer ist.
 		 */
-		if (!TextUtils.isEmpty(sttra)) {
-			ittra = Integer.parseInt(sttra);
+		if (!TextUtils.isEmpty(ttra.getText().toString())) {
+			ittra = Integer.parseInt(ttra.getText().toString());
 			ttrab = true;
 		}
-		if (!TextUtils.isEmpty(sttrb0) && ttrab) {
-			ittrb0 = Integer.parseInt(sttrb0);
+		for (int i = 0; i < edittextboxen.length; i++) {
+			if (!TextUtils.isEmpty(getTTR[i]) && ttrab) {
+				int uebergabe = Integer.parseInt(getTTR[i]);
+				int zwischen = gesamt;
 
-			gw0 = gewinnwahrscheinlichkeit(ittra, ittrb0);
-			// Wird geprüft ob gewonnen oder nicht
-			if (check_b0.isChecked()) {
-				gesamt = gewinnpunkte(gw0);
-			} else {
-				gesamt = verlustpunkte(gw0);
+				double uebergabewahrscheinlichkeit = gewinnwahrscheinlichkeit(
+						ittra, uebergabe);
+				// Wird geprüft ob gewonnen oder nicht
+				if (checkboxen[i].isChecked()) {
+					gesamt = gewinnpunkte(uebergabewahrscheinlichkeit);
+				} else {
+					gesamt = verlustpunkte(uebergabewahrscheinlichkeit);
 
+				}
+				gesamt = gesamt + zwischen;
 			}
 
-		}
-		if (!TextUtils.isEmpty(sttrb1) && ttrab) {
-			ittrb1 = Integer.parseInt(sttrb1);
-
-			gw1 = gewinnwahrscheinlichkeit(ittra, ittrb1);
-			int zwischen = gesamt;
-			// Wird geprüft ob gewonnen oder nicht
-			if (check_b1.isChecked()) {
-				gesamt = gewinnpunkte(gw1);
-			} else {
-				gesamt = verlustpunkte(gw1);
-			}
-
-			gesamt = gesamt + zwischen;
-		}
-		if (!TextUtils.isEmpty(sttrb2) && ttrab) {
-			ittrb2 = Integer.parseInt(sttrb2);
-
-			gw2 = gewinnwahrscheinlichkeit(ittra, ittrb2);
-			int zwischen = gesamt;
-			// Wird geprüft ob gewonnen oder nicht
-			if (check_b2.isChecked()) {
-				gesamt = gewinnpunkte(gw2);
-
-			} else {
-				gesamt = verlustpunkte(gw2);
-			}
-
-			gesamt = gesamt + zwischen;
-		}
-		if (!TextUtils.isEmpty(sttrb3) && ttrab) {
-			ittrb3 = Integer.parseInt(sttrb3);
-
-			gw3 = gewinnwahrscheinlichkeit(ittra, ittrb3);
-			int zwischen = gesamt;
-			// Wird geprüft ob gewonnen oder nicht
-			if (check_b3.isChecked()) {
-				gesamt = gewinnpunkte(gw3);
-
-			} else {
-				gesamt = verlustpunkte(gw3);
-			}
-
-			gesamt = gesamt + zwischen;
-		}
-		if (!TextUtils.isEmpty(sttrb4) && ttrab) {
-			ittrb4 = Integer.parseInt(sttrb4);
-
-			gw4 = gewinnwahrscheinlichkeit(ittra, ittrb4);
-			int zwischen = gesamt;
-			// Wird geprüft ob gewonnen oder nicht
-			if (check_b4.isChecked()) {
-				gesamt = gewinnpunkte(gw4);
-
-			} else {
-				gesamt = verlustpunkte(gw4);
-			}
-
-			gesamt = gesamt + zwischen;
 		}
 		Toast.makeText(
 				getActivity(),
@@ -247,9 +279,7 @@ restoreActionBar();
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+
 		if (id == R.id.menu_aenderungskonstante) {
 			startActivity(new Intent(getActivity(),
 					AenderungskonstanteActivity.class));
@@ -259,10 +289,4 @@ restoreActionBar();
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void restoreActionBar() {
-		ActionBar actionBar =getActivity().getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(R.string.title_ttrrechner);
-	}
 }
