@@ -89,13 +89,6 @@ public class TTRFragment extends Fragment {
 		return root;
 	}
 
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-
-	}
-
 	/**
 	 * Hier wird festgelegt wie viele Gegner angezeigt werden.
 	 */
@@ -103,7 +96,9 @@ public class TTRFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
+
 		View root = getView();
+		init(root);
 		SharedPreferences prefs = this.getActivity().getSharedPreferences(
 				"Zwischenwerte", Context.MODE_PRIVATE);
 		int uebergabeanzahl = prefs.getInt("AnzahlderGegner", 3);
@@ -119,8 +114,6 @@ public class TTRFragment extends Fragment {
 		}
 	}
 
-	
-
 	private void init(View root) {
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
 		ttra.requestFocus();
@@ -135,6 +128,7 @@ public class TTRFragment extends Fragment {
 		ttrb7 = (EditText) root.findViewById(R.id.etxt_ttrb7);
 		ttrb8 = (EditText) root.findViewById(R.id.etxt_ttrb8);
 		ttrb9 = (EditText) root.findViewById(R.id.etxt_ttrb9);
+
 		check_b0 = (CheckBox) root.findViewById(R.id.box_siegb0);
 		check_b1 = (CheckBox) root.findViewById(R.id.box_siegb1);
 		check_b2 = (CheckBox) root.findViewById(R.id.box_siegb2);
@@ -145,6 +139,17 @@ public class TTRFragment extends Fragment {
 		check_b7 = (CheckBox) root.findViewById(R.id.box_siegb7);
 		check_b8 = (CheckBox) root.findViewById(R.id.box_siegb8);
 		check_b9 = (CheckBox) root.findViewById(R.id.box_siegb9);
+
+		for (int i = 0; i < 10; i++) {
+			EditText uebergabeedit = (EditText) root
+					.findViewById(getResources().getIdentifier("etxt_ttrb" + i,
+							"id", getActivity().getPackageName()));
+			uebergabeedit.setVisibility(View.VISIBLE);
+			CheckBox uebergabetext = (CheckBox) root
+					.findViewById(getResources().getIdentifier("box_siegb" + i,
+							"id", getActivity().getPackageName()));
+			uebergabetext.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/**
