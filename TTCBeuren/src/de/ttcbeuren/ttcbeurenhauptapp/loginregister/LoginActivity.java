@@ -13,6 +13,7 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,7 +46,6 @@ import de.ttcbeuren.ttcbeurenhauptapp.internet.AppController;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity {
-
 	// LogCat tag
 	private static final String TAG = LoginActivity.class.getSimpleName();
 	/**
@@ -94,8 +94,8 @@ public class LoginActivity extends Activity {
 			/**
 			 * Für Spätere Funktionen Freischalten
 			 */
-			//btnaccountdelete.setVisibility(View.VISIBLE);
-			//btnaccpasswordchange.setVisibility(View.VISIBLE);
+			// btnaccountdelete.setVisibility(View.VISIBLE);
+			// btnaccpasswordchange.setVisibility(View.VISIBLE);
 			mEmailView.setVisibility(View.GONE);
 			mPasswordView.setVisibility(View.GONE);
 			mEmailSignInButton.setVisibility(View.GONE);
@@ -208,8 +208,8 @@ public class LoginActivity extends Activity {
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
-		String email = mEmailView.getText().toString();
-		String password = mPasswordView.getText().toString();
+	String	email = mEmailView.getText().toString();
+	String	password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
@@ -248,8 +248,8 @@ public class LoginActivity extends Activity {
 			 * Ruft den Loginprozess auf und prüft die
 			 * Internetverbindung(passiert im Sendevorgang)
 			 */
-
 			checkLogin(email, password);
+			
 		}
 
 	}
@@ -275,6 +275,7 @@ public class LoginActivity extends Activity {
 	 * 
 	 * @param email
 	 * @param password
+	 * @return 
 	 */
 	private void checkLogin(final String email, final String password) {
 		if (myConnection.isConnectingToInternet()) {
@@ -295,7 +296,6 @@ public class LoginActivity extends Activity {
 							try {
 								JSONObject jObj = new JSONObject(response);
 								boolean error = jObj.getBoolean("error");
-								JSONObject user = jObj.getJSONObject("user");
 
 								// Check for error node in json
 								if (!error) {
@@ -325,9 +325,19 @@ public class LoginActivity extends Activity {
 									// Error in login. Get the error message
 									String errorMsg = jObj
 											.getString("error_msg");
-									Toast.makeText(getApplicationContext(),
-											errorMsg, Toast.LENGTH_LONG).show();
+									if (errorMsg
+											.equals("Incorrect email or password!")) {
+										Toast.makeText(
+												getApplicationContext(),
+												"Email oder Passwort ist nicht korrekt",
+												Toast.LENGTH_LONG).show();
+									} else {
+										Toast.makeText(getApplicationContext(),
+												errorMsg, Toast.LENGTH_LONG)
+												.show();
+									}
 								}
+
 							} catch (JSONException e) {
 								// JSON error
 								e.printStackTrace();
@@ -370,9 +380,9 @@ public class LoginActivity extends Activity {
 			}
 		} else {
 			DialogFragment notifyFragment = new AlertFragmentNotify();
-			notifyFragment.show(getFragmentManager(),
-					"notify");
+			notifyFragment.show(getFragmentManager(), "notify");
 		}
+
 	}
 
 	private void showDialog() {

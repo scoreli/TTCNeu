@@ -27,8 +27,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ttrrechner.AenderungskonstanteActivity"
-            android:label="@string/title_activity_aenderungskonstante" >
+            android:name=".ttrrechner.EinstellungsttrActivity"
+            android:label="@string/title_activity_Einstellungenttr" >
         </activity>
         <activity
             android:name=".loginregister.LoginActivity"

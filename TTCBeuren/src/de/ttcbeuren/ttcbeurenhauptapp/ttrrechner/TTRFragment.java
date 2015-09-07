@@ -28,7 +28,8 @@ public class TTRFragment extends Fragment {
 
 	private CheckBox check_b0, check_b1, check_b2, check_b3, check_b4,
 			check_b5, check_b6, check_b7, check_b8, check_b9;
-
+	EditText[] edittextboxen;
+	CheckBox[] checkboxen;
 	private Button btnberechnen;
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	MainActivityStartseite mainac;
@@ -68,8 +69,62 @@ public class TTRFragment extends Fragment {
 		setHasOptionsMenu(true);
 		View root = inflater.inflate(R.layout.fragment_ttrrechner, container,
 				false);
+		init(root);
+		final EditText[] edittextboxen = { ttrb0, ttrb1, ttrb2, ttrb3, ttrb4,
+				ttrb5, ttrb6, ttrb7, ttrb8, ttrb9 };
+		final CheckBox[] checkboxen = { check_b0, check_b1, check_b2, check_b3,
+				check_b4, check_b5, check_b6, check_b7, check_b8, check_b9 };
+
+		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
+
+		// TODO Auto-generated method stub
+
+		btnberechnen.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ttrberechnen(edittextboxen, checkboxen);
+			}
+		});
+		return root;
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+	}
+
+	/**
+	 * Hier wird festgelegt wie viele Gegner angezeigt werden.
+	 */
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		View root = getView();
+		SharedPreferences prefs = this.getActivity().getSharedPreferences(
+				"Zwischenwerte", Context.MODE_PRIVATE);
+		int uebergabeanzahl = prefs.getInt("AnzahlderGegner", 3);
+		for (int i = uebergabeanzahl; i < 10; i++) {
+			EditText uebergabeedit = (EditText) root
+					.findViewById(getResources().getIdentifier("etxt_ttrb" + i,
+							"id", getActivity().getPackageName()));
+			uebergabeedit.setVisibility(View.GONE);
+			CheckBox uebergabetext = (CheckBox) root
+					.findViewById(getResources().getIdentifier("box_siegb" + i,
+							"id", getActivity().getPackageName()));
+			uebergabetext.setVisibility(View.GONE);
+		}
+	}
+
+	
+
+	private void init(View root) {
 		ttra = (EditText) root.findViewById(R.id.etxt_ttra);
 		ttra.requestFocus();
+
 		ttrb0 = (EditText) root.findViewById(R.id.etxt_ttrb0);
 		ttrb1 = (EditText) root.findViewById(R.id.etxt_ttrb1);
 		ttrb2 = (EditText) root.findViewById(R.id.etxt_ttrb2);
@@ -90,100 +145,6 @@ public class TTRFragment extends Fragment {
 		check_b7 = (CheckBox) root.findViewById(R.id.box_siegb7);
 		check_b8 = (CheckBox) root.findViewById(R.id.box_siegb8);
 		check_b9 = (CheckBox) root.findViewById(R.id.box_siegb9);
-		final EditText[] edittextboxen = { ttrb0, ttrb1, ttrb2, ttrb3, ttrb4,
-				ttrb5, ttrb6, ttrb7, ttrb8, ttrb9 };
-		final CheckBox[] checkboxen = { check_b0, check_b1, check_b2, check_b3,
-				check_b4, check_b5, check_b6, check_b7, check_b8, check_b9 };
-		SharedPreferences prefs = this.getActivity().getSharedPreferences(
-				"Zwischenwerte", Context.MODE_PRIVATE);
-		int uebergabeanzahl = prefs.getInt("AnzahlderGegner", 3);
-
-		btnberechnen = (Button) root.findViewById(R.id.btn_berechnen);
-		/**
-		 * Hier werden die nicht benutzten oder nicht gewollten gegner
-		 * ausgeblendet mit Checkboxen. Es sollte aber noch besser geschrieben
-		 * werden(Schöner)
-		 */
-
-		switch (uebergabeanzahl) {
-		case 1:
-			for (int i = 1; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 2:
-			for (int i = 2; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 3:
-			for (int i = 3; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 4:
-			for (int i = 4; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 5:
-			for (int i = 5; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 6:
-			for (int i = 6; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 7:
-			for (int i = 7; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 8:
-			for (int i = 8; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-		case 9:
-			for (int i = 9; i < edittextboxen.length; i++) {
-				edittextboxen[i].setVisibility(View.GONE);
-				checkboxen[i].setVisibility(View.GONE);
-
-			}
-			break;
-
-		}
-		// TODO Auto-generated method stub
-		/**
-		 * Es sollte behoben werden das der richtige Titel angezeigt wird.
-		 */
-		// restoreActionBar()
-		btnberechnen.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ttrberechnen(edittextboxen, checkboxen);
-			}
-		});
-		return root;
 	}
 
 	/**
@@ -282,7 +243,7 @@ public class TTRFragment extends Fragment {
 
 		if (id == R.id.menu_aenderungskonstante) {
 			startActivity(new Intent(getActivity(),
-					AenderungskonstanteActivity.class));
+					EinstellungsttrActivity.class));
 			return true;
 		}
 

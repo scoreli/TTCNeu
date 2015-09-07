@@ -19,7 +19,7 @@ import de.ttcbeuren.ttcbeurenhauptapp.R;
  * @author philipp
  *
  */
-public class AenderungskonstanteActivity extends PreferenceActivity implements
+public class EinstellungsttrActivity extends PreferenceActivity implements
 		Preference.OnPreferenceChangeListener {
 	int anzahlgegner = 1;
 

@@ -2,7 +2,7 @@
 
     <item
         android:id="@+id/menu_aenderungskonstante"
-        android:title="@string/menu_aenderungskonstante">
+        android:title="@string/menu_einstellungenttr">
     </item>
 
 </menu>
