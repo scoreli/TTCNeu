@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.spiele.DatabasehandlerSpiele;
@@ -89,7 +91,12 @@ DatabasehandlerSpiele dbspiele;
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		
+		if (id == R.id.change_toimSpiel) {
+			Intent i= new Intent(DetailActivity.this,ImSpielActivity.class);
+			i.putExtra(ErgebnisseFragment.KEY, uebergabespiel.getSpiel_id());
+			startActivity(i);
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

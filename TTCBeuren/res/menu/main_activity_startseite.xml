@@ -19,7 +19,7 @@
         <item android:id="@+id/menu_erstellen_top" android:title="@string/text_erstellen">
             <menu>
                 <item android:id="@+id/menu_spiel_erstellen" android:title="@string/text_spielerstellen"/>
-               <item android:id="@+id/menu_erstellen_newsfeed" android:title="@string/text_neuerNewsfeed"/>
+             <!--   <item android:id="@+id/menu_erstellen_newsfeed" android:title="@string/text_neuerNewsfeed"/>--> 
             </menu>
         </item>
     </group>

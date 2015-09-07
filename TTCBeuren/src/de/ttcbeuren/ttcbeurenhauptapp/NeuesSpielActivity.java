@@ -123,7 +123,7 @@ public class NeuesSpielActivity extends Activity implements
 		getMenuInflater().inflate(R.menu.neues_spiel, menu);
 		return true;
 	}
-
+/*
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -135,7 +135,7 @@ public class NeuesSpielActivity extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+*/
 	private void Spielerstellen() {
 		Spiel neuesSpiel = null;
 		/**

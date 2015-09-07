@@ -147,40 +147,8 @@ public class LoginActivity extends Activity {
 			 */
 			@Override
 			public void onClick(View v) {
-				LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
-						.getSystemService(LAYOUT_INFLATER_SERVICE);
-				View popupView = layoutInflater.inflate(
-						R.layout.bestaetigenpopup, null);
-				final PopupWindow popupWindow = new PopupWindow(popupView,
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-
-				Button btnDismiss = (Button) popupView
-						.findViewById(R.id.btn_dismiss);
-				btnDismiss.setOnClickListener(new Button.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						popupWindow.dismiss();
-					}
-				});
-				Button btnaccept = (Button) popupView
-						.findViewById(R.id.btn_accept);
-				btnaccept.setOnClickListener(new Button.OnClickListener() {
-					public void onClick(View v) {
-
-						/**
-						 * Hier kommt der Auszuführende Code rein
-						 */
-
-						popupWindow.dismiss();
-					}
-				});
-				// popupWindow.showAsDropDown(btnaccountdelete, 50, -30);
-				popupWindow.showAtLocation(btnaccountdelete, Gravity.CENTER,
-						50, 30);
-			}
-		});
+								
+		}});
 
 	}
 

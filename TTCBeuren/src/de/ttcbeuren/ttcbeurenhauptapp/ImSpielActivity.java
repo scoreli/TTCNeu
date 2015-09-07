@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
 import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentNotify;
+import de.ttcbeuren.ttcbeurenhauptapp.detailspiel.DetailActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.InternetService;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.DatabasehandlerUUID;
@@ -44,7 +46,8 @@ public class ImSpielActivity extends Activity implements
 	DatabasehandlerUUID dbuuid;
 	private InternetService internetservice;
 	private ConnectionDetector myConnection;
-
+	int uebergabespiel_id;
+	Spiel uebergabespiel;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,9 +58,9 @@ public class ImSpielActivity extends Activity implements
 		internetservice = new InternetService(this);
 		//
 		myConnection = new ConnectionDetector(getApplicationContext());
-		int uebergabespiel_id = getIntent().getExtras().getInt(
+		 uebergabespiel_id = getIntent().getExtras().getInt(
 				ErgebnisseFragment.KEY);
-		Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
+		 uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
 		plusminusHeim(0, uebergabespiel);
 		checkspielistentschieden
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -322,7 +325,10 @@ public class ImSpielActivity extends Activity implements
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.change_todetail) {
+			Intent i= new Intent(ImSpielActivity.this,DetailActivity.class);
+			i.putExtra(ErgebnisseFragment.KEY, uebergabespiel.getSpiel_id());
+			startActivity(i);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
