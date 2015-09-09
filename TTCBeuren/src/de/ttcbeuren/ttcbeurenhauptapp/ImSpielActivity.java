@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.CursorJoiner.Result;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -359,6 +361,7 @@ public class ImSpielActivity extends Activity implements
 		tpSpielende.setIs24HourView(true);
 		tpSpielende.setVisibility(View.GONE);
 	}
+
 	/*
 	 * public class AlertFragmentNotify extends DialogFragment {
 	 * 
@@ -373,4 +376,5 @@ public class ImSpielActivity extends Activity implements
 	 * 
 	 * } }); return builder.create(); } }
 	 */
+	
 }
