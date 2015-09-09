@@ -93,29 +93,35 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 	public void addSpiel(Spiel spiel) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(SPIELE_ID, spiel.getSpiel_id());// Muss auf jedenfall drin
-													// sein sonst übernimmt es
-													// nicht die ids..
-		values.put(SPIELE_punkteHeim, "" + spiel.getPunkteHeim()); // Ist INT
-		values.put(SPIELE_punkteGast, "" + spiel.getPunkteGast()); // Ist INT
-		values.put(SPIELE_spielsystem, spiel.getSpielsystem());
-		values.put(SPIELE_mannschaftsart, spiel.getMannschaftsart());
-		values.put(SPIELE_heimverein, spiel.getHeimverein());
-		values.put(SPIELE_heimvereinsnummer, spiel.getHeimvereinsnummer());
-		values.put(SPIELE_gastverein, spiel.getGastverein());
-		values.put(SPIELE_gastvereinsnummer, spiel.getGastvereinsnummer());
-		values.put(SPIELE_status, spiel.getStatus());
-		values.put(SPIELE_spielbegin, spiel.getSpielbegindatumtime());
-		values.put(SPIELE_spielende, spiel.getSpielende());
-		values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist
-																			// Int
-		values.put(SPIELE_benutzer_id, "" + spiel.getBenutzer_id()); // INT
-		Log.d("Date", "Register Response: ");
-		// Insert in Datenbank
-		db.insert(TABLE_Spiele, null, values);
-		db.close(); // Closing database connection
+		try {
+			ContentValues values = new ContentValues();
+			values.put(SPIELE_ID, spiel.getSpiel_id());// Muss auf jedenfall
+														// drin
+														// sein sonst übernimmt
+														// es
+														// nicht die ids..
+			values.put(SPIELE_punkteHeim, "" + spiel.getPunkteHeim()); // Ist
+																		// INT
+			values.put(SPIELE_punkteGast, "" + spiel.getPunkteGast()); // Ist
+																		// INT
+			values.put(SPIELE_spielsystem, spiel.getSpielsystem());
+			values.put(SPIELE_mannschaftsart, spiel.getMannschaftsart());
+			values.put(SPIELE_heimverein, spiel.getHeimverein());
+			values.put(SPIELE_heimvereinsnummer, spiel.getHeimvereinsnummer());
+			values.put(SPIELE_gastverein, spiel.getGastverein());
+			values.put(SPIELE_gastvereinsnummer, spiel.getGastvereinsnummer());
+			values.put(SPIELE_status, spiel.getStatus());
+			values.put(SPIELE_spielbegin, spiel.getSpielbegindatumtime());
+			values.put(SPIELE_spielende, spiel.getSpielende());
+			values.put(SPIELE_istspielbeendet, "" + spiel.getIstspielbeendet());// Ist
+																				// Int
+			values.put(SPIELE_benutzer_id, "" + spiel.getBenutzer_id()); // INT
+			Log.d("Date", "Register Response: ");
+			// Insert in Datenbank
+			db.insert(TABLE_Spiele, null, values);
+		} finally {
+			db.close(); // Closing database connection
+		}
 	}
 
 	/**
@@ -201,7 +207,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		List<Spiel> spielliste = new ArrayList<Spiel>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Spiele + " WHERE "
-				+ SPIELE_istspielbeendet + " = 0 ORDER BY "+ SPIELE_spielbegin +" DESC";
+				+ SPIELE_istspielbeendet + " = 0 ORDER BY " + SPIELE_spielbegin
+				+ " DESC";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -239,7 +246,8 @@ public class DatabasehandlerSpiele extends SQLiteOpenHelper {
 		List<Spiel> spielliste = new ArrayList<Spiel>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_Spiele + " WHERE "
-				+ SPIELE_istspielbeendet + " = 1 ORDER BY "+ SPIELE_spielbegin +" DESC";
+				+ SPIELE_istspielbeendet + " = 1 ORDER BY " + SPIELE_spielbegin
+				+ " DESC";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);

@@ -68,7 +68,6 @@ public class ErgebnisseFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// setHasOptionsMenu(true);
-
 		mAdapter = new ListViewadapter(getActivity());
 		dbspiele = new DatabasehandlerSpiele(getActivity());
 		dbuuid = new DatabasehandlerUUID(getActivity());
@@ -123,6 +122,7 @@ public class ErgebnisseFragment extends Fragment implements
 			}
 		});
 		updateListe("Alle Spiele");
+	
 		return root;
 
 	}

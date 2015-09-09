@@ -1,0 +1,30 @@
+# view res/layout/activity_main_activity_startseite.xml #generated:2
+-keep class android.support.v4.widget.DrawerLayout { <init>(...); }
+
+# view AndroidManifest.xml #generated:66
+-keep class de.ttcbeuren.ttcbeurenhauptapp.ImSpielActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:20
+-keep class de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite { <init>(...); }
+
+# view res/layout/activity_main_activity_startseite.xml #generated:31
+-keep class de.ttcbeuren.ttcbeurenhauptapp.NavigationDrawerFragment { <init>(...); }
+
+# view AndroidManifest.xml #generated:50
+-keep class de.ttcbeuren.ttcbeurenhauptapp.NeuesSpielActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:58
+-keep class de.ttcbeuren.ttcbeurenhauptapp.detailspiel.DetailActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:14
+-keep class de.ttcbeuren.ttcbeurenhauptapp.internet.AppController { <init>(...); }
+
+# view AndroidManifest.xml #generated:33
+-keep class de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:42
+-keep class de.ttcbeuren.ttcbeurenhauptapp.loginregister.RegisterActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:29
+-keep class de.ttcbeuren.ttcbeurenhauptapp.ttrrechner.EinstellungsttrActivity { <init>(...); }
+

@@ -48,19 +48,21 @@ public class ImSpielActivity extends Activity implements
 	private ConnectionDetector myConnection;
 	int uebergabespiel_id;
 	Spiel uebergabespiel;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_im_spiel);
 		init();
+
 		dbspiele = new DatabasehandlerSpiele(this);
 		dbuuid = new DatabasehandlerUUID(this);
 		internetservice = new InternetService(this);
 		//
 		myConnection = new ConnectionDetector(getApplicationContext());
-		 uebergabespiel_id = getIntent().getExtras().getInt(
+		uebergabespiel_id = getIntent().getExtras().getInt(
 				ErgebnisseFragment.KEY);
-		 uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
+		uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
 		plusminusHeim(0, uebergabespiel);
 		checkspielistentschieden
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -326,7 +328,7 @@ public class ImSpielActivity extends Activity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.change_todetail) {
-			Intent i= new Intent(ImSpielActivity.this,DetailActivity.class);
+			Intent i = new Intent(ImSpielActivity.this, DetailActivity.class);
 			i.putExtra(ErgebnisseFragment.KEY, uebergabespiel.getSpiel_id());
 			startActivity(i);
 			return true;
