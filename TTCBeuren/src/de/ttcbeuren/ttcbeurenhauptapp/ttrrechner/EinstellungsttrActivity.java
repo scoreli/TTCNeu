@@ -103,6 +103,10 @@ public class EinstellungsttrActivity extends PreferenceActivity implements
 		String uebergabe = (String) newValue;
 		preference.setSummary((String) newValue);
 		preference.setDefaultValue(newValue);
+		/**
+		 * Wird benutzt um den Fokus auf den ausgewählten zu legen in Listpreference
+		 */
+		((ListPreference) preference).setValueIndex(Integer.parseInt(uebergabe)-1);
 		SharedPreferences prefs = getSharedPreferences("Zwischenwerte",
 				MODE_PRIVATE);
 		prefs.edit().putInt("AnzahlderGegner", Integer.parseInt(uebergabe))
