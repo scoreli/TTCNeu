@@ -6,7 +6,7 @@
     <string name="ptext_unter1jahrkein ">1 Jahr kein Spiel</string>
     <string name="ptext_wenigerals30">Bewertete Spiele &lt; 30 </string>
     <string name="ptext_nachwuchsausgleich">Nachwuchsausgleich</string>
-    <string name="ptext_erklaerungAenderungskonstantesumm">Die Änderungskonstante gibt an wieviel Punkte Sie maximal gewinnen beziehungsweise verlieren können. Dabei gibt es gewisse Faktoren, die diese Beeinflussen. Dies hat den Vorteil dass z.B. jüngere und inaktive Spieler schneller Punkte ansammeln können.</string>
+    <string name="ptext_erklaerungAenderungskonstantesumm">Die Änderungskonstante gibt an, wieviel Punkte Sie maximal gewinnen beziehungsweise verlieren können. Dabei gibt es gewisse Faktoren, die diese beeinflussen. Dies hat den Vorteil dass z.B. jüngere und inaktive Spieler schneller Punkte ansammeln können.</string>
     <string name="ptext_erklaerungAenderungskonstante">Erklärung</string>
     <string name="ptext_allgemein">Allgemein</string>
     <string name="ptext_aenderkonstante">Änderungskonstante</string>

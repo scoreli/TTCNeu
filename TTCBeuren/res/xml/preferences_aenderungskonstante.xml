@@ -26,6 +26,7 @@
 <EditTextPreference 
      android:title="@string/ptext_erklaerungAenderungskonstante"
         android:summary="@string/ptext_erklaerungAenderungskonstantesumm"
+        android:selectable="false"
     />
     <CheckBoxPreference
         android:defaultValue="false"
