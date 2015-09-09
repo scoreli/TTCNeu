@@ -352,6 +352,11 @@ public class ImSpielActivity extends Activity implements
 		btnheimminuseins = (Button) findViewById(R.id.btnminus1heim);
 		btngastminuseins = (Button) findViewById(R.id.btnminus1gast);
 		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
+		/**
+		 * Für Spätere implementation
+		 */
+		switch_scoreboard.setVisibility(View.GONE);
+
 		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
 		btnzurueck = (Button) findViewById(R.id.btn_zurueck);
 		checkspielistentschieden = (CheckBox) findViewById(R.id.check_Spielistentschieden);
@@ -376,5 +381,5 @@ public class ImSpielActivity extends Activity implements
 	 * 
 	 * } }); return builder.create(); } }
 	 */
-	
+
 }

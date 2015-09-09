@@ -163,8 +163,124 @@ public class ErgebnisseFragment extends Fragment implements
 	}
 
 	public void updateListe(String NameDerMannschaft) {
-		ListAktualisierenTask servus = new ListAktualisierenTask();
-		servus.execute(NameDerMannschaft);
+		/**
+		 * Leider funktioniert die Sql abfrage nicht richtig irgenwie.Deswegen
+		 * nur verdünnt
+		 */
+		switch (NameDerMannschaft) {
+		case "Alle Spiele":
+			spielelive = dbspiele.getAllLiveSpiele();
+			spielebeendet = dbspiele.getAllBeendetSpiele();
+			break;
+		/*
+		 * case "1.Herren": spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_1), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_1), 1); break; case "2.Herren":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_2), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_2), 1); break; case "3.Herren":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_3), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_3), 1); break; case "4.Herren":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_4), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_herren),
+		 * getString(R.string.mannschaftsnummer_4), 1); break; case "1.Damen":
+		 * Toast.makeText(getActivity(), "1.Damen", Toast.LENGTH_SHORT).show();
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_damen),
+		 * getString(R.string.mannschaftsnummer_1), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele( getString(R.string.mannschaftsart_damen),
+		 * getString(R.string.mannschaftsnummer_1), 1); break; case "1.Jugend":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_1), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_1), 1); break; case "2.Jugend":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_2), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_2), 1); break; case "3.Jugend":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_3), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_3), 1); break; case "4.Jugend":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_4), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_4), 1); break; case "5.Jugend":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_5), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_5), 1); break; case "6.Jugend":
+		 * spielelive = dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_6), 0); spielebeendet =
+		 * dbspiele.getVariableSpiele(
+		 * getString(R.string.mannschaftsart_jugend),
+		 * getString(R.string.mannschaftsnummer_6), 1); break;
+		 */
+		case "Herren":
+			spielelive = dbspiele.getVariableSpiele(
+					getString(R.string.mannschaftsart_herren), 0);
+			spielebeendet = dbspiele.getVariableSpiele(
+					getString(R.string.mannschaftsart_herren), 1);
+			break;
+		case "Damen":
+			spielelive = dbspiele.getVariableSpiele(
+					getString(R.string.mannschaftsart_damen), 0);
+			spielebeendet = dbspiele.getVariableSpiele(
+					getString(R.string.mannschaftsart_damen), 1);
+			break;
+		case "Jugend U18":
+			spielelive = dbspiele.getVariableSpiele(
+					getString(R.string.mannschaftsart_jugend), 0);
+			spielebeendet = dbspiele.getVariableSpiele(
+					getString(R.string.mannschaftsart_jugend), 1);
+			break;
+
+		}
+		mAdapter.deletelist();
+		/**
+		 * Damit werden eigene Spiele anderst gefärbt.
+		 */
+		if (session.isLoggedIn()) {
+			mAdapter.setBenutzer_id(dbuuid.getBenutzer().get_id());
+		}
+
+		mAdapter.addSectionHeaderItem("Live :");
+		for (int i = 0; i < spielelive.size(); i++) {
+			mAdapter.addItem(spielelive.get(i));
+
+		}
+		mAdapter.addSectionHeaderItem("Beendet :");
+		for (int i = 0; i < spielebeendet.size(); i++) {
+			mAdapter.addItem(spielebeendet.get(i));
+		}
+		spielelive.clear();
+		spielebeendet.clear();
+		listview.setAdapter(mAdapter);
+
 	}
 
 	/**
@@ -188,142 +304,30 @@ public class ErgebnisseFragment extends Fragment implements
 		// TODO Auto-generated method stub
 
 	}
-
-	public class ListAktualisierenTask extends AsyncTask<String, Void, List<Spiel>> {
-
-		@Override
-		protected List<Spiel> doInBackground(String... params) {
-
-			/**
-			 * Leider funktioniert die Sql abfrage nicht richtig
-			 * irgenwie.Deswegen nur verdünnt
-			 */
-			switch (params[0]) {
-			case "Alle Spiele":
-				spielelive = dbspiele.getAllLiveSpiele();
-				spielebeendet = dbspiele.getAllBeendetSpiele();
-				break;
-			/*
-			 * case "1.Herren": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_1), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_1), 1); break; case
-			 * "2.Herren": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_2), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_2), 1); break; case
-			 * "3.Herren": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_3), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_3), 1); break; case
-			 * "4.Herren": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_4), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_herren),
-			 * getString(R.string.mannschaftsnummer_4), 1); break; case
-			 * "1.Damen": Toast.makeText(getActivity(), "1.Damen",
-			 * Toast.LENGTH_SHORT).show(); spielelive =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_damen),
-			 * getString(R.string.mannschaftsnummer_1), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_damen),
-			 * getString(R.string.mannschaftsnummer_1), 1); break; case
-			 * "1.Jugend": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_1), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_1), 1); break; case
-			 * "2.Jugend": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_2), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_2), 1); break; case
-			 * "3.Jugend": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_3), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_3), 1); break; case
-			 * "4.Jugend": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_4), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_4), 1); break; case
-			 * "5.Jugend": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_5), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_5), 1); break; case
-			 * "6.Jugend": spielelive = dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_6), 0); spielebeendet =
-			 * dbspiele.getVariableSpiele(
-			 * getString(R.string.mannschaftsart_jugend),
-			 * getString(R.string.mannschaftsnummer_6), 1); break;
-			 */
-			case "Herren":
-				spielelive = dbspiele.getVariableSpiele(
-						getString(R.string.mannschaftsart_herren), 0);
-				spielebeendet = dbspiele.getVariableSpiele(
-						getString(R.string.mannschaftsart_herren), 1);
-				break;
-			case "Damen":
-				spielelive = dbspiele.getVariableSpiele(
-						getString(R.string.mannschaftsart_damen), 0);
-				spielebeendet = dbspiele.getVariableSpiele(
-						getString(R.string.mannschaftsart_damen), 1);
-				break;
-			case "Jugend U18":
-				spielelive = dbspiele.getVariableSpiele(
-						getString(R.string.mannschaftsart_jugend), 0);
-				spielebeendet = dbspiele.getVariableSpiele(
-						getString(R.string.mannschaftsart_jugend), 1);
-				break;
-
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(List<Spiel> result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			mAdapter.deletelist();
-			/**
-			 * Damit werden eigene Spiele anderst gefärbt.
-			 */
-			if (session.isLoggedIn()) {
-				mAdapter.setBenutzer_id(dbuuid.getBenutzer().get_id());
-			}
-
-			mAdapter.addSectionHeaderItem("Live :");
-			for (int i = 0; i < spielelive.size(); i++) {
-				mAdapter.addItem(spielelive.get(i));
-
-			}
-			mAdapter.addSectionHeaderItem("Beendet :");
-			for (int i = 0; i < spielebeendet.size(); i++) {
-				mAdapter.addItem(spielebeendet.get(i));
-			}
-			spielelive.clear();
-			spielebeendet.clear();
-			listview.setAdapter(mAdapter);
-
-		}
-
-	}
+	/**
+	 * Muss noch verbessert werden
+	 */
+	/*
+	 * public class ListAktualisierenTask extends AsyncTask<String, Void,
+	 * List<Spiel>> {
+	 * 
+	 * @Override protected List<Spiel> doInBackground(String... params) {
+	 * 
+	 * 
+	 * return null;
+	 * 
+	 * }
+	 * 
+	 * @Override protected void onPostExecute(List<Spiel> result) { // TODO
+	 * Auto-generated method stub
+	 * 
+	 * System.out.println("had");
+	 * 
+	 * 
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 
 }
