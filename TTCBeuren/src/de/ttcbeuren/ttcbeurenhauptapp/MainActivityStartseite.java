@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
 import de.ttcbeuren.ttcbeurenhauptapp.ergebnisse.ErgebnisseFragment;
+import de.ttcbeuren.ttcbeurenhauptapp.listview.InterneRanglisteFragment;
 import de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity;
 import de.ttcbeuren.ttcbeurenhauptapp.ttrrechner.TTRFragment;
 
@@ -60,6 +61,7 @@ public class MainActivityStartseite extends Activity implements
 		 * AktuellesFragment().newInstance(position + 1)) .commit(); mTitle =
 		 * getString(R.string.title_aktuelles); }
 		 */
+
 		if (position == 0) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager
@@ -78,6 +80,15 @@ public class MainActivityStartseite extends Activity implements
 			mTitle = getString(R.string.title_ttrrechner);
 
 		}
+		if (position == 2) {
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction ft = fragmentManager.beginTransaction();
+			ft.replace(R.id.container,
+					new InterneRanglisteFragment().newInstance(position + 1))
+					.commit();
+			mTitle = getString(R.string.title_interneRangliste);
+
+		}
 
 	}
 
@@ -88,15 +99,19 @@ public class MainActivityStartseite extends Activity implements
 		 * 
 		 * break;
 		 */
-		
 
 		case 1:
 			mTitle = getString(R.string.title_ergebnisse);
-			//Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 			break;
 		case 2:
-			 mTitle = getString(R.string.title_ttrrechner);
-			//Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
+			mTitle = getString(R.string.title_ttrrechner);
+			// Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
+
+			break;
+		case 3:
+			mTitle = getString(R.string.title_interneRangliste);
+			// Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 
 			break;
 		}
@@ -134,10 +149,10 @@ public class MainActivityStartseite extends Activity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		/*
-		if (id == R.id.action_settings) {
-
-			return true;
-		}*/
+		 * if (id == R.id.action_settings) {
+		 * 
+		 * return true; }
+		 */
 		if (id == R.id.menu_account) {
 			startActivity(new Intent(MainActivityStartseite.this,
 					LoginActivity.class));
@@ -150,10 +165,10 @@ public class MainActivityStartseite extends Activity implements
 			return true;
 		}
 		/*
-		//if (id == R.id.menu_erstellen_newsfeed) {
-			
-			return true;
-		}*/
+		 * //if (id == R.id.menu_erstellen_newsfeed) {
+		 * 
+		 * return true; }
+		 */
 
 		return super.onOptionsItemSelected(item);
 	}

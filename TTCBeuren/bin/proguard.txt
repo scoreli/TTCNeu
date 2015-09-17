@@ -19,6 +19,9 @@
 # view AndroidManifest.xml #generated:14
 -keep class de.ttcbeuren.ttcbeurenhauptapp.internet.AppController { <init>(...); }
 
+# view res/layout/fragment_interne_rangliste.xml #generated:23
+-keep class de.ttcbeuren.ttcbeurenhauptapp.listview.DynamicListView { <init>(...); }
+
 # view AndroidManifest.xml #generated:33
 -keep class de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity { <init>(...); }
 
