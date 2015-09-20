@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -16,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -115,6 +115,7 @@ public class NeuesSpielActivity extends Activity implements
 			}
 
 		});
+		
 	}
 
 	@Override
@@ -226,6 +227,8 @@ public class NeuesSpielActivity extends Activity implements
 
 	private void init() {
 		viewsfreferenz();
+		ScrollView test= (ScrollView) findViewById(R.id.scrollview_neuesSpiel);
+		test.scrollTo(0, 0);
 		txt_status = (EditText) findViewById(R.id.etxt_status);
 		checkbeurenistheim = (CheckBox) findViewById(R.id.check_beurenistheim);
 		// Erst wenn die Checkbox spielentschieden aktiviert wird soll spielende
@@ -260,6 +263,12 @@ public class NeuesSpielActivity extends Activity implements
 		date_spieldatum.setCalendarViewShown(false);
 		btnerstellen = (Button) findViewById(R.id.btn_erstellen);
 		spinnerreferenzen();
+		/**
+		 * Für den Fokus ist aber noit perfekt
+		 * 
+		 */
+		checkbeurenistheim.setFocusable(true);
+		checkbeurenistheim.setFocusableInTouchMode(true);
 		checkbeurenistheim.requestFocus();// Wird der Fokus auf das Element
 											// gelegt
 		/**
