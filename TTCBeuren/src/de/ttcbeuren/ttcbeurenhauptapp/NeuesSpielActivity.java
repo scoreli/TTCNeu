@@ -145,7 +145,7 @@ public class NeuesSpielActivity extends Activity implements
 		 * benötigt.
 		 */
 		String spieldatumstring = "" + date_spieldatum.getYear() + "-"
-				+ date_spieldatum.getMonth() + "-"
+				+ (date_spieldatum.getMonth()+1) + "-"
 				+ date_spieldatum.getDayOfMonth() + " "
 				+ tpSpielbeginn.getCurrentHour() + ":"
 				+ tpSpielbeginn.getCurrentMinute() + ":" + 30;
@@ -227,8 +227,8 @@ public class NeuesSpielActivity extends Activity implements
 
 	private void init() {
 		viewsfreferenz();
-		ScrollView test= (ScrollView) findViewById(R.id.scrollview_neuesSpiel);
-		test.scrollTo(0, 0);
+		//ScrollView test= (ScrollView) findViewById(R.id.scrollview_neuesSpiel);
+		//test.scrollTo(0, 0);
 		txt_status = (EditText) findViewById(R.id.etxt_status);
 		checkbeurenistheim = (CheckBox) findViewById(R.id.check_beurenistheim);
 		// Erst wenn die Checkbox spielentschieden aktiviert wird soll spielende
