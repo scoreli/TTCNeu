@@ -80,6 +80,7 @@ public class MainActivityStartseite extends Activity implements
 			mTitle = getString(R.string.title_ttrrechner);
 
 		}
+		/*
 		if (position == 2) {
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -88,7 +89,7 @@ public class MainActivityStartseite extends Activity implements
 					.commit();
 			mTitle = getString(R.string.title_interneRangliste);
 
-		}
+		}*/
 
 	}
 
@@ -109,11 +110,12 @@ public class MainActivityStartseite extends Activity implements
 			// Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 
 			break;
+			/*
 		case 3:
 			mTitle = getString(R.string.title_interneRangliste);
 			// Toast.makeText(this, number + "", Toast.LENGTH_SHORT).show();
 
-			break;
+			break;*/
 		}
 	}
 

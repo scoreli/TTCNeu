@@ -10,6 +10,7 @@
     <string name="mannschaftsart_herren">Herren</string>
     <string name="mannschaftsart_damen">Damen</string>
     <string name="mannschaftsart_jugend">Jugend U18</string>
+    <string name="mannschaftsart_senioren">Senioren</string>
 
     <string-array name="Vereine_gegnervonBeuren">
         <item>BSG Duravit Hornberg</item>
@@ -74,6 +75,7 @@
         <item>Herren</item>
         <item>Damen</item>
         <item>Jugend U18</item>
+        <item>Senioren</item>
         
     </string-array>
      <string-array name="Mannschaftsartenduenn">
@@ -81,9 +83,11 @@
         <item>Herren</item>
         <item>Damen</item>
         <item>Jugend U18</item>
+        <item>Senioren</item>
         
     </string-array>
     <string-array name="Spielsysteme">
+        <item>4 Gewinnpunkte</item>
         <item>6 Gewinnpunkte</item>
         <item>8 Gewinnpunkte</item>
         <item>9 Gewinnpunkte</item>
