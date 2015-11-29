@@ -64,6 +64,12 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/btn_acc_passwordforgot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_passwordforgot" />
+
+            <Button
                 android:id="@+id/btn_zuregister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

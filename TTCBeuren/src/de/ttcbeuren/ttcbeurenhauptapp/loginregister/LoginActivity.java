@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -38,7 +39,9 @@ import com.android.volley.toolbox.StringRequest;
 import de.ttcbeuren.ttcbeurenhauptapp.ConnectionDetector;
 import de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite;
 import de.ttcbeuren.ttcbeurenhauptapp.R;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
 import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentNotify;
+import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentPWForgot;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppConfig;
 import de.ttcbeuren.ttcbeurenhauptapp.internet.AppController;
 
@@ -63,7 +66,7 @@ public class LoginActivity extends Activity {
 	private View mProgressView;
 	private View mLoginFormView;
 	private Button btnLogout, mEmailSignInButton, btnaccountdelete,
-			btnaccpasswordchange, btnzuregister;
+			btnaccpasswordchange, btnzuregister, btnaccpasswordforgot;
 	private ConnectionDetector myConnection;
 
 	@Override
@@ -95,7 +98,8 @@ public class LoginActivity extends Activity {
 			 * Für Spätere Funktionen Freischalten
 			 */
 			// btnaccountdelete.setVisibility(View.VISIBLE);
-			// btnaccpasswordchange.setVisibility(View.VISIBLE);
+			btnaccpasswordchange.setVisibility(View.VISIBLE);
+			btnaccpasswordforgot.setVisibility(View.GONE);
 			mEmailView.setVisibility(View.GONE);
 			mPasswordView.setVisibility(View.GONE);
 			mEmailSignInButton.setVisibility(View.GONE);
@@ -147,8 +151,27 @@ public class LoginActivity extends Activity {
 			 */
 			@Override
 			public void onClick(View v) {
-								
-		}});
+
+			}
+		});
+		btnaccpasswordchange.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(LoginActivity.this,
+						PwChangeActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
+		btnaccpasswordforgot.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				attempPWForgot();
+			}
+
+		});
 
 	}
 
@@ -157,11 +180,45 @@ public class LoginActivity extends Activity {
 		btnLogout = (Button) findViewById(R.id.btn_logout);
 		btnaccountdelete = (Button) findViewById(R.id.btn_acc_loeschen);
 		btnaccpasswordchange = (Button) findViewById(R.id.btn_passwortaendern);
+		btnaccpasswordforgot = (Button) findViewById(R.id.btn_acc_passwordforgot);
 		btnzuregister = (Button) findViewById(R.id.btn_zuregister);
 		mEmailSignInButton = (Button) findViewById(R.id.btn_registrieren);
 		mPasswordView = (EditText) findViewById(R.id.passwordregister);
 		mLoginFormView = findViewById(R.id.register_form);
 		mProgressView = findViewById(R.id.register_progress);
+	}
+
+	void attempPWForgot() {
+		// Reset errors.
+		mEmailView.setError(null);
+		String email = mEmailView.getText().toString();
+		boolean cancel = false;
+		View focusView = null;
+		passwordforgot(email);
+		// Check for a valid email address.
+				if (TextUtils.isEmpty(email)) {
+					mEmailView.setError(getString(R.string.error_field_required));
+					focusView = mEmailView;
+					cancel = true;
+				} else if (!isEmailValid(email)) {
+					mEmailView.setError(getString(R.string.error_invalid_email));
+					focusView = mEmailView;
+					cancel = true;
+				}
+				if (cancel) {
+					// There was an error; don't attempt login and focus the first
+					// form field with an error.
+					focusView.requestFocus();
+				} else {
+					/**
+					 * Ruft den PW vergessen auf und prüft die
+					 * Internetverbindung(passiert im Sendevorgang)
+					 */
+					passwordforgot(email);
+					DialogFragment PWforgotFragment = new AlertFragmentPWForgot();
+					PWforgotFragment.show(getFragmentManager(),
+							"PWForgot");
+				}
 	}
 
 	/**
@@ -176,8 +233,8 @@ public class LoginActivity extends Activity {
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
-	String	email = mEmailView.getText().toString();
-	String	password = mPasswordView.getText().toString();
+		String email = mEmailView.getText().toString();
+		String password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
@@ -217,7 +274,7 @@ public class LoginActivity extends Activity {
 			 * Internetverbindung(passiert im Sendevorgang)
 			 */
 			checkLogin(email, password);
-			
+
 		}
 
 	}
@@ -243,7 +300,7 @@ public class LoginActivity extends Activity {
 	 * 
 	 * @param email
 	 * @param password
-	 * @return 
+	 * @return
 	 */
 	private void checkLogin(final String email, final String password) {
 		if (myConnection.isConnectingToInternet()) {
@@ -353,7 +410,56 @@ public class LoginActivity extends Activity {
 
 	}
 
-	private void showDialog() {
+	private void passwordforgot(final String email) {
+		if (myConnection.isConnectingToInternet()) {
+			// Tag used to cancel the request
+			String tag_string_req = "req_password";
+			// Post geht hier irgendwie nicht
+			StringRequest strReq = new StringRequest(Method.POST,
+					AppConfig.URL_LOGIN, new Response.Listener<String>() {
+
+						@Override
+						public void onResponse(String response) {
+							Log.d(TAG, "PW Response: ");
+
+						}
+					}, new Response.ErrorListener() {
+
+						@Override
+						public void onErrorResponse(VolleyError error) {
+
+						}
+					}) {
+
+				@Override
+				protected Map<String, String> getParams() {
+					// Posting parameters to login url
+					Map<String, String> params = new HashMap<String, String>();
+					params.put("tag", "passwortvergessen");
+					params.put("email", email);
+
+					return params;
+				}
+
+			};
+
+			// Adding request to request queue
+			try {
+				AppController.getInstance().addToRequestQueue(strReq,
+						tag_string_req);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(), e.toString(),
+						Toast.LENGTH_SHORT).show();
+			}
+		} else {
+			DialogFragment notifyFragment = new AlertFragmentNotify();
+			notifyFragment.show(getFragmentManager(), "notify");
+		}
+
+	}
+
+		private void showDialog() {
 		if (!pDialog.isShowing())
 			pDialog.show();
 	}

@@ -25,6 +25,9 @@
 # view AndroidManifest.xml #generated:33
 -keep class de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity { <init>(...); }
 
+# view AndroidManifest.xml #generated:74
+-keep class de.ttcbeuren.ttcbeurenhauptapp.loginregister.PwChangeActivity { <init>(...); }
+
 # view AndroidManifest.xml #generated:42
 -keep class de.ttcbeuren.ttcbeurenhauptapp.loginregister.RegisterActivity { <init>(...); }
 

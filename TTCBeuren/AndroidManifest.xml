@@ -9,7 +9,7 @@
         android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- android name muss sonst schmeist appcontroller eine exeption -->
     <application
         android:name=".internet.AppController"
@@ -71,7 +71,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
         </activity>
-        
+        <activity
+            android:name="de.ttcbeuren.ttcbeurenhauptapp.loginregister.PwChangeActivity"
+            android:label="@string/title_activity_pw_change"
+            android:parentActivityName=".loginregister.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ttcbeuren.ttcbeurenhauptapp.loginregister.LoginActivity" />
+        </activity>
     </application>
 
 </manifest>

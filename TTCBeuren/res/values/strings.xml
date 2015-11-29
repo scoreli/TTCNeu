@@ -5,8 +5,7 @@
     <string name="title_aktuelles">Aktuelles</string>
     <string name="title_ergebnisse">Ergebnisse</string>
     <string name="title_ttrrechner">TTR Rechner</string>
-        <string name="title_interneRangliste">Interne Rangliste</string>
-    
+    <string name="title_interneRangliste">Interne Rangliste</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_refresh">Aktualisieren</string>
@@ -55,5 +54,6 @@
     <string name="title_activity_activitypopup">Popup</string>
     <string name="text_zudetailsdesSpiel">Details des Spieles</string>
     <string name="text_zuImSpiel">Zum Spiel</string>
+    <string name="title_activity_pw_change">Passwort ändern</string>
 
 </resources>
