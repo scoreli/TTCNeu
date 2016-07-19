@@ -33,7 +33,7 @@ public class MainActivityStartseite extends Activity implements
 
 	/**
 	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
+	 * {@link #restoreActionBar()}. Das ist ein Testext ob git funktioniert.
 	 */
 	private CharSequence mTitle;
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
