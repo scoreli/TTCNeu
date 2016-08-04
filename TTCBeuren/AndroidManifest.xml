@@ -64,6 +64,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.ttcbeuren.ttcbeurenhauptapp.MainActivityStartseite" />
         </activity>
+        <!--App.Compat muss als Theme intigriert sein wegen ActionBarActivity(Design noch anpassen)-->
         <activity
             android:name=".ImSpielActivity"
             android:label="@string/title_activity_im_spiel"
