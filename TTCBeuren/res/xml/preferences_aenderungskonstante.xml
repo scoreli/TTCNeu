@@ -42,7 +42,7 @@
         android:defaultValue="false"
         android:key="@string/preference_ptext_unter1jahrkein_key"
         android:summary="Änderungskonstante +4"
-        android:title="@string/ptext_unter1jahrkein " />
+        android:title="@string/ptext_unter1jahrkein" />
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="@string/preference_ptext_wenigerals30_key"

@@ -3,7 +3,7 @@
     <string name="ptext_anzahlGegner">1,2,3,4,5,6,7,8,9,10</string>
     <string name="ptext_unter21">Sie sind jünger als 21</string>
     <string name="ptext_unter16">Sie sind jünger als 16</string>
-    <string name="ptext_unter1jahrkein ">1 Jahr kein Spiel</string>
+    <string name="ptext_unter1jahrkein">1 Jahr kein Spiel</string>
     <string name="ptext_wenigerals30">Bewertete Spiele &lt; 30 </string>
     <string name="ptext_nachwuchsausgleich">Nachwuchsausgleich</string>
     <string name="ptext_erklaerungAenderungskonstantesumm">Die Änderungskonstante gibt an, wieviel Punkte Sie maximal gewinnen beziehungsweise verlieren können. Dabei gibt es gewisse Faktoren, die diese beeinflussen. Dies hat den Vorteil dass z.B. jüngere und inaktive Spieler schneller Punkte ansammeln können.</string>
