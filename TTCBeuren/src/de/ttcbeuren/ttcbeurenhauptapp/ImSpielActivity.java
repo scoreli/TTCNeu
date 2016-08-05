@@ -1,13 +1,8 @@
 package de.ttcbeuren.ttcbeurenhauptapp;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.CursorJoiner.Result;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -40,6 +35,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 
 import de.ttcbeuren.ttcbeurenhauptapp.alertdialogs.AlertFragmentConfirm;
@@ -56,7 +53,7 @@ Muss von ActionBarActivity erben laut Android-Dokumentation
 public class ImSpielActivity extends ActionBarActivity implements
 		AlertFragmentConfirm.AlertDialogListener {
 	/*
-	Für Google Cast
+	Für Google Cast Anbindung
 	 */
 	private MediaRouter mMediaRouter;
 	private MediaRouteSelector mMediaRouteSelector;
@@ -86,6 +83,7 @@ public class ImSpielActivity extends ActionBarActivity implements
 	private Button btnaktualisieren, btnloeschen, btnheimplusein,
 			btngastpluseins, btnheimminuseins, btngastminuseins, btnzurueck;
 	// private CheckBox checkboxbeenden;
+	private int anzahlGewinnpunkte;
 	private Switch switch_scoreboard;
 	DatabasehandlerSpiele dbspiele;
 	DatabasehandlerUUID dbuuid;
@@ -107,11 +105,22 @@ public class ImSpielActivity extends ActionBarActivity implements
 		dbuuid = new DatabasehandlerUUID(this);
 		internetservice = new InternetService(this);
 		//
+
 		myConnection = new ConnectionDetector(getApplicationContext());
 		uebergabespiel_id = getIntent().getExtras().getInt(
 				ErgebnisseFragment.KEY);
 		uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-		plusminusHeim(0, uebergabespiel);
+		/**
+		 * Dieser Abschnitt dient zur Herausfindung von der Anzahl der Gewinnpunkte.
+		 * Daraus bekommt man dann einen Integerwert für die Anzahl.
+		 */
+		String[] gewinnpunkte = uebergabespiel.getSpielsystem().split(" ");
+		anzahlGewinnpunkte = Integer.parseInt(gewinnpunkte[0]);
+
+		plusminusHeim(0, uebergabespiel,anzahlGewinnpunkte);
+
+
+
 		checkspielistentschieden
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -121,7 +130,13 @@ public class ImSpielActivity extends ActionBarActivity implements
 						if (isChecked) {
 							etxtspielende.setVisibility(View.VISIBLE);
 							tpSpielende.setVisibility(View.VISIBLE);
-
+							try {
+								String jsonUebergabe = uebergabespiel.toJSon();
+								sendMessage(jsonUebergabe);
+								Log.d(TAG, jsonUebergabe);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
 						} else {
 							etxtspielende.setVisibility(View.GONE);
 							tpSpielende.setVisibility(View.GONE);
@@ -182,7 +197,7 @@ public class ImSpielActivity extends ActionBarActivity implements
 				int uebergabespiel_id = getIntent().getExtras().getInt(
 						ErgebnisseFragment.KEY);
 				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusHeim(1, uebergabespiel);
+				plusminusHeim(1, uebergabespiel,anzahlGewinnpunkte);
 			}
 		});
 		btngastpluseins.setOnClickListener(new OnClickListener() {
@@ -198,7 +213,7 @@ public class ImSpielActivity extends ActionBarActivity implements
 				int uebergabespiel_id = getIntent().getExtras().getInt(
 						ErgebnisseFragment.KEY);
 				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusGast(1, uebergabespiel);
+				plusminusGast(1, uebergabespiel,anzahlGewinnpunkte);
 			}
 		});
 		btnheimminuseins.setOnClickListener(new OnClickListener() {
@@ -214,7 +229,7 @@ public class ImSpielActivity extends ActionBarActivity implements
 				int uebergabespiel_id = getIntent().getExtras().getInt(
 						ErgebnisseFragment.KEY);
 				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusHeim(-1, uebergabespiel);
+				plusminusHeim(-1, uebergabespiel,anzahlGewinnpunkte);
 			}
 		});
 		btngastminuseins.setOnClickListener(new OnClickListener() {
@@ -230,7 +245,7 @@ public class ImSpielActivity extends ActionBarActivity implements
 				int uebergabespiel_id = getIntent().getExtras().getInt(
 						ErgebnisseFragment.KEY);
 				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusGast(-1, uebergabespiel);
+				plusminusGast(-1, uebergabespiel,anzahlGewinnpunkte);
 			}
 		});
 		btnzurueck.setOnClickListener(new OnClickListener() {
@@ -245,19 +260,12 @@ public class ImSpielActivity extends ActionBarActivity implements
 			}
 		});
 
-		// Configure Cast device discovery
+		//Konfiguriere die Google-Cast-Geräte suche
 		mMediaRouter = MediaRouter.getInstance(getApplicationContext());
 		mMediaRouteSelector = new MediaRouteSelector.Builder()
 				.addControlCategory(CastMediaControlIntent.categoryForCast(getResources()
 						.getString(R.string.app_id))).build();
 		mMediaRouterCallback = new MyMediaRouterCallback();
-
-
-
-
-
-
-
 
 
 	}
@@ -334,9 +342,12 @@ public class ImSpielActivity extends ActionBarActivity implements
 	 * @param i
 	 * @param spiel
 	 */
-	public void plusminusHeim(int i, Spiel spiel) {
+	public void plusminusHeim(int i, Spiel spiel, int gewinnpunkte) {
 		int uebergabe = spiel.getPunkteHeim();
-		boolean freigabe = i > 0 || uebergabe > 0 && i < 1;
+		/**
+		 * Die Gewinnpunkte sind dafür da das man nicht mehr Eingeben kann als das Spielsystem erlaubt.
+		 */
+		boolean freigabe = uebergabe < gewinnpunkte && i > 0 || uebergabe > 0 && i < 1;
 		if (freigabe) {
 			uebergabe = uebergabe + i;
 			spiel.setPunkteHeim(uebergabe);
@@ -360,9 +371,12 @@ public class ImSpielActivity extends ActionBarActivity implements
 	 * @param i
 	 * @param spiel
 	 */
-	public void plusminusGast(int i, Spiel spiel) {
+	public void plusminusGast(int i, Spiel spiel, int gewinnpunkte) {
 		int uebergabe = spiel.getPunkteGast();
-		boolean freigabe = i > 0 || uebergabe > 0 && i < 1;
+		/**
+		 * Die Gewinnpunkte sind dafür da das man nicht mehr Eingeben kann als das Spielsystem erlaubt.
+		 */
+		boolean freigabe = uebergabe < gewinnpunkte && i > 0 || uebergabe > 0 && i < 1;
 		if (freigabe) {
 			uebergabe = uebergabe + i;
 			spiel.setPunkteGast(uebergabe);
@@ -540,7 +554,11 @@ public class ImSpielActivity extends ActionBarActivity implements
 
 												// set the initial instructions
 												// on the receiver
-												sendMessage(getString(R.string.instructions));
+												try {
+													sendMessage(uebergabespiel.toJSon());
+												} catch (JSONException e) {
+													e.printStackTrace();
+												}
 											} else {
 												Log.e(TAG, "application could not launch");
 												teardown(true);

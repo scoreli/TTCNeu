@@ -76,7 +76,7 @@
         <item>Damen</item>
         <item>Jugend U18</item>
         <item>Senioren</item>
-        
+
     </string-array>
      <string-array name="Mannschaftsartenduenn">
         <item>Alle Spiele</item>
@@ -86,6 +86,9 @@
         <item>Senioren</item>
         
     </string-array>
+    <!--Bitte immer eine Zahl und dann ein Leerzeichen folgen lassen.
+    Das hat den Grund, weil sonst nicht korrekt ein Integer aus dem String extrahiert werden kann.
+    Dies erfolgt in der ImSpielActivity Activity-->
     <string-array name="Spielsysteme">
         <item>4 Gewinnpunkte</item>
         <item>6 Gewinnpunkte</item>
