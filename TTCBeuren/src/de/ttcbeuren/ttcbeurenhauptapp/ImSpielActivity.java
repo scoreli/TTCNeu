@@ -111,6 +111,11 @@ public class ImSpielActivity extends ActionBarActivity implements
 				ErgebnisseFragment.KEY);
 		uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
 		/**
+		 * Damit der Status auch als Hint angezeigt wird:
+		 */
+		txfStatus.setHint("Status: " + uebergabespiel.getStatus());
+		
+		/**
 		 * Dieser Abschnitt dient zur Herausfindung von der Anzahl der Gewinnpunkte.
 		 * Daraus bekommt man dann einen Integerwert für die Anzahl.
 		 */
@@ -699,11 +704,7 @@ public class ImSpielActivity extends ActionBarActivity implements
 		btngastpluseins = (Button) findViewById(R.id.btnplus1gast);
 		btnheimminuseins = (Button) findViewById(R.id.btnminus1heim);
 		btngastminuseins = (Button) findViewById(R.id.btnminus1gast);
-		switch_scoreboard = (Switch) findViewById(R.id.switch_scoreboard);
-		/**
-		 * Für Spätere implementation
-		 */
-		switch_scoreboard.setVisibility(View.GONE);
+
 
 		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
 		btnzurueck = (Button) findViewById(R.id.btn_zurueck);
