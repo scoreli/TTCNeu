@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="text_Spielstand">Spielstand:</string>
+<resources><string name="text_Spielstand">Spielstand</string>
 <string name="text_heim_kurz">Heim</string>
 <string name="text_gast_kurz">Gast</string>
 <string name="text_Scoreboardan">Scoreboard</string>
@@ -8,5 +8,6 @@
 <string name="text_heim_plus1">Heim +1</string>
 <string name="text_loeschen">Löschen</string>
 <string name="text_zurueck">Zurück</string>
+    <string name="text_spielende_ohnedoppel">Spielende</string>
 
 </resources>

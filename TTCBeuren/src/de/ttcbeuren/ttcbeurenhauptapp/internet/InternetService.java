@@ -519,7 +519,7 @@ public class InternetService extends Activity {
 	public void updateSpiel(final String punkteHeim, final String punkteGast,
 			final String status, final String veranstaltungs_id,
 			final String user_id, final String istbeendet,
-			final String spielende) {
+			final String spielende,final boolean castVerbunden) {
 		if (myConnection.isConnectingToInternet()) {
 			// Tag used to cancel the request
 			String tag_string_req = "req_updateveranstaltung";
@@ -583,7 +583,14 @@ public class InternetService extends Activity {
 											hans.getApplicationContext(),
 											"Aktualisiert", Toast.LENGTH_SHORT)
 											.show();
-									hans.finish();
+									/**
+                                     * Hat den Zweck, dass die ImSpielActivity nur beendet wird
+									 * falls kein Chromecast verbunden ist.
+									 */
+									if(!castVerbunden){
+										hans.finish();
+									}
+
 								} else {
 
 									// Error occurred in registration. Get the

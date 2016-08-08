@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.MediaRouteActionProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -78,10 +78,10 @@ public class ImSpielActivity extends ActionBarActivity implements
 	 */
 	private CheckBox checkspielistentschieden;
 	private TimePicker tpSpielende;
-	private EditText txfSpielstandHeim, txfSpielstandGast, txfStatus;
-	private TextView statusScoreboard, etxtspielende;
-	private Button btnaktualisieren, btnloeschen, btnheimplusein,
-			btngastpluseins, btnheimminuseins, btngastminuseins, btnzurueck;
+	private EditText txfStatus;
+	private TextView etxtspielende;
+	private Button btnaktualisieren, btnloeschen, btnzurueck;
+	private NumberPicker np_Heim, np_Gast;
 	// private CheckBox checkboxbeenden;
 	private int anzahlGewinnpunkte;
 	private Switch switch_scoreboard;
@@ -99,8 +99,6 @@ public class ImSpielActivity extends ActionBarActivity implements
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(
 				getResources().getColor(android.R.color.transparent)));
-		init();
-
 		dbspiele = new DatabasehandlerSpiele(this);
 		dbuuid = new DatabasehandlerUUID(this);
 		internetservice = new InternetService(this);
@@ -110,28 +108,44 @@ public class ImSpielActivity extends ActionBarActivity implements
 		uebergabespiel_id = getIntent().getExtras().getInt(
 				ErgebnisseFragment.KEY);
 		uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-		/**
-		 * Damit der Status auch als Hint angezeigt wird:
-		 */
-		txfStatus.setHint("Status: " + uebergabespiel.getStatus());
-		
-		/**
-		 * Dieser Abschnitt dient zur Herausfindung von der Anzahl der Gewinnpunkte.
-		 * Daraus bekommt man dann einen Integerwert für die Anzahl.
-		 */
-		String[] gewinnpunkte = uebergabespiel.getSpielsystem().split(" ");
-		anzahlGewinnpunkte = Integer.parseInt(gewinnpunkte[0]);
 
-		plusminusHeim(0, uebergabespiel,anzahlGewinnpunkte);
+		init();
 
 
+
+
+
+		np_Heim.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+			@Override
+			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+				uebergabespiel.setPunkteHeim(newVal);
+				try {
+					dbspiele.updateSpiel(uebergabespiel);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		np_Gast.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+			@Override
+			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+				uebergabespiel.setPunkteGast(newVal);
+				try {
+					dbspiele.updateSpiel(uebergabespiel);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 
 		checkspielistentschieden
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
+												 boolean isChecked) {
 						if (isChecked) {
 							etxtspielende.setVisibility(View.VISIBLE);
 							tpSpielende.setVisibility(View.VISIBLE);
@@ -189,70 +203,6 @@ public class ImSpielActivity extends ActionBarActivity implements
 
 		});
 
-		btnheimplusein.setOnClickListener(new OnClickListener() {
-			/**
-			 * Wird der Button Heim plus eins gedrückt, wird nochmal die
-			 * Veranstaltung geholt und dann mit der Methode plusminusEins
-			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
-			 * aktualisiert.
-			 */
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				int uebergabespiel_id = getIntent().getExtras().getInt(
-						ErgebnisseFragment.KEY);
-				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusHeim(1, uebergabespiel,anzahlGewinnpunkte);
-			}
-		});
-		btngastpluseins.setOnClickListener(new OnClickListener() {
-			/**
-			 * Wird der Button Gast plus eins gedrückt, wird nochmal die
-			 * Veranstaltung geholt und dann mit der Methode plusminusEins
-			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
-			 * aktualisiert.
-			 */
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				int uebergabespiel_id = getIntent().getExtras().getInt(
-						ErgebnisseFragment.KEY);
-				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusGast(1, uebergabespiel,anzahlGewinnpunkte);
-			}
-		});
-		btnheimminuseins.setOnClickListener(new OnClickListener() {
-			/**
-			 * Wird der Button Heim minus eins gedrückt, wird nochmal die
-			 * Veranstaltung geholt und dann mit der Methode plusminusEins
-			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
-			 * aktualisiert.
-			 */
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				int uebergabespiel_id = getIntent().getExtras().getInt(
-						ErgebnisseFragment.KEY);
-				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusHeim(-1, uebergabespiel,anzahlGewinnpunkte);
-			}
-		});
-		btngastminuseins.setOnClickListener(new OnClickListener() {
-			/**
-			 * Wird der Button Gast minus eins gedrückt, wird nochmal die
-			 * Veranstaltung geholt und dann mit der Methode plusminusEins
-			 * aufgerufen und dann auf der internen Datenbank auch gleichzeitig
-			 * aktualisiert.
-			 */
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				int uebergabespiel_id = getIntent().getExtras().getInt(
-						ErgebnisseFragment.KEY);
-				Spiel uebergabespiel = dbspiele.getSpiel(uebergabespiel_id);
-				plusminusGast(-1, uebergabespiel,anzahlGewinnpunkte);
-			}
-		});
 		btnzurueck.setOnClickListener(new OnClickListener() {
 			/**
 			 * Wird der Button zurück gedrückt wird die Acitivty beendet und man
@@ -306,95 +256,23 @@ public class ImSpielActivity extends ActionBarActivity implements
 	}
 
 	private void aktualisieren() {
-		/*
-		 * Hier wird die Zahl(id) der Veranstaltung geholt
-		 */
 
-		Spiel updatespiel = dbspiele.getSpiel(getIntent().getExtras().getInt(
-				ErgebnisseFragment.KEY));
-		String spielstandheim = txfSpielstandHeim.getText().toString();
-		String spielstandgast = txfSpielstandGast.getText().toString();
 		String spielstatus = txfStatus.getText().toString();
 
-		if (TextUtils.isEmpty(spielstandheim) == false) {
-			updatespiel.setPunkteHeim(Integer.parseInt(spielstandheim));
-		}
-		if (TextUtils.isEmpty(spielstandgast) == false) {
-			updatespiel.setPunkteGast(Integer.parseInt(spielstandgast));
-		}
-		if (TextUtils.isEmpty(spielstatus) == false) {
-			updatespiel.setStatus(spielstatus);
-		}
 		if (checkspielistentschieden.isChecked()) {
 			String spielendeString = "" + tpSpielende.getCurrentHour() + ":"
 					+ tpSpielende.getCurrentMinute() + ":" + 30;
-			updatespiel.setSpielende(spielendeString);
-			updatespiel.setIstspielbeendet(1);
+			uebergabespiel.setSpielende(spielendeString);
+			uebergabespiel.setIstspielbeendet(1);
 
 		}
-		internetservice.updateSpiel("" + updatespiel.getPunkteHeim(), ""
-				+ updatespiel.getPunkteGast(), updatespiel.getStatus(), ""
-				+ updatespiel.getSpiel_id(), "" + updatespiel.getBenutzer_id(),
-				"" + updatespiel.getIstspielbeendet(),
-				updatespiel.getSpielende());
+		internetservice.updateSpiel("" + uebergabespiel.getPunkteHeim(), ""
+				+ uebergabespiel.getPunkteGast(), uebergabespiel.getStatus(), ""
+				+ uebergabespiel.getSpiel_id(), "" + uebergabespiel.getBenutzer_id(),
+				"" + uebergabespiel.getIstspielbeendet(),
+				uebergabespiel.getSpielende(), mApplicationStarted);
 	}
 
-	/**
-	 * Bei dieser Methode wird der Wert des Parameters i dem Spielstand der
-	 * Heimmannschaft der zu bearbeitenden Mannschaft addiert. Außerdem
-	 * aktualisiert die Methode noch den Spielstand den sie als Hint ausgibt.
-	 * 
-	 * @param i
-	 * @param spiel
-	 */
-	public void plusminusHeim(int i, Spiel spiel, int gewinnpunkte) {
-		int uebergabe = spiel.getPunkteHeim();
-		/**
-		 * Die Gewinnpunkte sind dafür da das man nicht mehr Eingeben kann als das Spielsystem erlaubt.
-		 */
-		boolean freigabe = uebergabe < gewinnpunkte && i > 0 || uebergabe > 0 && i < 1;
-		if (freigabe) {
-			uebergabe = uebergabe + i;
-			spiel.setPunkteHeim(uebergabe);
-		}
-		txfSpielstandHeim.setHint("Heim: " + spiel.getPunkteHeim());
-		txfSpielstandGast.setHint("Gast: " + spiel.getPunkteGast());
-		try {
-			dbspiele.updateSpiel(spiel);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Bei dieser Methode wird der Wert des Parameters i dem Spielstand der
-	 * Gastmannschaft der zu bearbeitenden Mannschaft addiert. Außerdem
-	 * aktualisiert die Methode noch den Spielstand den sie als Hint ausgibt.
-	 * 
-	 * @param i
-	 * @param spiel
-	 */
-	public void plusminusGast(int i, Spiel spiel, int gewinnpunkte) {
-		int uebergabe = spiel.getPunkteGast();
-		/**
-		 * Die Gewinnpunkte sind dafür da das man nicht mehr Eingeben kann als das Spielsystem erlaubt.
-		 */
-		boolean freigabe = uebergabe < gewinnpunkte && i > 0 || uebergabe > 0 && i < 1;
-		if (freigabe) {
-			uebergabe = uebergabe + i;
-			spiel.setPunkteGast(uebergabe);
-		}
-		txfSpielstandHeim.setHint("Heim: " + spiel.getPunkteHeim());
-		txfSpielstandGast.setHint("Gast: " + spiel.getPunkteGast());
-		try {
-			dbspiele.updateSpiel(spiel);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -695,18 +573,29 @@ public class ImSpielActivity extends ActionBarActivity implements
 	 * Initialisieren der grafischen Elementen
 	 */
 	private void init() {
-		txfSpielstandHeim = (EditText) findViewById(R.id.txfHeimmannschaftAktualisiere);
-		txfSpielstandGast = (EditText) findViewById(R.id.txfGastmannschaftAktualisiere);
+		np_Heim = (NumberPicker) findViewById(R.id.np_Heim);
+		np_Gast = (NumberPicker) findViewById(R.id.np_Gast);
+		np_Heim.setMinValue(0);
+		np_Gast.setMinValue(0);
+		/**
+		 * Dieser Abschnitt dient zur Herausfindung von der Anzahl der Gewinnpunkte.
+		 * Daraus bekommt man dann einen Integerwert für die Anzahl.
+		 */
+		String[] gewinnpunkte = uebergabespiel.getSpielsystem().split(" ");
+		anzahlGewinnpunkte = Integer.parseInt(gewinnpunkte[0]);
+		np_Gast.setMaxValue(anzahlGewinnpunkte);
+		np_Heim.setMaxValue(anzahlGewinnpunkte);
+		np_Gast.setValue(uebergabespiel.getPunkteGast());
+		np_Heim.setValue(uebergabespiel.getPunkteHeim());
+
+
 		txfStatus = (EditText) findViewById(R.id.txfAktualisiereStatus);
+		/**
+		 * Damit der Status auch als Hint angezeigt wird:
+		 */
+		txfStatus.setHint("Status: " + uebergabespiel.getStatus());
 		btnaktualisieren = (Button) findViewById(R.id.btnaktualisieren);
 		btnloeschen = (Button) findViewById(R.id.btnloeschen);
-		btnheimplusein = (Button) findViewById(R.id.btnplus1heim);
-		btngastpluseins = (Button) findViewById(R.id.btnplus1gast);
-		btnheimminuseins = (Button) findViewById(R.id.btnminus1heim);
-		btngastminuseins = (Button) findViewById(R.id.btnminus1gast);
-
-
-		statusScoreboard = (TextView) findViewById(R.id.statusscoreboard);
 		btnzurueck = (Button) findViewById(R.id.btn_zurueck);
 		checkspielistentschieden = (CheckBox) findViewById(R.id.check_Spielistentschieden);
 		etxtspielende = (TextView) findViewById(R.id.textView_Spielentschieden);
