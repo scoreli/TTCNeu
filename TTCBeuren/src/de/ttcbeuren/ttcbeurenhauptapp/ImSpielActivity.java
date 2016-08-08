@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.MediaRouteActionProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -259,6 +260,9 @@ public class ImSpielActivity extends ActionBarActivity implements
 
 		String spielstatus = txfStatus.getText().toString();
 
+		if (TextUtils.isEmpty(spielstatus) == false) {
+			uebergabespiel.setStatus(spielstatus);
+		}
 		if (checkspielistentschieden.isChecked()) {
 			String spielendeString = "" + tpSpielende.getCurrentHour() + ":"
 					+ tpSpielende.getCurrentMinute() + ":" + 30;
